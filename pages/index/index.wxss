@@ -1,1 +1,92 @@
-/* pages/index/index.wxss */
+/* 倒计时部分star */
+.top-container{
+  flex-direction:row;
+  display:flex;
+  margin-bottom: 60rpx;
+}
+.count-down-container{
+    flex-direction:column;
+    display:flex;
+    margin-left: 100rpx;
+    margin-top:-60rpx;
+}
+.target-container{
+    flex-direction:column;
+    display:flex;
+    background-color:#fff;
+    margin-top:100rpx;
+    margin-left:-80rpx;
+    padding-bottom: 10rpx;
+}
+.count-down-image{
+    width:360rpx;
+    height:450rpx;
+    margin-bottom: -230rpx;
+    margin-left: -150rpx;
+}
+.count-doen-text{
+  font-size: 54rpx;
+}
+/* 倒计时部分end */
+
+/* 每日计划star */
+/* edit部分star */
+.bottom-container{
+  margin: 40rpx;
+  border-width: 1rpx;  
+  border-color: black;  
+  border-style: solid;  
+}
+
+.edit-container{
+  flex-direction:row;
+  display:flex;
+  align-items: center;
+  justify-content: center;  
+  width: 100%;
+  height: 100%;
+  border-width: 0rpx 0rpx 1rpx 0rpx;  
+  border-color: black;  
+  border-style: solid; 
+}
+
+.diary-image{
+  width:100rpx;
+  height:100rpx;
+  margin-right: 10rpx;
+}
+
+.edit-text{
+  
+}
+
+.modify-image{
+  width:100rpx;
+  height:100rpx;
+  margin-left: 100rpx;
+}
+/* edit部分end */
+
+/* plan部分star */
+.plan-container{
+  flex-direction:row;
+  display:flex;
+  align-items: center;
+  /* justify-content: center; */
+  width: 100%;
+  height: 100%;
+  margin-top: 24rpx;
+  margin-bottom: 24rpx;
+  margin-left: 20rpx;
+}
+.plan-text{
+  font-size: 28rpx;
+  width: 500rpx;
+}
+.plan-image{
+  width:30rpx;
+  height:30rpx;
+  margin-left: 80rpx;
+}
+/* plan部分end */
+/* 每日计划star */

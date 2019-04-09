@@ -1,8 +1,6 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/index/index-dairy/index-dairy",
-    "pages/index/index-edit/index-edit",
     "pages/menu/menu",
     "pages/menu/menu-userdata/menu-userdata",
     "pages/menu/menu-content/plan/plan",
@@ -15,12 +13,12 @@
   ],
   "window": {
     "navigationBarTitleText": "考研小神器",
-    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarBackgroundColor": "#04838e",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
     "color": "#a5a5a5",
-    "selectedColor": "#006871",
+    "selectedColor": "#04838e",
     "borderStyle": "white",
     "position": "bottom",
     "list": [
