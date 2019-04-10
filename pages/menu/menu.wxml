@@ -1,2 +1,34 @@
-<!--pages/menu/menu.wxml-->
-<text>pages/menu/menu.wxml</text>
+<view id='infomation'>
+  <view id='picture_out'>
+    <view id='picture'>
+      <open-data type="userAvatarUrl"></open-data>
+    </view>
+  </view>
+  <view id='tips'>
+    <view id='nickName'>
+      <open-data type="userNickName"></open-data>
+    </view>
+    <view id='motto'>
+      <text decode='{{true}}'>{{motto}}</text>
+    </view>
+  </view>
+</view>
+
+<view id='settings'>
+<image class='wave' src='/images/menu/wave.png'/>
+<text class='item' bindtap='clickPlan'>考研计划</text>
+<image class='wave' src='/images/menu/wave.png'/>
+<text class='item' bindtap='clickDiary'>考研日记</text>
+<image class='wave' src='/images/menu/wave.png'/>
+<text class='item' bindtap='clickSchedule'>考研安排</text>
+<image class='wave' src='/images/menu/wave.png'/>
+<text class='item' bindtap='clickSetting'>设置</text>
+<image class='wave' src='/images/menu/wave.png'/>
+</view>
+
+
+<view id="bottom">
+  <text bindtap='clickFeedback'>错误反馈</text>
+  <text decode='{{true}}'> &nbsp; |  &nbsp; </text>
+  <text bindtap='clickContactUs'>联系我们</text>
+</view>
