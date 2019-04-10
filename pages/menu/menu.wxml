@@ -14,18 +14,17 @@
   </view>
 </view>
 
-<view id='settings'>
-<image class='wave' src='/images/menu/wave.png'/>
-<text class='item' bindtap='clickPlan'>考研计划</text>
-<image class='wave' src='/images/menu/wave.png'/>
-<text class='item' bindtap='clickDiary'>考研日记</text>
-<image class='wave' src='/images/menu/wave.png'/>
-<text class='item' bindtap='clickSchedule'>考研安排</text>
-<image class='wave' src='/images/menu/wave.png'/>
-<text class='item' bindtap='clickSetting'>设置</text>
-<image class='wave' src='/images/menu/wave.png'/>
+<view id='menu'>
+  <view class='wave' />
+  <view class='item' bindtap='clickPlan'>考研计划</view>
+  <view class='wave' />
+  <view class='item' bindtap='clickDiary'>考研日记</view>
+  <view class='wave' />
+  <view class='item' bindtap='clickSchedule'>考研安排</view>
+  <view class='wave' />
+  <view class='item' bindtap='clickSetting'>设置</view>
+  <view class='wave' />
 </view>
-
 
 <view id="bottom">
   <text bindtap='clickFeedback'>错误反馈</text>
