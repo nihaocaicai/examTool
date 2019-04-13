@@ -1,7 +1,7 @@
 <view hidden="{{flag}}">
   <view class='diary-container'>
     <!-- 标题 -->
-    <view class="wx-diary-title">考研小日志</view>
+    <view class="wx-diary-title">编辑</view>
     <form bindsubmit="formSubmit">
     <!-- 内容 -->
     <view class="wx-diary-con">
