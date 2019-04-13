@@ -20,12 +20,12 @@ Page({
     })
   },
 
-  /*点击 个人信息 按钮 */
-  clickUserData: function() {
-    wx.navigateTo({
-      url: '../menu/menu-userdata/menu-userdata',
-    })
-  },
+  // /*点击 个人信息 按钮 */
+  // clickUserData: function() {
+  //   wx.navigateTo({
+  //     url: '../menu/menu-userdata/menu-userdata',
+  //   })
+  // },
 
   /*点击 考研计划 按钮 */
   clickPlan: function() {

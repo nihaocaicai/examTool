@@ -1,2 +1,30 @@
-<!--pages/menu/menu-content/setting/setting.wxml-->
-设置
+<view>
+<!-- 头像star -->
+  <view class='image-container'>
+    <image class='head-image' src='/images/menu/head.png'></image>
+    <image class='edit-image' src='/images/menu/setting/edit.png' bindtap='showEdit'></image>
+  </view>
+<!-- 头像end -->
+
+<!-- 信息star -->
+  <view class='text-container'>
+    <text>昵称：忆梦</text>
+    <text>性别：男</text>
+    <text>生日：1998-02-01</text>
+    <text>目标大学：复旦大学</text>
+    <text>考研日期：2020-12-22</text>
+    <text>座右铭：考研路上，我们都不是孤独的</text>
+  </view>
+<!-- 信息end -->
+
+<!-- 退出登录star -->
+  <view class='button-container'>
+    <button bindtap='downLogin'>退出登录</button>
+  </view>
+<!-- 退出登录end -->
+
+  <edit id='edit'
+      bind:error="_error"  
+      bind:success="_success">
+  </edit>
+</view>

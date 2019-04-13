@@ -8,7 +8,7 @@
         <image style='width: 180rpx; height: 180rpx;' bindtap='clickGetAuto' src="/images/menu/head.png" />
       </view>
       <!-- 已经授权，显示头像 -->
-      <view wx:else bindtap='clickUserData'>
+      <view wx:else>
         <open-data type="userAvatarUrl" />
       </view>
     </view>
