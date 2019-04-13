@@ -1,37 +1,34 @@
 <view>
-<!-- 倒计时部分star -->
+  <!-- 倒计时部分star -->
   <view class='top-container'>
     <view class='count-down-container'>
       <image class='count-down-image' src="/images/index/count-down.png"></image>
-      <text class='count-doen-text'>55</text>
+      <text class='count-doen-text'>{{countdown}}</text>
     </view>
     <view class='target-container'>
-      <text>我的目标：复旦大学</text>
-      <text>考研路上，我们都不是孤单的</text>
+      <text>我的目标：{{goal}}</text>
+      <text>{{motto}}</text>
     </view>
   </view>
-<!-- 倒计时部分end -->
+  <!-- 倒计时部分end -->
 
-<!-- 每日计划star -->
+  <!-- 每日计划star -->
   <view class='bottom-container'>
     <view class='edit-container'>
       <image class='diary-image' src='/images/index/diary.png' bindtap="showDiary"></image>
-      <text class='edit-text'>2019-03-23 星期六</text>
+      <text class='edit-text'>{{date}}</text>
       <image class='modify-image' src='/images/index/modify.png' bindtap="goToModify"></image>
     </view>
 
-    <view class='plan-container'>
-      <text class='plan-text'>1、早上：8:00-10:30 记一单元单词</text>
-      <image class='plan-image' src='/images/index/star.png'></image>
+    <view wx:for='{{plan}}' wx:key='none'>
+      <view class='plan-container'>
+        <text class='plan-text'>{{item.content}}</text>
+        <image wx:if='{{item.flag_star}}' class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/star.png' />
+        <image wx:else class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/none-star.png' />
+      </view>
     </view>
 
-    <view class='plan-container'>
-      <text class='plan-text'>2、下午：14:00-17:30 学习数学理论</text>
-      <image class='plan-image' src='/images/index/none-star.png'></image>
-    </view>
   </view>
-  <diary id='diary'
-      bind:error="_error"  
-      bind:success="_success">
+  <diary id='diary' bind:error="_error" bind:success="_success">
   </diary>
 </view>

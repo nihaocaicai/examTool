@@ -1,41 +1,54 @@
-// pages/menu/menu.js
+var app = getApp()
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    motto: "考研路上，我们都不是孤独的。", //座右铭
+    motto:app.globalData.motto, //座右铭
   },
 
   /*点击 考研计划 按钮 */
   clickPlan: function() {
-    console.log("考研计划")
+    wx.navigateTo({
+      url: '../menu/menu-content/plan/plan',
+    })
   },
 
   /*点击 考研日记 按钮 */
-  clickDiary: function() {
-    console.log("考研日记")
+  clickDiary: function () {
+    wx.navigateTo({
+      url: '../menu/menu-content/diary/diary',
+    })
   },
 
   /*点击 考研安排 按钮 */
-  clickSchedule: function() {
-    console.log("考研安排")
+  clickExam: function () {
+    wx.navigateTo({
+      url: '../menu/menu-content/exam/exam',
+    })
   },
 
   /*点击 设置 按钮 */
-  clickSetting: function() {
-    console.log("设置")
+  clickSetting: function () {
+    wx.navigateTo({
+      url: '../menu/menu-content/setting/setting',
+    })
   },
 
   /*点击 错误反馈 按钮 */
-  clickFeedback: function() {
-    console.log("错误反馈")
+  clickFeedback: function () {
+    wx.navigateTo({
+      url: '../menu/menu-other/feedback/feedback',
+    })
   },
 
   /*点击 联系我们 按钮 */
-  clickContactUs: function() {
-    console.log("联系我们")
+  clickContact: function () {
+    wx.navigateTo({
+      url: '../menu/menu-other/contact/contact',
+    })
   },
 
   /**
