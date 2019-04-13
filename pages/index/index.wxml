@@ -17,7 +17,7 @@
     <view class='edit-container'>
       <image class='diary-image' src='/images/index/diary.png' bindtap="showDiary"></image>
       <text class='edit-text'>2019-03-23 星期六</text>
-      <image class='modify-image' src='/images/index/modify.png'></image>
+      <image class='modify-image' src='/images/index/modify.png' bindtap="goToModify"></image>
     </view>
 
     <view class='plan-container'>

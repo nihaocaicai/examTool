@@ -1,0 +1,22 @@
+<view>
+  <block wx:key="item" wx:for="{{data}}">
+  <view data-index='{{index}}' class="order-item" bindtouchstart="drawStart" bindtouchmove="drawMove" bindtouchend="drawEnd" style="right:{{item.right}}rpx">
+    <view class='data-container'>
+      <!-- 日期和星标 -->
+      <view class='date-container'>
+        <text class='date-text'>2019-04-13-8:00/2019-04-13-10:00</text>
+        <image class='date-image' src='/images/index/star.png'></image>
+      </view>
+      <!-- 内容 -->
+      <view class='content-container'>
+        <text class='content-text'>图书馆学习</text>
+      </view>
+    </view>
+    
+    <view class="edit">
+      <text bindtap="modItem">修改</text>
+      <text bindtap="delItem">删除</text>
+    </view>
+  </view>
+  </block>
+</view>

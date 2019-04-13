@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/index/modify/modify",
     "pages/menu/menu",
     "pages/menu/menu-userdata/menu-userdata",
     "pages/menu/menu-content/plan/plan",

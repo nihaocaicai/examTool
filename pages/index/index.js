@@ -17,5 +17,10 @@ Page({
   _success() {
     console.log('你点击了确定');
     this.diary.hideDiary();
+  },
+  goToModify() {
+    wx.navigateTo({
+      url: '../index/modify/modify',
+    })
   }
 })
