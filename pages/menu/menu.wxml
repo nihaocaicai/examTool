@@ -1,15 +1,38 @@
+<!-- 顶部信息框 -->
 <view id='infomation'>
+  <!-- 头像 -->
   <view id='picture_out'>
     <view id='picture'>
-      <open-data type="userAvatarUrl"></open-data>
+      <!-- 未授权，显示未授权头像 -->
+      <view wx:if="{{!hasAuto}}">
+        <image style='width: 180rpx; height: 180rpx;' bindtap='clickGetAuto' src="/images/menu/head.png" />
+      </view>
+      <!-- 已经授权，显示头像 -->
+      <view wx:else bindtap='clickUserData'>
+        <open-data type="userAvatarUrl" />
+      </view>
     </view>
   </view>
+
+  <!-- 昵称和座右铭框 -->
   <view id='tips'>
-    <view id='nickName'>
-      <open-data type="userNickName"></open-data>
+    <!-- 未授权，显示授权提示 -->
+    <view wx:if="{{!hasAuto}}">
+      <view id='nickName'>
+        <text decode='{{true}}'>未授权</text>
+      </view>
+      <view id='motto'>
+        <text decode='{{true}}'>请点击头像进行授权</text>
+      </view>
     </view>
-    <view id='motto'>
-      <text decode='{{true}}'>{{motto}}</text>
+    <!-- 已经授权，显示昵称和座右铭 -->
+    <view wx:else>
+      <view id='nickName'>
+        <open-data type="userNickName" />
+      </view>
+      <view id='motto'>
+        <text decode='{{true}}'>{{motto}}</text>
+      </view>
     </view>
   </view>
 </view>
