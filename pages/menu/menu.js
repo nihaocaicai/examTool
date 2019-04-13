@@ -1,12 +1,30 @@
 var app = getApp()
 
 Page({
-
   /**
    * 页面的初始数据
    */
   data: {
-    motto:app.globalData.motto, //座右铭
+    motto: app.globalData.motto, //座右铭
+    hasAuto: false, //是否授权，要添加逻辑检查
+  },
+
+  /*获取授权 按钮 */
+  clickGetAuto: function() {
+    console.log("点击授权")
+    // Todo 获取授权
+
+    // Todo
+    this.setData({
+      hasAuto: true
+    })
+  },
+
+  /*点击 个人信息 按钮 */
+  clickUserData: function() {
+    wx.navigateTo({
+      url: '../menu/menu-userdata/menu-userdata',
+    })
   },
 
   /*点击 考研计划 按钮 */
@@ -17,35 +35,35 @@ Page({
   },
 
   /*点击 考研日记 按钮 */
-  clickDiary: function () {
+  clickDiary: function() {
     wx.navigateTo({
       url: '../menu/menu-content/diary/diary',
     })
   },
 
   /*点击 考研安排 按钮 */
-  clickExam: function () {
+  clickExam: function() {
     wx.navigateTo({
       url: '../menu/menu-content/exam/exam',
     })
   },
 
   /*点击 设置 按钮 */
-  clickSetting: function () {
+  clickSetting: function() {
     wx.navigateTo({
       url: '../menu/menu-content/setting/setting',
     })
   },
 
   /*点击 错误反馈 按钮 */
-  clickFeedback: function () {
+  clickFeedback: function() {
     wx.navigateTo({
       url: '../menu/menu-other/feedback/feedback',
     })
   },
 
   /*点击 联系我们 按钮 */
-  clickContact: function () {
+  clickContact: function() {
     wx.navigateTo({
       url: '../menu/menu-other/contact/contact',
     })
@@ -54,7 +72,12 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {},
+  onLoad: function(options) {
+    //检查是否授权
+    this.setData({
+      hasAuto: true
+    })
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
