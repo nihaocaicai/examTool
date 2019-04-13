@@ -3,7 +3,6 @@ Component({
     multipleSlots: true // 在组件定义时的选项中启用多slot支持
   },
 
-  
   /**
    * 组件的属性列表
    */
@@ -44,13 +43,13 @@ Component({
       console.log('form发生了submit事件，携带数据为：', e.detail.value)
     },
     //隐藏弹框
-    hideDiary: function () {
+    hideEdit: function () {
       this.setData({
         flag: !this.data.flag
       })
     },
     //展示弹框
-    showDiary() {
+    showEdit() {
       this.setData({
         flag: !this.data.flag
       })
@@ -65,7 +64,7 @@ Component({
     },
     _success() {
       //触发成功回调
-      this.triggerEvent("success");
+      this.triggerEvent("success")
     }
   }
 })

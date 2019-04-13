@@ -19,4 +19,9 @@
     </view>
   </view>
   </block>
+
+  <edit id='edit'
+      bind:error="_error"  
+      bind:success="_success">
+  </edit>
 </view>

@@ -1,5 +1,5 @@
 {
   "usingComponents": {
-      "diary": "/component/diary/diary"
+      "diary": "/component/index/diary/diary"
     }
 }

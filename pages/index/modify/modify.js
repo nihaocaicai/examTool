@@ -5,6 +5,10 @@ Page({
     isScroll: true,
     windowHeight: 0,
   },
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
   onLoad: function (options) {
     var that = this;
     wx.getSystemInfo({
@@ -15,6 +19,15 @@ Page({
       }
     });
   },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+    //获得edit组件
+    this.edit = this.selectComponent("#edit");
+  },
+
   drawStart: function (e) {
     // console.log("drawStart");  
     var touch = e.touches[0]
@@ -68,11 +81,23 @@ Page({
     }
   },
 
-  modItem: function (e) {
+  modItem() {
     console.log("修改");
+    this.edit.showEdit();
   },
+  //取消事件
+  _error() {
+    console.log('你点击了取消');
+    this.edit.hideEdit();
+  },
+  //确认事件
+  _success() {
+    console.log('你点击了确定');
+    this.edit.hideEdit();
+  },
+  
 
-  delItem: function (e) {
+  delItem: function () {
     console.log("删除");
   },
 
@@ -81,5 +106,5 @@ Page({
    */
   onPullDownRefresh: function () {
     console.log("添加");
-  },
+  }
 })

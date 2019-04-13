@@ -1,4 +1,7 @@
 {
   "navigationBarTitleText": "每日编辑",
-  "enablePullDownRefresh":true
+  "enablePullDownRefresh":true,
+  "usingComponents": {
+    "edit": "/component/index/edit/edit"
+  }
 }
