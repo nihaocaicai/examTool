@@ -1,2 +1,15 @@
-<!--pages/login/login.wxml-->
-<text>pages/login/login.wxml</text>
+
+<view wx:if='{{!hasAuth}}'>
+<view id="">
+  考研小神器
+</view>
+
+<view id=''>
+  <image src=''/>
+</view>
+
+<view id=''>
+  <button class='' bindtap='getUserInfo'>
+  </button>
+</view>
+</view>

@@ -1,3 +1,7 @@
 {
-  "usingComponents": {}
+  "navigationBarTitleText": "历史计划",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "edit": "/component/index/edit/edit"
+  }
 }

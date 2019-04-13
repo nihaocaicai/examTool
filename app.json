@@ -1,5 +1,9 @@
 {
   "pages": [
+<<<<<<< Updated upstream
+=======
+    "pages/login/login",
+>>>>>>> Stashed changes
     "pages/index/index",
     "pages/menu/menu",
     "pages/index/modify/modify",
@@ -8,8 +12,7 @@
     "pages/menu/menu-content/exam/exam",
     "pages/menu/menu-content/setting/setting",
     "pages/menu/menu-other/contact/contact",
-    "pages/menu/menu-other/feedback/feedback",
-    "pages/login/login"
+    "pages/menu/menu-other/feedback/feedback"
   ],
   "window": {
     "navigationBarTitleText": "考研小神器",
