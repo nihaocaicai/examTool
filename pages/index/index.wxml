@@ -20,15 +20,22 @@
       <image class='modify-image' src='/images/index/modify.png' bindtap="goToModify"></image>
     </view>
 
-    <view wx:for='{{plan}}' wx:key='none'>
-      <view class='plan-container'>
-        <text class='plan-text'>{{item.content}}</text>
-        <image wx:if='{{item.flag_star}}' class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/star.png' />
-        <image wx:else class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/none-star.png' />
+    <view wx:if='{{plan.length==0}}'>
+      <!-- 今天没有计划 -->
+      <view style='margin:20px; text-align:center'>今天没有计划</view>
+    </view>
+
+    <!-- 今天有计划 -->
+    <view wx:else>
+      <view wx:for='{{plan}}' wx:key='none'>
+        <view class='plan-container'>
+          <text class='plan-text'>{{item.content}}</text>
+          <image wx:if='{{item.flag_star}}' class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/star.png' />
+          <image wx:else class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/none-star.png' />
+        </view>
       </view>
     </view>
 
   </view>
-  <diary id='diary' bind:error="_error" bind:success="_success">
-  </diary>
+  <diary id='diary' bind:error="_error" bind:success="_success" />
 </view>

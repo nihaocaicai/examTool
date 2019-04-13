@@ -1,44 +1,50 @@
 App({
   globalData: {
-    userInfo: {},
-    goal: '复旦大学', //目标，应该在登录时候获取
-    motto: '考研路上，我们都不是孤独的', //座右铭，应该在登录时候获取
+    userInfo: {}, //用户信息
+    goal: '未填写', //目标，应该在登录时候获取
+    motto: '你还没有填写座右铭', //座右铭，应该在登录时候获取
+    plan: [], //今日计划
   },
 
-  onLaunch: function(ops) {
-    // 获取用户信息
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-          wx.getUserInfo({
-            lang: "zh_CN",
-            success: res => {
-              // 可以将 res 发送给后台解码出 unionId
-              this.globalData.userInfo = res.userInfo
-              this.getOpenID() /*获取用户ID*/
-              // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-              // 所以此处加入 callback 以防止这种情况
-              if (this.userInfoReadyCallback) {
-                this.userInfoReadyCallback(res)
+  onLaunch: function(e) {
+    var that = this
+    //检查版本
+    if (wx.canIUse('button.open-type.getUserInfo')) {
+      // 版本支持，查看用户是否授权过
+      wx.getSetting({
+        success: function(res) {
+          if (res.authSetting['scope.userInfo']) {
+            //授权过，可以直接使用
+            wx.getUserInfo({
+              lang: "zh_CN",
+              success: function(res) {
+                that.globalData.userInfo = res.userInfo
+                that.getOpenID() //获取用户 openid
+                if (that.userInfoReadyCallback) { //回调函数
+                  that.userInfoReadyCallback()
+                }
               }
+            })
+          } else {
+            //如果未授权，将在 login 页面授权
+            if (that.needAuthorizeCallback) { //回调函数
+              that.needAuthorizeCallback()
             }
-          })
+          }
+        }
+      })
+    } else {
+      //如果版本太低，则告诉 login 页面版本太低
+      that.globalData.userInfo = {
+        userInfo: {
+          "version_mismatch": true
         }
       }
-    })
+    }
   },
 
-  /* 获取用户 openid */
-  getOpenID: function() {
-    /*
-    var that = this
-    // 登录
-    wx.login({
-      success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-        if (res.code) {}
-      }
-    })*/
+  // 获取用户 openid
+  getOpenID: function(e) {
+    console.log("模拟获取用户 openid")
   },
 })

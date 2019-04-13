@@ -3,37 +3,25 @@ var util_date = require('../utils/date.js')
 
 Page({
   data: {
-    goal: app.globalData.goal, //目标
-    motto: app.globalData.motto, //座右铭
     countdown: util_date.countdown, //倒计时天数
     date: util_date.date, //今天的日期
-    plan: [], //计划列表
   },
 
   onReady: function() {
     this.diary = this.selectComponent("#diary") //获得diary组件
-    this.getPlan() //获取计划
   },
 
-  //获取计划
-  getPlan: function() {
-    var plans
-    //Todo 获取计划（应该由网络获取）
-    plans = [{
-      "content": "1、早上：8:00-10:30 记一单元单词",
-      flag_star: true,
-    }, {
-      "content": "2、下午：14:00-17:30 学习数学理论",
-      flag_star: false,
-    }]
-    //Todo
+  onLoad: function() {
+    //数据在 login 页面就应该获取完了
     this.setData({
-      plan: plans
+      plan: app.globalData.plan, //计划
+      goal: app.globalData.goal, //目标
+      motto: app.globalData.motto, //座右铭
     })
   },
 
   //点击 星标按钮
-  clickStar(e) {
+  clickStar: function(e) {
     // 计划下标，从0开始
     var index = e.currentTarget.dataset.index
     // 获取计划列表

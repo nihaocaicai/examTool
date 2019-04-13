@@ -7,43 +7,55 @@ Page({
    * 页面的初始数据
    */
   data: {
-    hasAuth: false,
+    loading: true, //是否要显示 加载中 页面
+    needAuthorize: false, //是否需要授权
+    isOldVersion: false, //微信是否为旧版本
   },
 
   /* 点击按钮获取用户信息 监听器 */
   getUserInfo: function(e) {
-    app.globalData.userInfo = e.detail.userInfo
-    app.getOpenID() /*获取用户ID*/
-    wx.switchTab({
-      url: '../index/index',
-    })
+    var userInfo = e.detail.userInfo
+    if (userInfo) {
+      //用户按了允许授权按钮
+      app.globalData.userInfo = userInfo
+      app.getOpenID()
+      wx.switchTab({
+        url: '../index/index',
+      })
+    } else {
+      //用户按了拒绝按钮
+      wx.showModal({
+        title: '提示',
+        content: '必须授权才能使用考研小神器哦～',
+        showCancel: false,
+      })
+    }
   },
 
-  /* 用户授权 */
+  /* page.onload 获取用户授权 */
   authorize: function() {
     var that = this
-    // 判断用户是否授权
-    if (wx.canIUse('button.open-type.getUserInfo')) {
-      app.userInfoReadyCallback = res => {
-        that.data({
-          hasAuth: true,
-        })
-        //授权，进入主界面
-        wx.switchTab({
-          url: '../index/index',
-        })
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
+
+    /*初始化回调函数*/
+    //已获取用户信息的回调函数
+    app.userInfoReadyCallback = function() {
+      that.getInfo()
+    }
+    //未授权的回调函数
+    app.needAuthorizeCallback = function() {
+      that.setData({
+        needAuthorize: true, //显示 授权 页面
+        loading: false, //不显示 加载中 页面
+      })
+    }
+
+    if (app.globalData.userInfo['version_mismatch']) {
+      //微信版本太低，在没有 open-type=getUserInfo 版本的兼容处理
       wx.getUserInfo({
         lang: "zh_CN",
         success: res => {
           app.globalData.userInfo = res.userInfo
           app.getOpenID()
-          that.data({
-            hasAuth: true,
-          })
-          //授权，进入主界面
           wx.switchTab({
             url: '../index/index',
           })
@@ -52,21 +64,32 @@ Page({
     }
   },
 
+  // 获取用户基本信息(例如目标大学，座右铭等)
+  getInfo: function() {
+    app.globalData.goal = '复旦大学' //目标
+    app.globalData.motto = '考研路上，我们都不是孤独的' //座右铭
+    //获取计划（应该由网络获取）
+    app.globalData.plan = [{
+      content: "1、早上：8:00-10:30 记一单元单词",
+      flag_star: true,
+    }, {
+      content: "2、下午：14:00-17:30 学习数学理论",
+      flag_star: false,
+    }]
+    //在获取完之后才进入主界面，否则弹出对话框，提示网络错误
+    //模拟获取等待时间
+    setTimeout(function() {
+      wx.switchTab({
+        url: '../index/index',
+      })
+    }, 1000)
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    if (app.globalData.userInfo) {
-      this.setData({
-        hasAuth: true,
-      })
-      //授权，进入主界面
-      wx.switchTab({
-        url: '../index/index',
-      })
-    }else{
-      this.authorize()
-    }
+    this.authorize() //获取授权
   },
 
   /**

@@ -4,28 +4,7 @@ Page({
   /**
    * 页面的初始数据
    */
-  data: {
-    motto: app.globalData.motto, //座右铭
-    hasAuto: false, //是否授权，要添加逻辑检查
-  },
-
-  /*获取授权 按钮 */
-  clickGetAuto: function() {
-    console.log("点击授权")
-    // Todo 获取授权
-
-    // Todo
-    this.setData({
-      hasAuto: true
-    })
-  },
-
-  // /*点击 个人信息 按钮 */
-  // clickUserData: function() {
-  //   wx.navigateTo({
-  //     url: '../menu/menu-userdata/menu-userdata',
-  //   })
-  // },
+  data: {},
 
   /*点击 考研计划 按钮 */
   clickPlan: function() {
@@ -73,9 +52,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    //检查是否授权
     this.setData({
-      hasAuto: true
+      motto: app.globalData.motto,
+      nickName: app.globalData.userInfo['nickName'],
+      avatarUrl: app.globalData.userInfo['avatarUrl']
     })
   },
 
