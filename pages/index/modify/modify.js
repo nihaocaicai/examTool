@@ -107,5 +107,5 @@ Page({
   onPullDownRefresh: function () {
     console.log("添加");
     this.edit.showEdit();
-  }
+  },
 })

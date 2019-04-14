@@ -1,5 +1,6 @@
 // pages/login/login.js
 var app = getApp()
+var testData = require("../../utils/testData.js")
 
 Page({
 
@@ -71,47 +72,14 @@ Page({
     app.globalData.goal = '复旦大学' //目标
     app.globalData.motto = '考研路上，我们都不是孤独的' //座右铭
     //获取计划（应该由网络获取）
-    app.globalData.plan = [{
-      "content": "1、早上：8:00-10:30 记一单元单词",
-      flag_star: true,
-    }, {
-      "content": "2、下午：14:00-17:30 学习数学理论",
-      flag_star: false,
-    }, {
-      "content": "2、下午：14:00-17:30 学习数学理论",
-      flag_star: false,
-    }, {
-      "content": "2、下午：14:00-17:30 学习数学理论",
-      flag_star: false,
-    }, {
-      "content": "2、下午：14:00-17:30 学习数学理论",
-      flag_star: false,
-    }, {
-      "content": "2、下午：14:00-17:30 学习数学理论",
-      flag_star: false,
-    }, {
-      "content": "2、下午：14:00-17:30 学习数学理论",
-      flag_star: false,
-    }, {
-      "content": "2、下午：14:00-17:30 学习数学理论",
-      flag_star: false,
-    }, {
-      "content": "2、下午：14:00-17:30 学习数学理论",
-      flag_star: false,
-    }, {
-      "content": "2、下午：14:00-17:30 学习数学理论",
-      flag_star: false,
-    }, {
-      "content": "2、下午：14:00-17:30 学习数学理论",
-      flag_star: false,
-    }]
-    //在获取完之后才进入主界面，否则弹出对话框，提示网络错误
+    app.globalData.plan = testData.index_plan
+    //在获取完之后才进入主界面，否则弹出对话框，提示网络错误(例如"网络连接超时")
+    wx.switchTab({
+      url: '../index/index',
+    })
+
     //模拟获取等待时间
-    setTimeout(function() {
-      wx.switchTab({
-        url: '../index/index',
-      })
-    }, 500)
+    //setTimeout(function() {}, 500)
   },
 
   /**

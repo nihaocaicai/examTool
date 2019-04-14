@@ -1,5 +1,5 @@
 var app = getApp()
-var util_date = require('../../utils/index/data.js')
+var util_date = require('../../utils/index/date.js')
 
 Page({
   data: {
