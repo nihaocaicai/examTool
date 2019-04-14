@@ -8,6 +8,7 @@ App({
 
   onLaunch: function(e) {
     var that = this
+    var timeOut = 10 //回调函数设置超时阈值
     //检查版本
     if (wx.canIUse('button.open-type.getUserInfo')) {
       // 版本支持，查看用户是否授权过
@@ -21,15 +22,34 @@ App({
                 that.globalData.userInfo = res.userInfo
                 that.globalData.userInfo['gender'] = (that.globalData.userInfo['gender'] == 1 ? "男" : "女")
                 that.getOpenID() //获取用户 openid
-                if (that.userInfoReadyCallback) { //回调函数
-                  that.userInfoReadyCallback()
+                while (--timeOut != 0) {
+                  if (that.userInfoReadyCallback) { //回调函数
+                    that.userInfoReadyCallback()
+                    break
+                  }
+                }
+                //回调函数设置超时重启程序
+                if (timeOut == 0) {
+                  wx.reLaunch({
+                    url: '/pages/login/login',
+                  })
                 }
               }
             })
           } else {
+            var i = 10
             //如果未授权，将在 login 页面授权
-            if (that.needAuthorizeCallback) { //回调函数
-              that.needAuthorizeCallback()
+            while (--timeOut != 0) {
+              if (that.needAuthorizeCallback) { //回调函数
+                that.needAuthorizeCallback()
+                break
+              }
+            }
+            //回调函数设置超时重启程序
+            if (timeOut == 0) {
+              wx.reLaunch({
+                url: '/pages/login/login',
+              })
             }
           }
         }

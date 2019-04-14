@@ -1,12 +1,12 @@
 {
   "pages": [
-    "pages/index/modify/modify",
     "pages/login/login",
+    "pages/index/modify/modify",
     "pages/index/index",
     "pages/menu/menu",
-    "pages/menu/menu-content/plan/plan",
     "pages/menu/menu-content/diary/diary",
     "pages/menu/menu-content/exam/exam",
+    "pages/menu/menu-content/plan/plan",
     "pages/menu/menu-content/setting/setting",
     "pages/menu/menu-other/contact/contact",
     "pages/menu/menu-other/feedback/feedback"
@@ -14,7 +14,7 @@
   "window": {
     "navigationBarTitleText": "考研小神器",
     "navigationBarBackgroundColor": "#04838e",
-    "navigationBarTextStyle": "black"
+    "navigationBarTextStyle": "white"
   },
   "tabBar": {
     "color": "#a5a5a5",
