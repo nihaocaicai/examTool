@@ -1,7 +1,7 @@
 Page({
   data: {
     delBtnWidth: 160,
-    data: [{ right: 0 }, { right: 0 }, { right: 0 }, { right: 0 }, { right: 0 }, { right: 0 }, { right: 0 }],
+    data: [{ right: 0 }, { right: 0 }],
     isScroll: true,
     windowHeight: 0,
   },

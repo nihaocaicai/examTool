@@ -1,5 +1,5 @@
 var app = getApp()
-var util_date = require('../utils/date.js')
+var util_date = require('../../utils/index/data.js')
 
 Page({
   data: {
@@ -61,6 +61,7 @@ Page({
     console.log('你点击了确定');
     this.diary.hideDiary();
   },
+  // 展示所有的日志，跳转到菜单页面的考研日志
   showAllDiary(){
     wx.navigateTo({
       url: '../menu/menu-content/diary/diary',

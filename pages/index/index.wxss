@@ -1,12 +1,12 @@
 .container{
-  margin-top:10rpx; 
+  
 }
 
 /* 倒计时部分star */
 .top-container{
   flex-direction:row;
   display:flex;
-  margin-bottom: 80rpx;
+  margin-bottom: 65rpx;
 }
 .count-down-container{
     flex-direction:column;
@@ -41,11 +41,14 @@
 /* 每日计划star */
 /* edit部分star */
 .bottom-container{
-  margin: 40rpx;
+  margin-top: 40rpx;
+  margin-bottom: 40rpx;
+  margin-left: 60rpx;
+  margin-right: 60rpx;
   border-width: 1rpx;  
   border-color: black;  
   border-style: solid;
-  height: 560rpx;
+  height: 500rpx;
 }
 
 .edit-container{
@@ -72,7 +75,7 @@
 .modify-image{
   width:80rpx;
   height:80rpx;
-  margin-left: 200rpx;
+  margin-left: 180rpx;
 }
 /* edit部分end */
 
@@ -95,10 +98,10 @@
 .plan-image{
   width:35rpx;
   height:35rpx;
-  margin-left: 60rpx;
+  margin-left: 40rpx;
 }
 .scroll-view{
-  height: 450rpx;
+  height: 400rpx;
 }
 /* 隐藏滚动条 */
 ::-webkit-scrollbar
@@ -114,7 +117,7 @@ color: transparent;
 .show-container{
   width:35rpx;
   height:35rpx;
-  margin-top: 50rpx;
+  margin-top: 18rpx;
   margin-left: 500rpx;
 }
 .show-container image{
