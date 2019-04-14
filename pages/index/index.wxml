@@ -35,10 +35,13 @@
             <image wx:if='{{item.flag_star}}' class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/star.png' />
             <image wx:else class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/none-star.png' />
           </view>
-
         </view>
       </view>
     </scroll-view>
+
+    <view class='show-container'>
+      <image src='/images/index/show.png' bindtap='showAllDiary'></image>
+    </view>
   </view>
   <diary id='diary' bind:error="_error" bind:success="_success" />
 </view>

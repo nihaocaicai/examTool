@@ -61,5 +61,10 @@ Page({
     console.log('你点击了确定');
     this.diary.hideDiary();
   },
+  showAllDiary(){
+    wx.navigateTo({
+      url: '../menu/menu-content/diary/diary',
+    })
+  }
 
 })

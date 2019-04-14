@@ -108,4 +108,17 @@ height: 0;
 color: transparent;
 }
 /* plan部分end */
-/* 每日计划star */
+/* 每日计划end */
+
+/* 日记展示star */
+.show-container{
+  width:35rpx;
+  height:35rpx;
+  margin-top: 50rpx;
+  margin-left: 500rpx;
+}
+.show-container image{
+  width: 145rpx;
+  height: 145rpx;
+}
+/* 日记展示end */
