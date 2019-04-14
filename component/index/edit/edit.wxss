@@ -1,4 +1,4 @@
-.diary-container {
+.plan-container {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -12,28 +12,36 @@
   overflow: hidden;
   background: #fff;
 }
-.wx-diary-title {
+.wx-plan-title {
   width: 100%;
   padding: 20rpx;
   text-align: center;
   font-size: 40rpx;
   border-bottom: 1rpx solid black;
 }
-.wx-diary-con {
+.wx-plan-con {
   margin: 25rpx 10rpx;
   padding: 10rpx;
 }
-
-.wx-diary-con textarea{
-  width: 100%;
+.plan-content-container{
+  
+}
+.plan-content{
+  border-width: 1rpx;  
+  border-color: black;  
+  border-style: solid;
 }
 
-.wx-diary-btn {
+
+
+
+
+.wx-plan-btn {
   display: flex;
   justify-content: space-around;
   margin-bottom: 25rpx;
 }
-.wx-diary-btn button {
+.wx-plan-btn button {
   display: flex;
   align-items: center;
   justify-content: center;

@@ -65,6 +65,18 @@ Component({
     _success() {
       //触发成功回调
       this.triggerEvent("success")
-    }
+    },
+    bindDateChange(e) {
+      console.log('picker发送选择改变，携带值为', e.detail.value)
+      this.setData({
+        date: e.detail.value
+      })
+    },
+    bindTimeChange(e) {
+      console.log('picker发送选择改变，携带值为', e.detail.value)
+      this.setData({
+        time: e.detail.value
+      })
+    },
   }
 })

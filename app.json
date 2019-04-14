@@ -1,8 +1,8 @@
 {
   "pages": [
-    "pages/index/modify/modify",
     "pages/login/login",
     "pages/index/index",
+    "pages/index/modify/modify",
     "pages/menu/menu",
     "pages/menu/menu-content/plan/plan",
     "pages/menu/menu-content/diary/diary",
