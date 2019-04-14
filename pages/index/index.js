@@ -25,7 +25,34 @@ Page({
     }, {
       "content": "2、下午：14:00-17:30 学习数学理论",
       flag_star: false,
-    }]
+      }, {
+        "content": "2、下午：14:00-17:30 学习数学理论",
+        flag_star: false,
+      }, {
+        "content": "2、下午：14:00-17:30 学习数学理论",
+        flag_star: false,
+      }, {
+        "content": "2、下午：14:00-17:30 学习数学理论",
+        flag_star: false,
+      }, {
+        "content": "2、下午：14:00-17:30 学习数学理论",
+        flag_star: false,
+      }, {
+        "content": "2、下午：14:00-17:30 学习数学理论",
+        flag_star: false,
+      }, {
+        "content": "2、下午：14:00-17:30 学习数学理论",
+        flag_star: false,
+      }, {
+        "content": "2、下午：14:00-17:30 学习数学理论",
+        flag_star: false,
+      }, {
+        "content": "2、下午：14:00-17:30 学习数学理论",
+        flag_star: false,
+      }, {
+        "content": "2、下午：14:00-17:30 学习数学理论",
+        flag_star: false,
+      }]
     //Todo
     this.setData({
       plan: plans

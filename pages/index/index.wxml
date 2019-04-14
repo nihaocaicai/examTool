@@ -1,4 +1,4 @@
-<view>
+<view class='container'>
   <!-- 倒计时部分star -->
   <view class='top-container'>
     <view class='count-down-container'>
@@ -19,7 +19,9 @@
       <text class='edit-text'>{{date}}</text>
       <image class='modify-image' src='/images/index/modify.png' bindtap="goToModify"></image>
     </view>
-
+ <scroll-view
+    scroll-y
+    class='scroll-view'>
     <view wx:for='{{plan}}' wx:key='none'>
       <view class='plan-container'>
         <text class='plan-text'>{{item.content}}</text>
@@ -27,8 +29,10 @@
         <image wx:else class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/none-star.png' />
       </view>
     </view>
-
+  </scroll-view>
   </view>
+
   <diary id='diary' bind:error="_error" bind:success="_success">
   </diary>
+  
 </view>

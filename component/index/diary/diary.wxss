@@ -19,9 +19,22 @@
   font-size: 40rpx;
   border-bottom: 1rpx solid black;
 }
-.wx-diary-con {
-  margin: 25rpx 10rpx;
+.wx-diary-headline{
   padding: 10rpx;
+  border-width: 1rpx;  
+  border-color: black;  
+  border-style: solid;
+  margin: 20rpx;
+}
+.wx-diary-headline input{
+  width: 100%;
+}
+.wx-diary-con {
+  margin: 20rpx;
+  padding: 10rpx;
+  border-width: 1rpx;  
+  border-color: black;  
+  border-style: solid;
 }
 
 .wx-diary-con textarea{

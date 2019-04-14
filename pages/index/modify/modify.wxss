@@ -15,15 +15,15 @@
   height: 100%;
   margin-top: 24rpx;
   margin-bottom: 5rpx;
-  margin-left: 20rpx;
+  margin-left: 15rpx;
 }
 .date-text{
   font-size: 28rpx;
   width: 500rpx;
 }
 .date-image{
-  width:30rpx;
-  height:30rpx;
+  width:32rpx;
+  height:32rpx;
   margin-left: 80rpx;
 }
 /* 日期和星标end */
@@ -31,12 +31,12 @@
 .content-container{
   width: 100%;
   height: 100%;
+  margin-top: 15rpx;
   margin-bottom: 24rpx;
-  margin-left: 20rpx;
+  margin-left: 15rpx;
 }
 .content-text{
   font-size: 28rpx;
-  width: 500rpx;
 }
 /* 内容end */
 
@@ -47,7 +47,7 @@
 .edit{  
   width: 160rpx;  
   height: 100%;
-  background-color: red; 
+  background-color:#e9e9e9; 
   color: white; 
   position: absolute;  
   top: 0;  
@@ -55,4 +55,14 @@
   display: flex;  
   justify-content: center;  
   align-items: center;  
-} 
+}
+
+.modify-image{
+  width: 85rpx;
+  height: 85rpx;
+}
+
+.del-image{
+  width: 75rpx;
+  height: 75rpx;
+}

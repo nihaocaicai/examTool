@@ -9,13 +9,13 @@
       </view>
       <!-- 内容 -->
       <view class='content-container'>
-        <text class='content-text'>图书馆学习</text>
+        <text class='content-text'>图书馆学习图书馆学习图书馆学习图书馆学习图书馆学习图书馆学习</text>
       </view>
     </view>
     
     <view class="edit">
-      <text bindtap="modItem">修改</text>
-      <text bindtap="delItem">删除</text>
+      <image class='modify-image' src='/images/index/diary.png' bindtap="modItem"></image>
+      <image class='del-image' src='/images/index/modify/del.png' bindtap="delItem"></image>
     </view>
   </view>
   </block>

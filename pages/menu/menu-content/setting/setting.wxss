@@ -33,7 +33,7 @@
 /* 退出登录star */
 .button-container{
   margin: auto;
-  width: 200rpx;
+  width: 300rpx;
 }
 .button-container button{
   background: #04838e;

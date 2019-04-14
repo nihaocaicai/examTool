@@ -1,8 +1,12 @@
+.container{
+  margin-top:10rpx; 
+}
+
 /* 倒计时部分star */
 .top-container{
   flex-direction:row;
   display:flex;
-  margin-bottom: 60rpx;
+  margin-bottom: 80rpx;
 }
 .count-down-container{
     flex-direction:column;
@@ -17,6 +21,11 @@
     margin-top:100rpx;
     margin-left:-80rpx;
     padding-bottom: 10rpx;
+}
+.target-container text{
+  font-size: 32rpx;
+  margin-top: 10rpx;
+  margin-bottom: 10rpx;
 }
 .count-down-image{
     width:360rpx;
@@ -35,7 +44,8 @@
   margin: 40rpx;
   border-width: 1rpx;  
   border-color: black;  
-  border-style: solid;  
+  border-style: solid;
+  height: 560rpx;
 }
 
 .edit-container{
@@ -44,26 +54,25 @@
   align-items: center;
   justify-content: center;  
   width: 100%;
-  height: 100%;
+  height: 100rpx;
   border-width: 0rpx 0rpx 1rpx 0rpx;  
   border-color: black;  
   border-style: solid; 
 }
 
 .diary-image{
-  width:100rpx;
-  height:100rpx;
-  margin-right: 10rpx;
+  width:80rpx;
+  height:80rpx;
 }
 
 .edit-text{
-  
+  font-size: 32rpx;
 }
 
 .modify-image{
-  width:100rpx;
-  height:100rpx;
-  margin-left: 100rpx;
+  width:80rpx;
+  height:80rpx;
+  margin-left: 200rpx;
 }
 /* edit部分end */
 
@@ -77,16 +86,26 @@
   height: 100%;
   margin-top: 24rpx;
   margin-bottom: 24rpx;
-  margin-left: 20rpx;
+  margin-left: 30rpx;
 }
 .plan-text{
   font-size: 28rpx;
   width: 500rpx;
 }
 .plan-image{
-  width:30rpx;
-  height:30rpx;
-  margin-left: 80rpx;
+  width:35rpx;
+  height:35rpx;
+  margin-left: 60rpx;
+}
+.scroll-view{
+  height: 450rpx;
+}
+/* 隐藏滚动条 */
+::-webkit-scrollbar
+{
+width: 0;
+height: 0;
+color: transparent;
 }
 /* plan部分end */
 /* 每日计划star */
