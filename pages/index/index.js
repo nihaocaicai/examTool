@@ -3,18 +3,15 @@ var util_date = require('../utils/date.js')
 
 Page({
   data: {
-    goal: app.globalData.goal, //目标
-    motto: app.globalData.motto, //座右铭
     countdown: util_date.countdown, //倒计时天数
     date: util_date.date, //今天的日期
-    plan: [], //计划列表
   },
 
   onReady: function() {
     this.diary = this.selectComponent("#diary") //获得diary组件
-    this.getPlan() //获取计划
   },
 
+<<<<<<< HEAD
   //获取计划
   getPlan: function() {
     var plans
@@ -54,13 +51,19 @@ Page({
         flag_star: false,
       }]
     //Todo
+=======
+  onLoad: function() {
+    //数据在 login 页面就应该获取完了
+>>>>>>> 72468a6a4d3462814a310fb0cb1e2703d4015217
     this.setData({
-      plan: plans
+      plan: app.globalData.plan, //计划
+      goal: app.globalData.goal, //目标
+      motto: app.globalData.motto, //座右铭
     })
   },
 
   //点击 星标按钮
-  clickStar(e) {
+  clickStar: function(e) {
     // 计划下标，从0开始
     var index = e.currentTarget.dataset.index
     // 获取计划列表
