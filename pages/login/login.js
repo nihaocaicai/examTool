@@ -16,8 +16,9 @@ Page({
   getUserInfo: function(e) {
     var userInfo = e.detail.userInfo
     if (userInfo) {
-      //用户按了允许授权按钮
+      //用户按了授权按钮
       app.globalData.userInfo = userInfo
+      app.globalData.userInfo['gender'] = (app.globalData.userInfo['gender'] == 1 ? "男" : "女")
       app.getOpenID()
       wx.switchTab({
         url: '../index/index',
@@ -55,6 +56,7 @@ Page({
         lang: "zh_CN",
         success: res => {
           app.globalData.userInfo = res.userInfo
+          app.globalData.userInfo['gender'] = (app.globalData.userInfo['gender'] == 1 ? "男" : "女")
           app.getOpenID()
           wx.switchTab({
             url: '../index/index',
@@ -70,10 +72,37 @@ Page({
     app.globalData.motto = '考研路上，我们都不是孤独的' //座右铭
     //获取计划（应该由网络获取）
     app.globalData.plan = [{
-      content: "1、早上：8:00-10:30 记一单元单词",
+      "content": "1、早上：8:00-10:30 记一单元单词",
       flag_star: true,
     }, {
-      content: "2、下午：14:00-17:30 学习数学理论",
+      "content": "2、下午：14:00-17:30 学习数学理论",
+      flag_star: false,
+    }, {
+      "content": "2、下午：14:00-17:30 学习数学理论",
+      flag_star: false,
+    }, {
+      "content": "2、下午：14:00-17:30 学习数学理论",
+      flag_star: false,
+    }, {
+      "content": "2、下午：14:00-17:30 学习数学理论",
+      flag_star: false,
+    }, {
+      "content": "2、下午：14:00-17:30 学习数学理论",
+      flag_star: false,
+    }, {
+      "content": "2、下午：14:00-17:30 学习数学理论",
+      flag_star: false,
+    }, {
+      "content": "2、下午：14:00-17:30 学习数学理论",
+      flag_star: false,
+    }, {
+      "content": "2、下午：14:00-17:30 学习数学理论",
+      flag_star: false,
+    }, {
+      "content": "2、下午：14:00-17:30 学习数学理论",
+      flag_star: false,
+    }, {
+      "content": "2、下午：14:00-17:30 学习数学理论",
       flag_star: false,
     }]
     //在获取完之后才进入主界面，否则弹出对话框，提示网络错误
@@ -82,7 +111,7 @@ Page({
       wx.switchTab({
         url: '../index/index',
       })
-    }, 1000)
+    }, 500)
   },
 
   /**

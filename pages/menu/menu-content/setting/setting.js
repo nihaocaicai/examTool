@@ -1,6 +1,21 @@
 // pages/menu/menu-content/setting/setting.js
+var app = getApp()
+
 Page({
-  onReady: function () {
+  onLoad: function() {
+    var userInfo = app.globalData.userInfo
+    this.setData({
+      avatarUrl: userInfo['avatarUrl'],
+      nickName: userInfo['nickName'],
+      gender: userInfo['gender'],
+      birthday: '1998-02-01',
+      goal: app.globalData.goal,
+      examDate: '2020-12-22',
+      motto: app.globalData.motto,
+    })
+  },
+
+  onReady: function() {
     this.edit = this.selectComponent("#edit") //获得diary组件
   },
   /* 考研小日志 diary 对话框 */
@@ -19,7 +34,7 @@ Page({
     console.log('你点击了确定');
     this.edit.hideEdit();
   },
-  downLogin(){
+  downLogin() {
     console.log('退出登录');
   }
 })

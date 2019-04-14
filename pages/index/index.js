@@ -11,50 +11,12 @@ Page({
     this.diary = this.selectComponent("#diary") //获得diary组件
   },
 
-<<<<<<< HEAD
   //获取计划
   getPlan: function() {
-    var plans
-    //Todo 获取计划（应该由网络获取）
-    plans = [{
-      "content": "1、早上：8:00-10:30 记一单元单词",
-      flag_star: true,
-    }, {
-      "content": "2、下午：14:00-17:30 学习数学理论",
-      flag_star: false,
-      }, {
-        "content": "2、下午：14:00-17:30 学习数学理论",
-        flag_star: false,
-      }, {
-        "content": "2、下午：14:00-17:30 学习数学理论",
-        flag_star: false,
-      }, {
-        "content": "2、下午：14:00-17:30 学习数学理论",
-        flag_star: false,
-      }, {
-        "content": "2、下午：14:00-17:30 学习数学理论",
-        flag_star: false,
-      }, {
-        "content": "2、下午：14:00-17:30 学习数学理论",
-        flag_star: false,
-      }, {
-        "content": "2、下午：14:00-17:30 学习数学理论",
-        flag_star: false,
-      }, {
-        "content": "2、下午：14:00-17:30 学习数学理论",
-        flag_star: false,
-      }, {
-        "content": "2、下午：14:00-17:30 学习数学理论",
-        flag_star: false,
-      }, {
-        "content": "2、下午：14:00-17:30 学习数学理论",
-        flag_star: false,
-      }]
-    //Todo
-=======
+  },
+
   onLoad: function() {
     //数据在 login 页面就应该获取完了
->>>>>>> 72468a6a4d3462814a310fb0cb1e2703d4015217
     this.setData({
       plan: app.globalData.plan, //计划
       goal: app.globalData.goal, //目标

@@ -39,7 +39,7 @@ page {
 
 #button_view {
   margin: 0 auto;
-  width: 200rpx;
+  width: 300rpx;
 }
 
 #button {
