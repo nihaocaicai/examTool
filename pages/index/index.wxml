@@ -19,41 +19,26 @@
       <text class='edit-text'>{{date}}</text>
       <image class='modify-image' src='/images/index/modify.png' bindtap="goToModify"></image>
     </view>
-<<<<<<< HEAD
- <scroll-view
-    scroll-y
-    class='scroll-view'>
-    <view wx:for='{{plan}}' wx:key='none'>
-      <view class='plan-container'>
-        <text class='plan-text'>{{item.content}}</text>
-        <image wx:if='{{item.flag_star}}' class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/star.png' />
-        <image wx:else class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/none-star.png' />
-=======
 
-    <view wx:if='{{plan.length==0}}'>
-      <!-- 今天没有计划 -->
-      <view style='margin:20px; text-align:center'>今天没有计划</view>
-    </view>
+    <scroll-view scroll-y class='scroll-view'>
 
-    <!-- 今天有计划 -->
-    <view wx:else>
-      <view wx:for='{{plan}}' wx:key='none'>
-        <view class='plan-container'>
-          <text class='plan-text'>{{item.content}}</text>
-          <image wx:if='{{item.flag_star}}' class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/star.png' />
-          <image wx:else class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/none-star.png' />
-        </view>
->>>>>>> 72468a6a4d3462814a310fb0cb1e2703d4015217
+        <!-- 今天没有计划 -->
+      <view wx:if='{{plan.length==0}}'>
+        <view style='margin:20px; text-align:center'>今天没有计划</view>
       </view>
-    </view>
-  </scroll-view>
-  </view>
-<<<<<<< HEAD
 
-  <diary id='diary' bind:error="_error" bind:success="_success">
-  </diary>
-  
-=======
+      <!-- 今天有计划 -->
+      <view wx:else>
+        <view wx:for='{{plan}}' wx:key='none'>
+          <view class='plan-container'>
+            <text class='plan-text'>{{item.content}}</text>
+            <image wx:if='{{item.flag_star}}' class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/star.png' />
+            <image wx:else class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/none-star.png' />
+          </view>
+
+        </view>
+      </view>
+    </scroll-view>
+  </view>
   <diary id='diary' bind:error="_error" bind:success="_success" />
->>>>>>> 72468a6a4d3462814a310fb0cb1e2703d4015217
 </view>

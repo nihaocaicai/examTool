@@ -19,6 +19,7 @@ App({
               lang: "zh_CN",
               success: function(res) {
                 that.globalData.userInfo = res.userInfo
+                that.globalData.userInfo['gender'] = (that.globalData.userInfo['gender'] == 1 ? "男" : "女")
                 that.getOpenID() //获取用户 openid
                 if (that.userInfoReadyCallback) { //回调函数
                   that.userInfoReadyCallback()
