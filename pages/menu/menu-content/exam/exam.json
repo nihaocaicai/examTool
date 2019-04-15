@@ -2,6 +2,7 @@
   "navigationBarTitleText": "考研安排",
   "enablePullDownRefresh": true,
   "usingComponents": {
-    "edit": "/component/menu/editexam/editexam"
+    "editexam": "/component/menu/editexam/editexam",
+    "modifyexam": "/component/menu/modifyexam/modifyexam"
   }
 }

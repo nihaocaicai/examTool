@@ -26,6 +26,7 @@ Page({
   onReady: function () {
     //获得edit组件
     this.edit = this.selectComponent("#edit");
+    this.modify = this.selectComponent("#modify");
   },
 
   drawStart: function (e) {
@@ -83,17 +84,25 @@ Page({
 
   modItem() {
     console.log("修改");
-    this.edit.showEdit();
+    this.modify.showEdit();
   },
   //取消事件
   _error() {
     console.log('你点击了取消');
     this.edit.hideEdit();
   },
+  _errormodify() {
+    console.log('你点击了取消');
+    this.modify.hideEdit();
+  },
   //确认事件
   _success() {
     console.log('你点击了确定');
     this.edit.hideEdit();
+  },
+  _successmodify() {
+    console.log('你点击了确定');
+    this.modify.hideEdit();
   },
   
 
@@ -107,5 +116,5 @@ Page({
   onPullDownRefresh: function () {
     console.log("添加");
     this.edit.showEdit();
-  }
+  },
 })

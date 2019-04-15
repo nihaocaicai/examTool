@@ -11,10 +11,9 @@
   <!-- 信息star -->
   <view class='text-container'>
     <text>昵称：{{nickName}}</text>
-    <text>性别：{{gender}}</text>
     <text>生日：{{birthday}}</text>
-    <text>目标大学：{{goal}}</text>
     <text>考研日期：{{examDate}}</text>
+    <text>目标大学：{{goal}}</text>
     <text>座右铭：{{motto}}</text>
   </view>
   <!-- 信息end -->

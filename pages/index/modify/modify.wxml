@@ -24,4 +24,8 @@
       bind:error="_error"  
       bind:success="_success">
   </edit>
+  <modify id='modify'
+      bind:error="_errormodify"  
+      bind:success="_successmodify">
+  </modify>
 </view>

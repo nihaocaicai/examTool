@@ -1,7 +1,8 @@
+<!--component/index/modify/modify.wxml-->
 <view hidden="{{flag}}">
   <view class='plan-container'>
     <!-- 标题 -->
-    <view class="wx-plan-title">每日计划添加</view>
+    <view class="wx-plan-title">修改计划</view>
     <form bindsubmit="formSubmit">
       <!-- 内容 -->
       <view class="wx-plan-con">
