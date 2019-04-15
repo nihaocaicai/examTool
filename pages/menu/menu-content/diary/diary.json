@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "每日编辑",
+  "navigationBarTitleText": "考研日记",
   "enablePullDownRefresh": true,
   "usingComponents": {
     "diary": "/component/index/diary/diary",

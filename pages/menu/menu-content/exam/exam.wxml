@@ -13,15 +13,19 @@
       </view>
     </view>
     
-    <view class="edit">
+    <view class="editexam">
       <image class='modify-image' src='/images/index/diary.png' bindtap="modItem"></image>
       <image class='del-image' src='/images/index/modify/del.png' bindtap="delItem"></image>
     </view>
   </view>
   </block>
 
-  <edit id='edit'
-      bind:error="_error"  
-      bind:success="_success">
-  </edit>
+  <editexam id='editexam'
+      bind:error="_errorexam"  
+      bind:success="_successexam">
+  </editexam>
+  <modifyexam id='modifyexam'
+      bind:error="_errormodifyexam"  
+      bind:success="_successmodifyexam">
+  </modifyexam>
 </view>

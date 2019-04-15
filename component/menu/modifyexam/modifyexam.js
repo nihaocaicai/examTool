@@ -24,7 +24,7 @@ Component({
     // 弹窗确认按钮文字
     btn_ok: {
       type: String,
-      value: '确定'
+      value: '保存'
     }
   },
 
@@ -71,6 +71,12 @@ Component({
       this.setData({
         date: e.detail.value
       })
-    }
+    },
+    bindTimeChange(e) {
+      console.log('picker发送选择改变，携带值为', e.detail.value)
+      this.setData({
+        time: e.detail.value
+      })
+    },
   }
 })

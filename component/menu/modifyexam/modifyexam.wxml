@@ -1,7 +1,7 @@
 <view hidden="{{flag}}">
   <view class='editexam-container'>
     <!-- 标题 -->
-    <view class="wx-editexam-title">考研安排</view>
+    <view class="wx-editexam-title">修改安排</view>
     <form bindsubmit="formSubmit">
     <!-- 内容 -->
     <view class="wx-editexam-con">

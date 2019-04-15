@@ -1,4 +1,5 @@
-.editexam-container {
+/* component/index/modify/modify.wxss */
+.plan-container {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -12,48 +13,36 @@
   overflow: hidden;
   background: #fff;
 }
-.wx-editexam-title {
+.wx-plan-title {
   width: 100%;
   padding: 20rpx;
   text-align: center;
   font-size: 40rpx;
   border-bottom: 1rpx solid black;
 }
-.wx-editexam-con {
-  width:100%;
-  padding: 20rpx;
-  margin: 20rpx 20rpx;
+.wx-plan-con {
+  margin: 25rpx 10rpx;
+  padding: 10rpx;
 }
-.wx-examtxt{
-  width: 80%;
-  height: 30rpx;
+.plan-content-container{
+  
+}
+.plan-content{
   border-width: 1rpx;  
   border-color: black;  
   border-style: solid;
-  font-size: 28rpx;
-  color: #333;
-  background: #fff;
-  margin:  20rpx 20rpx;
-  padding: 10rpx;
 }
-.section {
-  width: 80%;
-  height: 30rpx;
-  border-width: 1rpx;  
-  border-color: black;  
-  border-style: solid;
-  font-size: 30rpx;
-  color: #333;
-  background: #fff;
-  margin:  20rpx 20rpx;
-  padding: 10rpx;
-}
-.wx-editexam-btn {
+
+
+
+
+
+.wx-plan-btn {
   display: flex;
   justify-content: space-around;
   margin-bottom: 25rpx;
 }
-.wx-editexam-btn button {
+.wx-plan-btn button {
   display: flex;
   align-items: center;
   justify-content: center;

@@ -26,7 +26,8 @@ Page({
    */
   onReady: function () {
     //获得edit组件
-    this.edit = this.selectComponent("#edit");
+    this.editexam = this.selectComponent("#editexam");
+    this.modifyexam = this.selectComponent("#modifyexam");
   },
 
   drawStart: function (e) {
@@ -84,17 +85,25 @@ Page({
 
   modItem() {
     console.log("修改");
-    this.edit.showEdit();
+    this.modifyexam.showEdit();
   },
   //取消事件
-  _error() {
+  _errorexam() {
     console.log('你点击了取消');
-    this.edit.hideEdit();
+    this.editexam.hideEdit();
+  },
+  _errormodifyexam() {
+    console.log('你点击了取消');
+    this.modifyexam.hideEdit();
   },
   //确认事件
-  _success() {
+  _successexam() {
     console.log('你点击了确定');
-    this.edit.hideEdit();
+    this.editexam.hideEdit();
+  },
+  _successmodifyexam() {
+    console.log('你点击了确定');
+    this.modifyexam.hideEdit();
   },
 
 
@@ -107,6 +116,6 @@ Page({
    */
   onPullDownRefresh: function () {
     console.log("添加");
-    this.edit.showEdit();
+    this.editexam.showEdit();
   }
 })
