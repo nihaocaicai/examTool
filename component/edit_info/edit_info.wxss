@@ -13,7 +13,8 @@
 }
 .wx-setting-title {
   width: 100%;
-  padding: 20rpx;
+  padding-top: 20rpx;
+  padding-bottom: 20rpx;
   text-align: center;
   font-size: 40rpx;
   border-bottom: 1rpx solid black;
@@ -46,6 +47,7 @@
   padding: 10rpx;
 }
 .section {
+  display: flex;
   width: 90%;
   height: 40rpx;
   font-size: 36rpx;

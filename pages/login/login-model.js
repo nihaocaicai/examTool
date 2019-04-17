@@ -1,7 +1,6 @@
 //login 页面登录接口
 //完成授权且获取 userInfo 和 openid 之后的操作
 var app = getApp()
-var testData = require("../../data/testData.js")
 
 class Login {
   //用户点击授权按钮 获取用户信息
@@ -63,13 +62,12 @@ class Login {
 
   //设置对话框 点击确定按钮
   dialogConfirm(page, formData) {
-    //对formData进行处理
-    page.edit.hideEdit();
     try {
       wx.setStorageSync('user_info', formData)
-      wx.setStorageSync('plan', new Object())
+      wx.setStorageSync('plan', new Array())
       // Todo 执行保存到服务器操作（必须）
       // Todo 成功后跳转首页，失败提示网络出错
+      page.edit.hideEdit();
       this.toIndex()
     } catch (e) {
       console.log("保存信息出错", e)
@@ -81,17 +79,7 @@ class Login {
       })
     }
   }
-
-  //设置对话框 点击取消按钮
-  // page 指的是 login 页面
-  dialogCancel(page) {
-    wx.showModal({
-      title: '提示',
-      content: '必须设置信息才能使用哦～',
-      showCancel: false,
-    })
-  }
-
+  
   //跳转到首页
   toIndex() {
     wx.switchTab({

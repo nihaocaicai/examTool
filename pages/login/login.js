@@ -29,11 +29,6 @@ Page({
   },
 
   /* 考研小日志 diary 对话框 */
-  //回调 取消事件
-  _error() {
-    login.dialogCancel(this)
-  },
-  
   //回调 保存数据事件
   _save(e) {
     login.dialogConfirm(this, e.detail)
