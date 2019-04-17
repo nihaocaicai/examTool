@@ -7,25 +7,7 @@ Component({
    * 组件的属性列表
    */
   properties: {
-    title: {            // 属性名
-      type: String,     // 类型（必填），目前接受的类型包括：String, Number, Boolean, Object, Array, null（表示任意类型）
-      value: '标题'     // 属性初始值（可选），如果未指定则会根据类型选择一个
-    },
-    // 弹窗内容
-    content: {
-      type: String,
-      value: '内容'
-    },
-    // 弹窗取消按钮文字
-    btn_no: {
-      type: String,
-      value: '取消'
-    },
-    // 弹窗确认按钮文字
-    btn_ok: {
-      type: String,
-      value: '确定'
-    }
+    
   },
 
   /**
@@ -39,9 +21,6 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    formSubmit(e) {
-      console.log('form发生了submit事件，携带数据为：', e.detail.value)
-    },
     //隐藏弹框
     hideEdit: function () {
       this.setData({
@@ -66,17 +45,42 @@ Component({
       //触发成功回调
       this.triggerEvent("success")
     },
-    bindDateChange(e) {
-      console.log('picker发送选择改变，携带值为', e.detail.value)
+
+    // 组件表单提交数据
+    formSubmit(e) {
+      console.log('form发生了submit事件，携带数据为：', e.detail.value)
+    },
+    // 组件表单相关方法
+
+    bindStarDateChange(e) {
+      console.log('stardate发送选择改变，携带值为', e.detail.value)
       this.setData({
-        date: e.detail.value
+        stardate: e.detail.value
       })
     },
-    bindTimeChange(e) {
-      console.log('picker发送选择改变，携带值为', e.detail.value)
+    bindStarTimeChange(e) {
+      console.log('startime发送选择改变，携带值为', e.detail.value)
       this.setData({
-        time: e.detail.value
+        startime: e.detail.value
       })
     },
+    bindEndDateChange(e) {
+      console.log('enddate发送选择改变，携带值为', e.detail.value)
+      this.setData({
+        enddate: e.detail.value
+      })
+    },
+    bindEndTimeChange(e) {
+      console.log('endtime发送选择改变，携带值为', e.detail.value)
+      this.setData({
+        endtime: e.detail.value
+      })
+    },
+    switch1Change(e) {
+      console.log('switch1 发生 change 事件，携带值为', e.detail.value)
+    },
+    switch2Change(e) {
+      console.log('switch2 发生 change 事件，携带值为', e.detail.value)
+    }
   }
 })

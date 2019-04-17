@@ -5,10 +5,10 @@
     <form bindsubmit="formSubmit">
     <!-- 内容 -->
     <view class="wx-diary-headline">
-      <input name="input" maxlength="10" placeholder="标题" />
+      <input name="title" maxlength="10" label="标题" type='text' placeholder="标题" />
     </view>
     <view class="wx-diary-con">
-      <textarea name="textarea" placeholder="内容" />
+      <textarea name="content" maxlength="140" placeholder="说说你的变法吧..." />
     </view>
     <!-- 按钮 -->
     <view class="wx-diary-btn">
