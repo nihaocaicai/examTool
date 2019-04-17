@@ -5,7 +5,10 @@
   border-color: black;  
   border-style: solid;
 }
-
+.wx-date{
+  padding-bottom: 10rpx;
+  margin-left: 20rpx;
+}
 /* 日期star */
 .date-container{
   flex-direction:row;

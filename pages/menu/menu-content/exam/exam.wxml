@@ -1,7 +1,7 @@
 <!--pages/menu/menu-content/exam/exam.wxml-->
 <view>
 <view>
-<text>2020-12-22</text>
+<text class="wx-date">2020-12-22</text>
   <block wx:key="item" wx:for="{{data}}">
   <view data-index='{{index}}' class="order-item" bindtouchstart="drawStart" bindtouchmove="drawMove" bindtouchend="drawEnd" style="right:{{item.right}}rpx">
     <view class='data-container'>

@@ -34,6 +34,8 @@ Component({
    */
   data: {
     flag: true,
+    min: 0,//最少字数
+    max: 140, //最多字数 (根据自己需求改变)
   },
 
   /**
@@ -42,6 +44,30 @@ Component({
   methods: {
     formSubmit(e) {
       console.log('form发生了submit事件，携带数据为：', e.detail.value)
+    },
+    //textarea字数限制
+    inputs: function (e) {
+      // 获取输入框的内容
+      var value = e.detail.value;
+      // 获取输入框内容的长度
+      var len = parseInt(value.length);
+
+      //最少字数限制
+      if (len <= this.data.min)
+        this.setData({
+          texts: "加油，够0个字哦"
+        })
+      else if (len > this.data.min)
+        this.setData({
+          texts: " "
+        })
+
+      //最多字数限制
+      if (len > this.data.max) return;
+      // 当输入框内容的长度大于最大长度限制（max)时，终止setData()的执行
+      this.setData({
+        currentWordNumber: len //当前字数  
+      });
     },
     //隐藏弹框
     hideDiary: function () {
