@@ -51,6 +51,14 @@
   width: 100%;
 }
 
+.currentWordNumber{
+  font-size: 28rpx;
+  color: gray;
+  position: absolute;
+  left: 350rpx;
+  bottom: -6rpx;
+}
+
 .wx-diary-btn {
   display: flex;
   justify-content: space-around;

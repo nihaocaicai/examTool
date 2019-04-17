@@ -37,7 +37,8 @@
   font-size: 28rpx;
 }
 .plan-content-container switch{
-  margin-left:320rpx; 
+  margin-left:340rpx; 
+  margin-bottom:10rpx; 
 }
 
 .plan-content-container picker{

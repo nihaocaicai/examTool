@@ -10,7 +10,9 @@
         </view>
         <!-- 内容 -->
         <view class="wx-diary-con">
-          <textarea name="content" maxlength="140" placeholder="说说你的想法吧..." />
+          <textarea name="content" maxlength="140" placeholder="说说你的想法吧..." minlength="{{min}}" maxlength="{{max}}" bindinput="inputs" >
+          <text class="currentWordNumber">{{currentWordNumber|0}}/{{max}}</text>
+          </textarea>
         </view>
       </view>
       <!-- 按钮 -->
