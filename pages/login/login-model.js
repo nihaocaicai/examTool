@@ -8,10 +8,12 @@ class Login {
   clickAuthorzieButton(page, e) {
     var userInfo = e.detail.userInfo
     if (userInfo) {
+      page.setData({
+        loading: true, //是否要显示 加载中 页面
+        needAuthorize: false, //是否需要授权
+      })
       //用户按了授权按钮
       app.gotUserInfo(userInfo)
-      app.getOpenID()
-      this.setInfo(page)
     } else {
       //用户按了拒绝按钮
       wx.showModal({
@@ -22,17 +24,21 @@ class Login {
     }
   }
 
-  //设置回调函数
+  /*初始化回调函数*/
   setCallBack(page) {
     var that = this
-    /*初始化回调函数*/
-    //已获取用户信息的回调函数
+    //获取到 userInfo 的回调函数
     app.userInfoReadyCallback = function(isFirst) {
       //isFirst 是否是第一次登录，针对旧版本优化
-      if (isFirst || wx.getStorageSync('hasInfo') == false) {
+      if (isFirst) {
+        that.setInfo(page)
+      } else if (wx.getStorageSync('user_info') == "") {
+        //wx.getStorageSync('userInfo') 缓存是否有信息
+        //缓存没有信息，可以尝试网络获取，需要这么做吗？
+        //不需要直接弹窗让用户重新设置信息
         that.setInfo(page)
       } else {
-        that.getInfo(page)
+        that.toIndex()
       }
     }
     //未授权的回调函数
@@ -49,23 +55,31 @@ class Login {
   // page 指的是 login 页面
   setInfo(page) {
     page.edit = page.selectComponent("#edit") //获得diary组件
-    try {
-      wx.setStorageSync('hasInfo', false)
-    } catch (e) {}
+    page.edit.setData({
+      nickName: wx.getStorageSync("wx_user_info")['user_name']
+    })
     page.edit.showEdit();
   }
 
   //设置对话框 点击确定按钮
-  // page 指的是 login 页面
-  dialogConfirm(page) {
-    console.log("设置成功")
+  dialogConfirm(page, formData) {
+    //对formData进行处理
     page.edit.hideEdit();
     try {
-      wx.setStorageSync('hasInfo', true)
-    } catch (e) {}
-    wx.switchTab({
-      url: '../index/index',
-    })
+      wx.setStorageSync('user_info', formData)
+      wx.setStorageSync('plan', new Object())
+      // Todo 执行保存到服务器操作（必须）
+      // Todo 成功后跳转首页，失败提示网络出错
+      this.toIndex()
+    } catch (e) {
+      console.log("保存信息出错", e)
+      //存储空间不足够等问题
+      wx.showModal({
+        title: '提示',
+        content: '保存数据出错，可能是存储空间不足，请清理一下手机后重试',
+        showCancel: false,
+      })
+    }
   }
 
   //设置对话框 点击取消按钮
@@ -78,18 +92,13 @@ class Login {
     })
   }
 
-  // 获取用户基本信息(例如目标大学，座右铭等)
-  // page 指的是 login 页面
-  getInfo(page) {
-    //获取计划等信息（应该由网络获取
-    //如果获取信息成功，则
-    app.globalData.plan = testData.index_plan
-    //在获取完之后才进入主界面，否则弹出对话框，提示网络错误(例如"网络连接超时")
+  //跳转到首页
+  toIndex() {
     wx.switchTab({
       url: '../index/index',
     })
   }
-};
+}
 
 export {
   Login

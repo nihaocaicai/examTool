@@ -2,25 +2,23 @@ var app = getApp()
 var util_date = require('../../utils/index/date.js')
 
 Page({
-  data: {
-    countdown: util_date.countdown, //倒计时天数
-    date: util_date.date, //今天的日期
-  },
+  data: {},
 
   onReady: function() {
     this.diary = this.selectComponent("#diary") //获得diary组件
   },
 
-  //获取计划
-  getPlan: function() {
-  },
+  onShow: function() {
+    var user_info = wx.getStorageSync("user_info")
+    var plan = wx.getStorageSync("plan")
 
-  onLoad: function() {
     //数据在 login 页面就应该获取完了
     this.setData({
-      plan: app.globalData.plan, //计划
-      goal: app.globalData.goal, //目标
-      motto: app.globalData.motto, //座右铭
+      plan: plan, //计划
+      goal: user_info.goal, //目标
+      motto: user_info.motto, //座右铭
+      countdown: user_info.countdown, //倒计时天数
+      date: util_date.date, //今天的日期
     })
   },
 
@@ -62,7 +60,7 @@ Page({
     this.diary.hideDiary();
   },
   // 展示所有的日志，跳转到菜单页面的考研日志
-  showAllDiary(){
+  showAllDiary() {
     wx.navigateTo({
       url: '../menu/menu-content/diary/diary',
     })

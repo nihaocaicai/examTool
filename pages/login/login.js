@@ -14,7 +14,6 @@ Page({
   data: {
     loading: true, //是否要显示 加载中 页面
     needAuthorize: false, //是否需要授权
-    isOldVersion: false, //微信是否为旧版本
   },
 
   /**
@@ -34,8 +33,9 @@ Page({
   _error() {
     login.dialogCancel(this)
   },
-  //回调 确认事件
-  _success() {
-    login.dialogConfirm(this)
-  },
+  
+  //回调 保存数据事件
+  _save(e) {
+    login.dialogConfirm(this, e.detail)
+  }
 })

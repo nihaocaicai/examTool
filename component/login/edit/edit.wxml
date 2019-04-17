@@ -6,10 +6,10 @@
       <!-- 内容 -->
       <view class="wx-setting-con">
         <view class="wx-edit">昵称</view>
-        <textarea class="wx-txt" maxlength="10" placeholder='昵称'></textarea>
+        <textarea name="nickName" class="wx-txt" maxlength="10" value="{{nickName}}" auto-focus="true" focus="true"/>
         <!-- 选择生日 -->
         <view class="section">
-          <picker mode="date" value="{{birthday}}" bindchange="bindBirthdayChange">
+          <picker name="birthday" mode="date" value="{{birthday}}" bindchange="bindBirthdayChange">
             <view class="picker">
               生日：{{birthday == null ? "点击选择日期" : birthday}}
             </view>
@@ -17,16 +17,16 @@
         </view>
         <!-- 考研日期 -->
         <view class="section">
-          <picker mode="date" value="{{date}}" bindchange="bindDateChange">
+          <picker name="date" mode="date" value="{{date}}" bindchange="bindDateChange">
             <view class="picker">
               考研日期：{{date == null ? "点击选择日期" : date}}
             </view>
           </picker>
         </view>
         <view class="wx-edit">目标大学</view>
-        <textarea class="wx-txt" maxlength="10" placeholder='目标大学'></textarea>
+        <textarea name="goal" class="wx-txt" maxlength="10" placeholder='目标大学'></textarea>
         <view class="wx-edit">座右铭</view>
-        <textarea class="wx-txt2" maxlength="50" placeholder='座右铭'></textarea>
+        <textarea name="motto" class="wx-txt2" maxlength="50" placeholder='座右铭'></textarea>
       </view>
       <!-- 按钮 -->
       <view class="wx-setting-btn">
