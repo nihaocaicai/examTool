@@ -55,7 +55,7 @@ Component({
       formData['countdown'] = 55;
 
       //跳过设置信息
-      //isRight = true
+      // isRight = true
       if (isRight) {
         //调用成功保存回调函数
         this.triggerEvent("save", formData)
