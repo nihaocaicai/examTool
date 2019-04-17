@@ -51,17 +51,7 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
-    var wxInfo = wx.getStorageSync("wx_user_info")
-    var info = wx.getStorageSync("user_info")
-    if (wxInfo!="" && info!=""){
-      this.setData({
-        motto: info.motto,
-        nickName: info.nickName,
-        avatarUrl: wxInfo.user_avatar,
-      })
-    }
-  },
+  onLoad: function(options) {},
 
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -71,7 +61,18 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {},
+  onShow: function() {
+    var wxInfo = wx.getStorageSync("wx_user_info")
+    var info = wx.getStorageSync("user_info")
+
+    if (wxInfo != "" && info != "") {
+      this.setData({
+        motto: info.motto == "" ? "未设置座右铭" : info.motto,
+        nickName: wxInfo.user_name,
+        avatarUrl: wxInfo.user_avatar,
+      })
+    }
+  },
 
   /**
    * 生命周期函数--监听页面隐藏

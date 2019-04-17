@@ -1,5 +1,9 @@
+import {
+  DateUtil
+} from "../../utils/DateUtil.js"
+
 var app = getApp()
-var util_date = require('../../utils/index/date.js')
+var dateUtil = new DateUtil()
 
 Page({
   data: {},
@@ -9,16 +13,15 @@ Page({
   },
 
   onShow: function() {
-    var user_info = wx.getStorageSync("user_info")
+    var info = wx.getStorageSync("user_info")
     var plan = wx.getStorageSync("plan")
 
-    //数据在 login 页面就应该获取完了
     this.setData({
       plan: plan, //计划
-      goal: user_info.goal, //目标
-      motto: user_info.motto, //座右铭
-      countdown: user_info.countdown, //倒计时天数
-      date: util_date.date, //今天的日期
+      goal: info.goal_university == "" ? "未设置" : info.goal_university, //目标
+      motto: info.motto == "" ? "未设置座右铭" : info.motto, //座右铭
+      countdown: info.examDate == null ? "无" : parseInt(dateUtil.countDownFromToday(info.examDate)), //倒计时天数
+      date: dateUtil.getIndexDate(), //今天的日期
     })
   },
 

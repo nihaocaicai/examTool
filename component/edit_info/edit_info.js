@@ -1,3 +1,8 @@
+import {
+  DateUtil
+} from "../../utils/DateUtil.js"
+var dateUtil = new DateUtil()
+
 Component({
   options: {
     multipleSlots: true // 在组件定义时的选项中启用多slot支持
@@ -33,11 +38,14 @@ Component({
    */
   data: {
     flag: true,
+    isLogin: true, //是否是登录的时候设置
+    goal_university: "",
+    goal_major: "",
+    motto: "",
   },
 
   /* 生命周期函数 */
-  lifetimes: {
-  },
+  lifetimes: {},
 
   /**
    * 组件的方法列表
@@ -46,37 +54,39 @@ Component({
     formSubmit(e) {
       //判断数据填写是否符合要求
       var formData = e.detail.value
-      var formProName = Object.getOwnPropertyNames(formData)
-      var isRight = true
-      for (var i in formProName)
-        isRight = isRight && formData[formProName[i]]
+      var notSetFlag = null
 
-      //检查考研时间和日期是否正确，并且设置倒计时时间
-      formData['countdown'] = 55;
-
-      //跳过设置信息
-      //isRight = true
-      if (isRight) {
-        //调用成功保存回调函数
-        this.triggerEvent("save", formData)
-      } else {
+      //检查生日设置是否正确
+      if (formData.birthday != notSetFlag && parseInt(dateUtil.countDownFromToday(formData.birthday)) >= 0) {
         wx.showModal({
           title: '提示',
-          content: '你的填写有错误哦！每一项都要填写~',
+          content: '生日不能设置为今天或未来的日期',
           showCancel: false,
         })
+        return
       }
+
+      //检查考研日期是否设置正确
+      if (formData.examDate != notSetFlag && parseInt(dateUtil.countDownFromToday(formData.examDate)) <= 0) {
+        wx.showModal({
+          title: '提示',
+          content: '考研日期不能设置为过去或今天的日期',
+          showCancel: false,
+        })
+        return
+      }
+      this.triggerEvent("save", formData)
     },
     //隐藏弹框
     hideEdit: function() {
       this.setData({
-        flag: !this.data.flag
+        flag: true
       })
     },
     //展示弹框
     showEdit() {
       this.setData({
-        flag: !this.data.flag
+        flag: false
       })
     },
     //修改生日
@@ -88,20 +98,27 @@ Component({
     //修改考研日期
     bindDateChange(e) {
       this.setData({
-        date: e.detail.value
+        examDate: e.detail.value
       })
     },
-    /*
-     * 内部私有方法建议以下划线开头
-     * triggerEvent 用于触发事件
-     */
+    
+    //点击 生日 删除键
+    cleanBirthday(){
+      this.setData({
+        birthday: null
+      })
+    },
+
+    //点击 考研日期 删除键
+    cleanExamDate() {
+      this.setData({
+        examDate: null
+      })
+    },
+
+    //点击取消按钮
     _error() {
-      //触发取消回调
       this.triggerEvent("error")
-    },
-    _success() {
-      //触发成功回调
-      this.triggerEvent("success")
-    },
+    }
   }
 })

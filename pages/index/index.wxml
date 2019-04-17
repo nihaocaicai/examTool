@@ -23,7 +23,11 @@
     <scroll-view scroll-y class='scroll-view'>
       <!-- 今天没有计划 -->
       <view wx:if='{{plan.length==0}}'>
-        <view style='margin:20px; text-align:center'>今天没有计划</view>
+        <view style='margin:20px; text-align:center;'>
+          <text decode='true' style='font-size:32rpx; color:#999'>
+          今天你还没有计划\n还等什么，赶紧行动起来吧
+          </text>
+        </view>
       </view>
       <!-- 今天有计划 -->
       <view wx:else>
@@ -42,7 +46,7 @@
     </view>
   </view>
 
-  
+
   <!-- 日记添加组件 -->
   <diary id='diary' bind:error="_error" bind:success="_success" />
 </view>

@@ -2,7 +2,7 @@
   <!-- 头像star -->
   <view class='image-container'>
     <view>
-      <image class='head-image' src='{{avatarUrl}}' />
+      <image class='head-image' src='{{wxInfo.user_avatar}}' />
     </view>
     <image class='edit-image' src='/images/menu/setting/edit.png' bindtap='showEdit' />
   </view>
@@ -10,13 +10,13 @@
 
   <!-- 信息star -->
   <view class='text-container'>
-    <text>昵称：{{nickName}}</text>
-    <text>性别：男</text>
-    <text>生日：{{birthday}}</text>
-    <text>考研日期：{{examDate}}</text>
-    <text>目标大学：{{goal}}</text>
-    <text>目标专业：计算机科学与技术</text>
-    <text>座右铭：{{motto}}</text>
+    <text>昵称：{{wxInfo.user_name}}</text>
+    <text>性别：{{wxInfo.user_gender}}</text>
+    <text>生日：{{info.birthday == null ? "未设置": info.birthday}}</text>
+    <text>考研日期：{{info.examDate == null ? "未设置": info.examDate}}</text>
+    <text>目标大学：{{info.goal_university == "" ? "未设置": info.goal_university}}</text>
+    <text>目标专业：{{info.goal_major == "" ? "未设置": info.goal_major}}</text>
+    <text>座右铭：{{info.motto  == "" ? "未设置座右铭": info.motto}}</text>
   </view>
   <!-- 信息end -->
 
@@ -26,5 +26,5 @@
   </view>
   <!-- 退出登录end -->
 
-  <edit id='edit' bind:error="_error" bind:success="_success"/>
+  <edit id='edit' bind:error="_error" bind:save="_save"/>
 </view>

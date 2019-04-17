@@ -20,9 +20,4 @@ App({
   gotUserInfo(userInfo) {
     login.gotUserInfo(this, userInfo)
   },
-
-  //获取用户 OpenID 操作 此处为 login 调用接口 不要删除
-  getOpenID: function() {
-    login.getOpenID(this)
-  },
 })
