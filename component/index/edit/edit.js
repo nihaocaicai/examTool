@@ -15,6 +15,7 @@ Component({
    */
   data: {
     flag: true,
+    hidden_time:true,
   },
 
   /**
@@ -76,11 +77,20 @@ Component({
         endtime: e.detail.value
       })
     },
+    bindPointTimeChange(e) {
+      console.log('point_time发送选择改变，携带值为', e.detail.value)
+      this.setData({
+        point_time: e.detail.value
+      })
+    },
     switch1Change(e) {
       console.log('switch1 发生 change 事件，携带值为', e.detail.value)
     },
     switch2Change(e) {
       console.log('switch2 发生 change 事件，携带值为', e.detail.value)
+      this.setData({
+        hidden_time: !this.data.hidden_time
+      })
     }
   }
 })

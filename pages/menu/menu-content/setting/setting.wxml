@@ -11,9 +11,11 @@
   <!-- 信息star -->
   <view class='text-container'>
     <text>昵称：{{nickName}}</text>
+    <text>性别：男</text>
     <text>生日：{{birthday}}</text>
     <text>考研日期：{{examDate}}</text>
     <text>目标大学：{{goal}}</text>
+    <text>目标专业：计算机科学与技术</text>
     <text>座右铭：{{motto}}</text>
   </view>
   <!-- 信息end -->

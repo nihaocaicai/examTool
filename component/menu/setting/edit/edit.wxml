@@ -5,8 +5,7 @@
     <form bindsubmit="formSubmit">
     <!-- 内容 -->
     <view class="wx-setting-con">
-      <view class="wx-edit">昵称</view>
-        <textarea class="wx-txt" maxlength="10" placeholder='昵称'></textarea>
+      <view class="wx-edit">昵称：菜菜</view>
       <!-- 选择生日 -->
       <view class="section">
         <picker mode="date" value="{{date}}" start="2015-09-01" end="2017-09-01" bindchange="bindDateChange">

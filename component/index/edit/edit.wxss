@@ -3,8 +3,8 @@
   left: 50%;
   top: 50%;
  
-  width: 80%;
-  max-width: 600rpx;
+  width: 85%;
+  max-width: 800rpx;
   border: 1rpx solid #ccc;
   border-radius: 10rpx;
   box-sizing: bordre-box;
@@ -24,18 +24,30 @@
   padding: 10rpx;
 }
 .plan-content-container{
-  
+  flex-direction:row;
+  display:flex;
+  margin-bottom:15rpx; 
+  border-bottom-width: 1rpx;  
+  border-bottom-color: black;  
+  border-bottom-style: dashed;
+  height: 65rpx;
+  align-items: center;
 }
-.plan-content{
-  border-width: 1rpx;  
-  border-color: black;  
-  border-style: solid;
+.plan-content-container input{
+  font-size: 28rpx;
+}
+.plan-content-container switch{
+  margin-left:320rpx; 
 }
 
+.plan-content-container picker{
+  width: 100%;
+}
+.plan-content-container text{
+  font-size: 28rpx;
+}
 
-
-
-
+/* 按钮 */
 .wx-plan-btn {
   display: flex;
   justify-content: space-around;
