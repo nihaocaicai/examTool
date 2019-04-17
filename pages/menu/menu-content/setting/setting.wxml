@@ -22,10 +22,9 @@
 
   <!-- 退出登录star -->
   <view class='button-container'>
-    <button bindtap='downLogin'>退出登录</button>
+    <button bindtap='logout'>退出登录</button>
   </view>
   <!-- 退出登录end -->
 
-  <edit id='edit' bind:error="_error" bind:success="_success">
-  </edit>
+  <edit id='edit' bind:error="_error" bind:success="_success"/>
 </view>

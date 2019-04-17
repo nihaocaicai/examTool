@@ -1,5 +1,5 @@
 var app = getApp()
-var testData = require('../../../../utils/testData.js') //测试数据
+var testData = require('../../../../data/testData.js') //测试数据
 
 Page({
   /**

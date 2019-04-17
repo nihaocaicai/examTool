@@ -32,3 +32,5 @@
   <text decode='{{true}}'> &nbsp; |  &nbsp; </text>
   <text bindtap='clickContact'>联系我们</text>
 </view>
+
+<edit id='edit' bind:error="_error" bind:success="_success"/>
