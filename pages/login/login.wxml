@@ -20,5 +20,5 @@
     </view>
   </view>
 
-  <edit id='edit' bind:error="_error" bind:success="_success"/>
+  <edit id='edit' bind:error="_error" bind:save="_save"/>
 </view>

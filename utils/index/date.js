@@ -13,13 +13,6 @@ function getDate() {
   ).join('-') + ' ' + week.toString()
 }
 
-//获取倒计时天数
-function getCountdown() {
-  var countdown = 55
-  return countdown
-}
-
 module.exports = {
   date: getDate(), //今天的日期
-  countdown: getCountdown(), //倒计时天数
 }
