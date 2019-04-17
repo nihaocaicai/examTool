@@ -1,1 +1,5 @@
-{}
+{
+  "usingComponents": {
+    "edit": "/component/login/edit/edit"
+  }
+}

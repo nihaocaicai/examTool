@@ -52,11 +52,15 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    this.setData({
-      motto: app.globalData.motto,
-      nickName: app.globalData.userInfo['nickName'],
-      avatarUrl: app.globalData.userInfo['avatarUrl']
-    })
+    var wxInfo = wx.getStorageSync("wx_user_info")
+    var info = wx.getStorageSync("user_info")
+    if (wxInfo!="" && info!=""){
+      this.setData({
+        motto: info.motto,
+        nickName: info.nickName,
+        avatarUrl: wxInfo.user_avatar,
+      })
+    }
   },
 
   /**

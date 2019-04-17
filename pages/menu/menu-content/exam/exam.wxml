@@ -1,11 +1,13 @@
 <!--pages/menu/menu-content/exam/exam.wxml-->
 <view>
+<view>
+<text>2020-12-22</text>
   <block wx:key="item" wx:for="{{data}}">
   <view data-index='{{index}}' class="order-item" bindtouchstart="drawStart" bindtouchmove="drawMove" bindtouchend="drawEnd" style="right:{{item.right}}rpx">
     <view class='data-container'>
       <!-- 时间-->
       <view class='date-container'>
-        <text class='date-text'>2020-12-22 8:30--11:30</text>
+        <text class='date-text'>8:30</text>
       </view>
       <!-- 科目及地点 -->
       <view class='content-container'>
@@ -19,6 +21,7 @@
     </view>
   </view>
   </block>
+</view>
 
   <editexam id='editexam'
       bind:error="_errorexam"  

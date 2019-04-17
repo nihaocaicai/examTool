@@ -7,53 +7,57 @@
       <view class="wx-plan-con">
         <!-- 计划内容 -->
         <view class="plan-content-container">
-          <text>计划内容：</text>
-          <input class='plan-content' placeholder="计划内容" />
-        </view>
-        <!-- 是否每日重复 -->
-        <view class="plan-switch-container">
-          <text>每日重复：</text>
-          <switch class='plan-switch' bindchange="switchChange" />
+          <text>计划：</text>
+          <input name="plan_content" placeholder="计划内容" />
         </view>
         <!-- 开始时间 -->
         <!-- 开始日期选择 -->
-        <view class="section">
-          <picker mode="date" value="{{date}}" start="2015-09-01" end="2017-09-01" bindchange="bindDateChange">
-            <view class="picker">
-              开始日期: {{date}}
-            </view>
+        <view class="plan-content-container">
+          <picker name='stardate' mode="date" value="{{date}}" bindchange="bindStarDateChange">
+            <text>开始日期: {{stardate}}</text>
           </picker>
         </view>
+
         <!-- 开始当天时间选择 -->
-        <view class="section">
-          <picker mode="time" value="{{time}}" start="09:01" end="21:01" bindchange="bindTimeChange">
-            <view class="picker">
-              开始时间: {{time}}
-            </view>
+        <view class="plan-content-container">
+          <picker name='startime' mode="time" value="{{time}}" bindchange="bindStarTimeChange">
+            <text>开始时间: {{startime}}</text>
           </picker>
         </view>
+
         <!-- 结束时间 -->
-        <view class="section">
-          <picker mode="date" value="{{date}}" start="2015-09-01" end="2017-09-01" bindchange="bindDateChange">
-            <view class="picker">
-              结束日期: {{date}}
-            </view>
+        <view class="plan-content-container">
+          <picker name='enddate' mode="date" value="{{date}}" bindchange="bindEndDateChange">
+            <text>结束日期: {{enddate}}</text>
           </picker>
         </view>
         <!-- 结束当天时间选择 -->
-        <view class="section">
-          <picker mode="time" value="{{time}}" start="09:01" end="21:01" bindchange="bindTimeChange">
-            <view class="picker">
-              结束时间: {{time}}
-            </view>
+        <view class="plan-content-container">
+          <picker name='endtime' mode="time" value="{{time}}" bindchange="bindEndTimeChange">
+            <text>结束时间: {{endtime}}</text>
           </picker>
         </view>
+        <!-- 是否每日重复 -->
+        <view class="plan-content-container">
+          <text>每日重复：</text>
+          <switch name='plan_if_repeat' bindchange="switch1Change" />
+        </view>
         <!-- 是否开启微信提示 -->
-        <view class="plan-switch-container">
+        <view class="plan-content-container">
           <text>微信提示：</text>
-          <switch class='plan-switch' bindchange="switchChange" />
+          <switch name='plan_if_prompt' bindchange="switch2Change" />
+        </view>
+        <!-- 微信提示时间选择，默认当天的时间 -->
+        <view>
+          <!-- 当天时间选择 -->
+          <view class="plan-content-container" hidden="{{hidden_time}}">
+            <picker name='point_time' mode="time" value="{{time}}" bindchange="bindPointTimeChange">
+              <text>提示时间: {{point_time}}</text>
+            </picker>
+          </view>
         </view>
       </view>
+
       <!-- 按钮 -->
       <view class="wx-plan-btn">
         <button bindtap='_error'>取消</button>

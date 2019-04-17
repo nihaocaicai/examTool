@@ -34,7 +34,7 @@ Page({
     console.log('你点击了确定');
     this.edit.hideEdit();
   },
-  downLogin() {
+  logout() {
     console.log('退出登录');
   }
 })
