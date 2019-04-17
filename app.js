@@ -1,3 +1,9 @@
+import {
+  Login
+} from "utils/app-model.js"
+
+var login = new Login(); //实例化 登陆模块
+
 App({
   globalData: {
     userInfo: {}, //用户信息
@@ -7,65 +13,16 @@ App({
   },
 
   onLaunch: function(e) {
-    var that = this
-    var timeOut = 10 //回调函数设置超时阈值
-    //检查版本
-    if (wx.canIUse('button.open-type.getUserInfo')) {
-      // 版本支持，查看用户是否授权过
-      wx.getSetting({
-        success: function(res) {
-          if (res.authSetting['scope.userInfo']) {
-            //授权过，可以直接使用
-            wx.getUserInfo({
-              lang: "zh_CN",
-              success: function(res) {
-                that.globalData.userInfo = res.userInfo
-                that.globalData.userInfo['gender'] = (that.globalData.userInfo['gender'] == 1 ? "男" : "女")
-                that.getOpenID() //获取用户 openid
-                while (--timeOut != 0) {
-                  if (that.userInfoReadyCallback) { //回调函数
-                    that.userInfoReadyCallback()
-                    break
-                  }
-                }
-                //回调函数设置超时重启程序
-                if (timeOut == 0) {
-                  wx.reLaunch({
-                    url: '/pages/login/login',
-                  })
-                }
-              }
-            })
-          } else {
-            var i = 10
-            //如果未授权，将在 login 页面授权
-            while (--timeOut != 0) {
-              if (that.needAuthorizeCallback) { //回调函数
-                that.needAuthorizeCallback()
-                break
-              }
-            }
-            //回调函数设置超时重启程序
-            if (timeOut == 0) {
-              wx.reLaunch({
-                url: '/pages/login/login',
-              })
-            }
-          }
-        }
-      })
-    } else {
-      //如果版本太低，则告诉 login 页面版本太低
-      that.globalData.userInfo = {
-        userInfo: {
-          "version_mismatch": true
-        }
-      }
-    }
+    login.getAuthorize(this) //获取授权
   },
 
-  // 获取用户 openid
-  getOpenID: function(e) {
-    console.log("模拟获取用户 openid")
+  //成功获取微信用户信息后的操作 此处为 login 调用接口 不要删除
+  gotUserInfo(userInfo) {
+    login.gotUserInfo(this, userInfo)
+  },
+
+  //获取用户 OpenID 操作 此处为 login 调用接口 不要删除
+  getOpenID: function() {
+    login.getOpenID(this)
   },
 })
