@@ -30,11 +30,11 @@
 .count-down-image{
     width:360rpx;
     height:450rpx;
-    margin-bottom: -230rpx;
-    margin-left: -150rpx;
+    margin-bottom: -240rpx;
+    margin-left: -120rpx;
 }
 .count-doen-text{
-  font-size: 54rpx;
+  font-size: 48rpx;
 }
 /* 倒计时部分end */
 
