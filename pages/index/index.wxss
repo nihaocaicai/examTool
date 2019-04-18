@@ -1,4 +1,5 @@
 .container {
+  margin-top: -35rpx;
 }
 
 /* 倒计时部分star */
@@ -6,7 +7,7 @@
 .top-container {
   flex-direction: row;
   display: flex;
-  margin-bottom: 140rpx;
+  margin-bottom: 100rpx;
 }
 
 .bookshelf {
@@ -17,7 +18,7 @@
 .bookshelf-image {
   width: 980rpx;
   height: 980rpx;
-  margin-left: -110rpx;
+  margin-left: -115rpx;
   margin-top: -300rpx;
 }
 
@@ -27,7 +28,7 @@
   /* background: beige; */
   font-size: 42rpx;
   margin-top: -510rpx;
-  margin-left: 86rpx;
+  margin-left: 85rpx;
   /* 水平垂直居中 */
   text-align: center;
   line-height: 60rpx;
