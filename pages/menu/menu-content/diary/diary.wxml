@@ -1,5 +1,5 @@
 <view>
-<view>
+<view class="wx-top">
 <text class="wx-date">2019-04-13</text>
   <block wx:key="item" wx:for="{{data}}">
   <view data-index='{{index}}' class="order-item" bindtouchstart="drawStart" bindtouchmove="drawMove" bindtouchend="drawEnd" style="right:{{item.right}}rpx">

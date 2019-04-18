@@ -1,11 +1,19 @@
 .data-container{
-  margin: 40rpx;
+  margin-top: 20rpx;
+  margin-left: 40rpx;
+  margin-right: 40rpx;
   border-width: 1rpx;  
   border-color: black;  
-  border-style: solid;
+  border-style: dashed;
+}
+.wx-top{
+  margin-top: 20rpx;
 }
 .wx-date{
-  margin-left: 20rpx;
+  margin-top: 20rpx;
+  margin-left: 25rpx;
+  font-size: 48rpx;
+  color: #d6d6d6;
 }
 /* 日期star */
 .date-container{
@@ -16,7 +24,7 @@
   width: 100%;
   height: 100%;
   margin-top: 24rpx;
-  margin-bottom: 5rpx;
+  margin-bottom: 15rpx;
   margin-left: 15rpx;
 }
 .date-text{
