@@ -67,10 +67,10 @@ Component({
       }
 
       //检查考研日期是否设置正确
-      if (formData.examDate != notSetFlag && parseInt(dateUtil.countDownFromToday(formData.examDate)) <= 0) {
+      if (formData.examDate != notSetFlag && parseInt(dateUtil.countDownFromToday(formData.examDate)) < 0) {
         wx.showModal({
           title: '提示',
-          content: '考研日期不能设置为过去或今天的日期',
+          content: '考研日期不能设置为过去的日期',
           showCancel: false,
         })
         return

@@ -1,13 +1,14 @@
 <view class='container'>
   <!-- 倒计时部分star -->
   <view class='top-container'>
-    <view class='count-down-container'>
-      <image class='count-down-image' src="/images/index/count-down.png"></image>
-      <text class='count-doen-text'>{{countdown}}</text>
+    <view class='bookshelf'>
+      <image class='bookshelf-image' src="/images/index/bookshelf.png"></image>
+      <text class='bookshelf-text'>{{countdown}}</text>
     </view>
     <view class='target-container'>
-      <text>我的目标：{{goal}}</text>
-      <text>{{motto}}</text>
+      <text class='u_text'>{{goal_university}}</text>
+      <text class='c_text'>{{goal_major}}</text>
+      <text class='c_text'>{{motto}}</text>
     </view>
   </view>
   <!-- 倒计时部分end -->
