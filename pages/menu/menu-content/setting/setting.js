@@ -4,34 +4,35 @@ import {
 } from "setting-model.js"
 
 var setting = new Setting()
-var app = getApp()
 
 Page({
   onLoad: function() {
-    setting.getUserData(this)
+    setting.setPage(this)
+    setting.getUserData()
   },
 
   onReady: function() {
     this.edit = this.selectComponent("#edit") //获得diary组件
   },
 
+  /* 点击 退出登录 按钮 */
+  clickLogoutButton() {
+    setting.clickLogoutButton()
+  },
+
   /* 考研小日志 diary 对话框 */
   //显示对话框事件
   showEdit() {
-    setting.showEdit(this)
-  },
-
-  logout() {
-    console.log('退出登录');
+    setting.showEdit()
   },
 
   //回调 取消事件
   _error() {
-    setting.cancelEdit(this)
+    setting.cancelEdit()
   },
 
   //回调 保存数据事件
   _save(e) {
-    setting.confirmEdit(this, e.detail)
+    setting.confirmEdit(e.detail)
   },
 })

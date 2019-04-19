@@ -18,7 +18,7 @@ class DateUtil {
 
   //从今天开始还有多少天
   countDownFromToday(endDates) {
-    var startDate = new Date().getTime()
+    var startDate = new Date(Date.parse(this.getFormatDate().replace(/-/g, "/"))).getTime()
     var endDate = new Date(Date.parse(endDates.replace(/-/g, "/"))).getTime()
     var interval_time = -(startDate - endDate) / (1000 * 60 * 60 * 24)
     return interval_time
