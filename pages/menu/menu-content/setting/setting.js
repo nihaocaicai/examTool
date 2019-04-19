@@ -15,14 +15,15 @@ Page({
     this.edit = this.selectComponent("#edit") //获得diary组件
   },
 
+  /* 点击 退出登录 按钮 */
+  clickLogoutButton() {
+    setting.clickLogoutButton()
+  },
+
   /* 考研小日志 diary 对话框 */
   //显示对话框事件
   showEdit() {
     setting.showEdit()
-  },
-
-  logout() {
-    console.log('退出登录');
   },
 
   //回调 取消事件

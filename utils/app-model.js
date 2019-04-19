@@ -9,6 +9,9 @@ class Login {
 
   //获取授权操作
   getAuthorize() {
+    //Todo 添加判断是否登出的判断
+    //未完成！！！！！！！！！！！！！
+
     if (wx.getStorageSync('wx_user_info') != "") {
       this.userInfoIsReady() //如果缓存有授权数据，则不需要发起授权申请
     } else {
@@ -126,17 +129,22 @@ class Login {
 
   //获取信息失败
   getInfoFail() {
-    var login = this
     wx.showModal({
       title: '提示',
       content: '获取信息失败，点击确定重启程序重试',
+      confirmColor: '#04838e',
       success: function() {
-        wx.reLaunch({
-          url: 'login',
-        })
-        login.getAuthorize()
+        this.reLunchApp()
       }
     })
+  }
+
+  //重启小程序
+  reLunchApp() {
+    wx.reLaunch({
+      url: '/pages/login/login',
+    })
+    this.getAuthorize()
   }
 };
 

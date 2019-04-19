@@ -20,5 +20,10 @@ App({
   //获取用户其他信息失败后后的操作 此处为 login 调用接口 不要删除
   getInfoFail() {
     login.getInfoFail()
+  },
+
+  //重启程序 此处为 login 调用接口 不要删除
+  reLunchApp() {
+    login.reLunchApp()
   }
 })
