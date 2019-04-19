@@ -3,12 +3,12 @@
   <view class='top-container'>
     <view class='bookshelf'>
       <image class='bookshelf-image' src="/images/index/bookshelf.png"></image>
-      <text class='bookshelf-text'>1234</text>
+      <text class='bookshelf-text'>{{countdown}}</text>
     </view>
     <view class='target-container'>
-      <text class='u_text'>复旦大学</text>
-      <text class='c_text'>计算机科学与技术</text>
-      <text class='c_text'>心无羁绊，独立自在翱翔</text>
+      <text class='u_text'>{{goal_university}}</text>
+      <text class='c_text'>{{goal_major}}</text>
+      <text class='c_text'>{{motto}}</text>
     </view>
   </view>
   <!-- 倒计时部分end -->

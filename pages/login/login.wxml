@@ -10,7 +10,7 @@
     </view>
 
     <view wx:if='{{needAuthorize}}' id='button_view'>
-      <button id='button' open-type="getUserInfo" bindgetuserinfo="clickAuthorzieButton">微信登录</button>
+      <button id='button' open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="clickAuthorzieButton">微信登录</button>
     </view>
 
     <!-- 旧版本微信提示加载中 / 网络可能有阻塞，需要提示正在加载中 -->

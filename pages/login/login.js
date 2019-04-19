@@ -1,36 +1,27 @@
-// pages/login/login.js
 import {
   Login
 } from "login-model.js"
 
-var app = getApp()
 var login = new Login()
 
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     loading: true, //是否要显示 加载中 页面
-    needAuthorize: false, //是否需要授权
+    needAuthorize: false, //是否需要显示 点击授权 按钮
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function(options) {
-    login.setCallBack(this) //设置回调函数
+  onShow: function(options) {
+    login.setPage(this)
+    login.setCallBack() //设置回调函数
   },
 
   /* 点击按钮获取用户信息 监听器 */
   clickAuthorzieButton: function(e) {
-    login.clickAuthorzieButton(this, e)
+    login.clickAuthorzieButton(e)
   },
 
-  /* 考研小日志 diary 对话框 */
   //回调 保存数据事件
   _save(e) {
-    login.dialogConfirm(this, e.detail)
+    login.dialogConfirm(e.detail)
   }
 })

@@ -4,11 +4,11 @@ import {
 } from "setting-model.js"
 
 var setting = new Setting()
-var app = getApp()
 
 Page({
   onLoad: function() {
-    setting.getUserData(this)
+    setting.setPage(this)
+    setting.getUserData()
   },
 
   onReady: function() {
@@ -18,7 +18,7 @@ Page({
   /* 考研小日志 diary 对话框 */
   //显示对话框事件
   showEdit() {
-    setting.showEdit(this)
+    setting.showEdit()
   },
 
   logout() {
@@ -27,11 +27,11 @@ Page({
 
   //回调 取消事件
   _error() {
-    setting.cancelEdit(this)
+    setting.cancelEdit()
   },
 
   //回调 保存数据事件
   _save(e) {
-    setting.confirmEdit(this, e.detail)
+    setting.confirmEdit(e.detail)
   },
 })

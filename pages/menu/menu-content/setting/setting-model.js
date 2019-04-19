@@ -1,7 +1,11 @@
 var app = getApp()
 
 class Setting {
-  getUserData(page) {
+  setPage(page){
+    this.page = page
+  }
+
+  getUserData() {
     var info = wx.getStorageSync('user_info')
     var wxInfo = wx.getStorageSync('wx_user_info')
     info.birthday = info.birthday == null ? "未设置" : info.birthday
@@ -9,17 +13,17 @@ class Setting {
     info.goal_university = info.goal_university == "" ? "未设置" : info.goal_university
     info.goal_major = info.goal_major == "" ? "未设置" : info.goal_major
     info.motto = info.motto == "" ? "未设置座右铭" : info.motto
-    page.setData({
+    this.page.setData({
       wxInfo: wxInfo,
       info: info,
     })
   }
 
   //显示设置对话框
-  showEdit(page) {
+  showEdit() {
     var info = wx.getStorageSync('user_info')
     var wxInfo = wx.getStorageSync('wx_user_info')
-    page.edit.setData({
+    this.page.edit.setData({
       isLogin: false, //不是在登录的时候显示对话框
       nickName: wxInfo['user_name'],
       birthday: info['birthday'],
@@ -29,22 +33,22 @@ class Setting {
       goal_major: info['goal_major'],
       motto: info['motto'],
     })
-    page.edit.showEdit();
+    this.page.edit.showEdit();
   }
 
   //取消编辑
-  cancelEdit(page) {
-    page.edit.hideEdit();
+  cancelEdit() {
+    this.page.edit.hideEdit();
   }
 
   //保存编辑
-  confirmEdit(page, formData) {
+  confirmEdit(formData) {
     try {
       wx.setStorageSync('user_info', formData)
-      page.setData({
+      this.page.setData({
         info: formData
       })
-      page.edit.hideEdit();
+      this.page.edit.hideEdit();
     } catch (e) {
       console.log("保存信息出错", e)
       //存储空间不足够等问题

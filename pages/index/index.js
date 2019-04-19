@@ -18,7 +18,8 @@ Page({
 
     this.setData({
       plan: plan, //计划
-      goal: info.goal_university == "" ? "未设置" : info.goal_university, //目标
+      goal_university: info.goal_university == "" ? "未设置目标大学" : info.goal_university, //目标
+      goal_major: info.goal_major == "" ? "未设置目标专业" : info.goal_major, //目标
       motto: info.motto == "" ? "未设置座右铭" : info.motto, //座右铭
       countdown: info.examDate == null ? "无" : parseInt(dateUtil.countDownFromToday(info.examDate)), //倒计时天数
       date: dateUtil.getIndexDate(), //今天的日期
