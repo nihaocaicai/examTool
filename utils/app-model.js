@@ -9,10 +9,10 @@ class Login {
 
   //获取授权操作
   getAuthorize() {
-    //Todo 添加判断是否登出的判断
-    //未完成！！！！！！！！！！！！！
-
-    if (wx.getStorageSync('wx_user_info') != "") {
+    if (wx.getStorageSync('logout')) {
+      //执行过登出操作，提示需要删除小程序后再添加
+      this.needDeleteApp()
+    } else if (wx.getStorageSync('wx_user_info') != "") {
       this.userInfoIsReady() //如果缓存有授权数据，则不需要发起授权申请
     } else {
       // 如果缓存没有数据，重新授权
@@ -26,8 +26,8 @@ class Login {
             else
               login.needAuthorize() //没有授权，需要用户点击按钮授
           },
-          fail: function() {
-            login.getInfoFail();
+          fail: function(res) {
+            login.getInfoFail(res);
           }
         })
       } else {
@@ -45,7 +45,7 @@ class Login {
         login.processUserInfo(res.userInfo)
       },
       fail: res => {
-        login.getInfoFail();
+        login.getInfoFail(res);
       }
     })
   }
@@ -72,11 +72,11 @@ class Login {
           login.userInfoIsReady()
         } else {
           //获取失败
-          login.getInfoFail();
+          login.getInfoFail(res);
         }
       },
-      fail: function() {
-        login.getInfoFail();
+      fail: function(res) {
+        login.getInfoFail(res);
       }
     })
   }
@@ -95,11 +95,12 @@ class Login {
           }
         } catch (e) {
           //捕获回调函数时候的错误
+          that.getInfoFail(e)
         }
       } else {
         //超时还没有准备好回调函数，只能提示获取信息失败
         clearInterval(interval)
-        that.getInfoFail()
+        that.getInfoFail("UserInfo 数据获取完成回调函数设置失败\n在函数 userInfoIsReady")
       }
     }, 1000)
   }
@@ -122,19 +123,22 @@ class Login {
       } else {
         //超时还没有准备好回调函数，只能提示获取信息失败
         clearInterval(interval)
-        that.getInfoFail()
+        that.getInfoFail("需要授权回调函数设置失败\n在函数 needAuthorize")
       }
     }, 1000)
   }
 
   //获取信息失败
-  getInfoFail() {
+  getInfoFail(e) {
+    console.log("获取信息失败，错误原因:\n", e)
+    var that = this
     wx.showModal({
       title: '提示',
       content: '获取信息失败，点击确定重启程序重试',
       confirmColor: '#04838e',
+      showCancel: false,
       success: function() {
-        this.reLunchApp()
+        that.reLunchApp()
       }
     })
   }
@@ -145,6 +149,34 @@ class Login {
       url: '/pages/login/login',
     })
     this.getAuthorize()
+  }
+
+  //需要在小程序中删除程序
+  needDeleteApp() {
+    var that = this
+    var timeOut = 10;
+    var interval = setInterval(function() {
+      if (--timeOut != 0) {
+        //未授权的回调函数
+        try {
+          if (that.app.needDeleteAppCallback && timeOut != 0) {
+            clearInterval(interval)
+            that.app.needDeleteAppCallback()
+          }
+        } catch (e) {
+          //捕获回调函数时候的错误
+          that.getInfoFail(e)
+        }
+      } else {
+        //超时还没有准备好回调函数，只能提示获取信息失败
+        clearInterval(interval)
+        wx.showModal({
+          title: '提示',
+          content: '当前微信账户执行过登出操作，需要在微信中删除本小程序后重新登录',
+          showCancel: false,
+        })
+      }
+    }, 1000)
   }
 };
 
