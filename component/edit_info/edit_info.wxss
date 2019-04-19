@@ -2,8 +2,9 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 80%;
-  max-width: 600rpx;
+ 
+  width: 85%;
+  max-width: 800rpx;
   border: 1rpx solid #ccc;
   border-radius: 10rpx;
   box-sizing: bordre-box;
@@ -19,59 +20,51 @@
   font-size: 40rpx;
   border-bottom: 1rpx solid black;
 }
-.wx-setting-con {
-  margin: 20rpx 20rpx;
-  padding: 20rpx;
-}
-
-.wx-txt{
-  width: 500rpx;
-  height: 30rpx;
-  border-width: 1rpx;  
-  border-color: black;  
-  border-style: solid;
-  font-size: 28rpx;
-  background: #fff;
-  margin:  10rpx 10rpx;
+.wx-plan-con {
+  margin: 25rpx 10rpx;
   padding: 10rpx;
 }
-.wx-txt2{
-  width: 500rpx;
+.plan-content-container{
+  flex-direction:row;
+  display:flex;
+  margin-bottom:15rpx; 
+  border-bottom-width: 1rpx;  
+  border-bottom-color: black;  
+  border-bottom-style: dashed;
+  height: 65rpx;
+  align-items: center;
+}
+.plan-content-container input{
+  font-size: 28rpx;
+}
+.plan-content-container picker{
+  width: 100%;
+}
+.plan-content-container text{
+  font-size: 28rpx;
+}
+.mottoedit{
+  flex-direction:row;
+  align-items: center;
+  font-size: 28rpx;
+  margin-bottom: 20rpx;
+}
+.wx-motto-con {
   height: 100rpx;
+  width: 93%;
+  font-size: 28rpx;
+  padding: 10rpx;
   border-width: 1rpx;  
   border-color: black;  
-  border-style: solid;
-  font-size: 28rpx;
-  background: #fff;
-  margin:  10rpx 10rpx;
-  padding: 10rpx;
+  border-style: dashed;
 }
-.section {
-  display: flex;
-  width: 90%;
-  height: 40rpx;
-  font-size: 36rpx;
-  color: #333;
-  background: #fff;
-  margin:  10rpx 3rpx ;
-  padding: 10rpx;
-}
-.wx-edit {
-  font-size: 36rpx;
-  color: #333;
-  margin: 10rpx 3rpx;
-  padding: 10rpx;
-}
-.wx-setting-con textarea{
-  width: 93%;
-}
-
-.wx-setting-btn {
+/* 按钮 */
+.wx-plan-btn {
   display: flex;
   justify-content: space-around;
   margin-bottom: 25rpx;
 }
-.wx-setting-btn button {
+.wx-plan-btn button {
   display: flex;
   align-items: center;
   justify-content: center;
