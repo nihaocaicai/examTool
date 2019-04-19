@@ -65,12 +65,6 @@ Component({
         startime: e.detail.value
       })
     },
-    bindEndDateChange(e) {
-      console.log('enddate发送选择改变，携带值为', e.detail.value)
-      this.setData({
-        enddate: e.detail.value
-      })
-    },
     bindEndTimeChange(e) {
       console.log('endtime发送选择改变，携带值为', e.detail.value)
       this.setData({

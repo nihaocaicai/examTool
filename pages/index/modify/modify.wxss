@@ -9,6 +9,7 @@
 
 .data-container{
   margin-top: 35rpx;
+  margin-bottom: 35rpx;
   margin-left: 40rpx;
   margin-right: 40rpx;
   border-width: 1rpx;  
