@@ -101,20 +101,6 @@ Component({
         examDate: e.detail.value
       })
     },
-    
-    //点击 生日 删除键
-    cleanBirthday(){
-      this.setData({
-        birthday: null
-      })
-    },
-
-    //点击 考研日期 删除键
-    cleanExamDate() {
-      this.setData({
-        examDate: null
-      })
-    },
 
     //点击取消按钮
     _error() {

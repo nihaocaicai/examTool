@@ -2,7 +2,6 @@
   position: absolute;
   left: 50%;
   top: 50%;
- 
   width: 85%;
   max-width: 800rpx;
   border: 1rpx solid #ccc;
@@ -20,11 +19,11 @@
   font-size: 40rpx;
   border-bottom: 1rpx solid black;
 }
-.wx-plan-con {
+.wx-setting-con {
   margin: 25rpx 10rpx;
   padding: 10rpx;
 }
-.plan-content-container{
+.setting-content-container{
   flex-direction:row;
   display:flex;
   margin-bottom:15rpx; 
@@ -34,37 +33,44 @@
   height: 65rpx;
   align-items: center;
 }
-.plan-content-container input{
-  font-size: 28rpx;
+.setting-content-container input{
+  font-size: 34rpx;
 }
-.plan-content-container picker{
+.setting-content-container picker{
   width: 100%;
+  font-size: 34rpx;
 }
-.plan-content-container text{
-  font-size: 28rpx;
+.setting-content-container text{
+  font-size: 34rpx;
 }
-.mottoedit{
+/*座右铭*/
+.motto{
+  height: 100%;
   flex-direction:row;
   align-items: center;
-  font-size: 28rpx;
-  margin-bottom: 20rpx;
+}
+.mottoedit{
+  flex-direction:column;
+  align-items: center;
+  font-size: 34rpx;
+  margin-bottom: 15rpx;
 }
 .wx-motto-con {
-  height: 100rpx;
-  width: 93%;
-  font-size: 28rpx;
-  padding: 10rpx;
+  height: 50rpx;
+  width: 96%;
+  font-size: 30rpx;
   border-width: 1rpx;  
   border-color: black;  
   border-style: dashed;
+  padding: 10rpx;
 }
 /* 按钮 */
-.wx-plan-btn {
+.wx-setting-btn {
   display: flex;
   justify-content: space-around;
   margin-bottom: 25rpx;
 }
-.wx-plan-btn button {
+.wx-setting-btn button {
   display: flex;
   align-items: center;
   justify-content: center;
