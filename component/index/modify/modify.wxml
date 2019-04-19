@@ -14,7 +14,7 @@
         <!-- 开始日期选择 -->
         <view class="plan-content-container">
           <picker name='stardate' mode="date" value="{{date}}" bindchange="bindStarDateChange">
-            <text>开始日期: {{stardate}}</text>
+            <text>日期: {{stardate}}</text>
           </picker>
         </view>
 
@@ -22,13 +22,6 @@
         <view class="plan-content-container">
           <picker name='startime' mode="time" value="{{time}}" bindchange="bindStarTimeChange">
             <text>开始时间: {{startime}}</text>
-          </picker>
-        </view>
-
-        <!-- 结束时间 -->
-        <view class="plan-content-container">
-          <picker name='enddate' mode="date" value="{{date}}" bindchange="bindEndDateChange">
-            <text>结束日期: {{enddate}}</text>
           </picker>
         </view>
         <!-- 结束当天时间选择 -->

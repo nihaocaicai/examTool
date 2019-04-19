@@ -32,11 +32,11 @@ Page({
   drawStart: function (e) {
     // console.log("drawStart");  
     var touch = e.touches[0]
-
     for (var index in this.data.data) {
       var item = this.data.data[index]
       item.right = 0
     }
+    // console.log(item);
     this.setData({
       data: this.data.data,
       startX: touch.clientX,
