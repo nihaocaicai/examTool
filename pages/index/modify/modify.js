@@ -29,6 +29,7 @@ Page({
   drawStart: function(e) {
     var touch = e.touches[0];
     // console.log(touch);
+    // 最初状态，设置right的值为0，不显示滑块编辑，删除
     for (var index in this.data.planList) {
       var items = this.data.planList[index].data
       // console.log(items)
@@ -37,7 +38,6 @@ Page({
         item.right = 0
       }
     }
-
     this.setData({
       planList: this.data.planList,
       startX: touch.clientX,
@@ -46,12 +46,15 @@ Page({
   },
   drawMove: function(e) {
     var touch = e.touches[0]
+    // 中间状态，设置right的值为滑动的值，相应显示滑块大小
+    // 获得当前滑块所在的日期板块
     var ind = e.currentTarget.dataset.ind
     var items = this.data.planList[ind].data
+    // 获得当前滑块日期下对应的时间模块
     var item = items[e.currentTarget.dataset.index]
     // console.log(item.right)
+    // 设置right的值
     var disX = this.data.startX - touch.clientX
-
     if (disX >= 20) {
       if (disX > this.data.delBtnWidth) {
         disX = this.data.delBtnWidth
@@ -71,6 +74,7 @@ Page({
     }
   },
   drawEnd: function(e) {
+    // 最后状态，设置right的值为滑动的值为最大，相应显示滑块大小
     var ind = e.currentTarget.dataset.ind
     var items = this.data.planList[ind].data
     var item = items[e.currentTarget.dataset.index]
