@@ -42,13 +42,12 @@
 }
 
 .u_text {
-  font-size: 52rpx;
+  font-size: 48rpx;
   margin-bottom: 10rpx;
 }
 
 .c_text {
-  font-size: 26rpx;
-  margin-left: 20rpx;
+  font-size: 24rpx;
   margin-bottom: 4rpx;
 }
 
