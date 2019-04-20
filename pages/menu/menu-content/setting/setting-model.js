@@ -60,51 +60,40 @@ class Setting {
     }
   }
 
-  //点击退出登录按钮
-  clickLogoutButton() {
-    wx.showModal({
-      title: '提示',
-      content: '退出登录后，所有信息都会被删除，你确定要退出登录吗？',
-      showCancel: true,
-      confirmText: '退出',
-      confirmColor: '#04838e',
-      success: function(res) {
-        if (res.confirm) {
-          wx.showLoading({
-            title: '清除数据中',
-          })
-          //Todo 请求服务器删除信息
-          //success: 执行删除数据操作
-          //Todo 删除数据操作
-          wx.setStorageSync('logout', true)
-          //Todo 删除数据操作
-
-          //模拟等待时间
-          setTimeout(function() {
-            wx.hideLoading()
-            wx.showModal({
-              title: '提示',
-              content: '退出成功，请在微信中删除小程序完成退出操作',
-              showCancel: false,
-              confirmColor: '#04838e',
-              success: function(res) {
-                app.reLunchApp()
-              },
-            })
-          }, 2000)
-          //fail: 删除失败
-          /*
-          wx.hideLoading()
-          wx.showModal({
-            title: '提示',
-            content: '网络连接失败，请检查网络后重试',
-            showCancel: false,
-            confirmColor: '#04838e',
-          })
-           */
-        }
-      },
+  //确定删除信息按钮
+  confirmDelete(e) {
+    wx.showLoading({
+      title: '清除数据中',
     })
+    try {
+      //Todo 请求服务器删除信息
+      //success: 执行删除数据操作
+      //Todo 删除数据操作
+      wx.setStorageSync('logout', true)
+      //模拟等待时间
+      setTimeout(function() {
+        wx.hideLoading()
+        wx.showModal({
+          title: '提示',
+          content: '退出成功，请在微信中删除小程序完成退出操作',
+          showCancel: false,
+          confirmColor: '#04838e',
+          success: function(res) {
+            app.reLunchApp()
+          },
+        })
+      }, 2000)
+      //Todo 删除数据操作
+      //fail: throw "无法与服务器连接"
+    } catch (e) {
+      wx.hideLoading()
+      wx.showModal({
+        title: '提示',
+        content: '退出失败，请检查网络后重试',
+        showCancel: false,
+        confirmColor: '#04838e',
+      })
+    }
   }
 }
 

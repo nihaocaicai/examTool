@@ -26,5 +26,17 @@
   </view>
   <!-- 退出登录end -->
 
-  <edit id='edit' bind:error="_error" bind:save="_save"/>
+  <edit id='edit' bind:error="_error" bind:save="_save" />
+
+  <modal id="modal" hidden="{{!showDeleteModal}}" title="提示" confirm-text="退出" cancel-text="取消" bindcancel="cancelDelete" bindconfirm="confirmDelete">
+    <view style='text-align:center'>退出登录后，所有信息都会被删除</view>
+    <view style='text-align:center'>请填入正确答案以完成操作</view>
+    <view style='margin-top:20rpx' />
+
+    <view style='font-size:50rpx; display:flex; justify-content:center; align-items:center'>
+      <text decode='true'>{{add1}} + {{add2}} = &nbsp;</text>
+      <input value='{{value}}' style='width:50rpx' bindinput="bindKeyInput" type='text' placeholder="?" maxlength='1' focus="{{true}}" />
+    </view>
+  </modal>
+
 </view>

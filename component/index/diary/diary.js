@@ -72,13 +72,13 @@ Component({
     //隐藏弹框
     hideDiary: function () {
       this.setData({
-        flag: !this.data.flag
+        flag: true
       })
     },
     //展示弹框
     showDiary() {
       this.setData({
-        flag: !this.data.flag
+        flag: false
       })
     },
     /*
