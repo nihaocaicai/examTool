@@ -23,7 +23,7 @@
 
     <scroll-view scroll-y class='scroll-view'>
       <!-- 今天没有计划 -->
-      <view wx:if='{{plan.length==0}}'>
+      <view wx:if='{{everyday_planList.data.length==0}}'>
         <view style='margin:20px; text-align:center;'>
           <text decode='true' style='font-size:32rpx; color:#999'>
           今天你还没有计划\n还等什么，赶紧行动起来吧
@@ -32,10 +32,10 @@
       </view>
       <!-- 今天有计划 -->
       <view wx:else>
-        <view wx:for='{{plan}}' wx:key='none'>
+        <view wx:for='{{everyday_planList.data}}' wx:key='item'>
           <view class='plan-container'>
-            <text class='plan-text'>{{item.content}}</text>
-            <image wx:if='{{item.flag_star}}' class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/star.png' />
+            <text class='plan-text'>{{index+1}}、{{item.plan_star_time}}-{{item.plan_end_time}}：{{item.plan_content}}</text>
+            <image wx:if='{{item.plan_if_finish}}' class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/star.png' />
             <image wx:else class='plan-image' bindtap='clickStar' data-index="{{index}}" src='/images/index/none-star.png' />
           </view>
         </view>

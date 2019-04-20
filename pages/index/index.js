@@ -1,12 +1,22 @@
+var everyday_plansData = require('../../data/local-everyday-plan.js')
+
 import {
   DateUtil
-} from "../../utils/DateUtil.js"
-
+} from "../../utils/DateUtil.js";
 var app = getApp()
 var dateUtil = new DateUtil()
 
+
 Page({
-  data: {},
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function(options) {
+    // 获取数据文件数据
+    this.setData({
+      everyday_planList: everyday_plansData.everyday_planList
+    });
+  },
 
   onReady: function() {
     this.diary = this.selectComponent("#diary") //获得diary组件
@@ -14,10 +24,9 @@ Page({
 
   onShow: function() {
     var info = wx.getStorageSync("user_info")
-    var plan = wx.getStorageSync("plan")
+    var everyday_planList = wx.getStorageSync("everyday_planList")
 
     this.setData({
-      plan: plan, //计划
       goal_university: info.goal_university == "" ? "未设置目标大学" : info.goal_university, //目标
       goal_major: info.goal_major == "" ? "未设置目标专业" : info.goal_major, //目标
       motto: info.motto == "" ? "未设置座右铭" : info.motto, //座右铭
@@ -31,13 +40,14 @@ Page({
     // 计划下标，从0开始
     var index = e.currentTarget.dataset.index
     // 获取计划列表
-    var plans = this.data.plan
-    var flag = plans[index]['flag_star'] // 获取星标状态
-    plans[index]['flag_star'] = !flag //修改对应计划的星标状态
+    var plans = this.data.everyday_planList
+    var flag = plans.data[index].plan_if_finish // 获取星标状态
+    plans.data[index].plan_if_finish = !flag //修改对应计划的星标状态
     //设置新的列表
     this.setData({
-      plan: plans
+      everyday_planList: plans
     })
+    var everyday_planList = wx.getStorageSync("plans")
   },
 
   //点击 修改按钮
