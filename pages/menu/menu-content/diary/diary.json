@@ -2,7 +2,6 @@
   "navigationBarTitleText": "考研日记",
   "enablePullDownRefresh": true,
   "usingComponents": {
-    "diary": "/component/index/diary/diary",
-    "modifydiary": "/component/index/modifydiary/modifydiary"
+    "diary": "/component/index/diary/diary"
   }
 }

@@ -34,14 +34,10 @@ class Login {
     app.userInfoReadyCallback = function() {
       if (!(wx.getStorageSync('user_info') instanceof Object)) {
         //缓存不存在 user_info ，尝试从服务器获取
-        that.getUser_infoFromService()
-      } else if (!(wx.getStorageSync('plan') instanceof Array)) {
-        //缓存存在 user_info ，检查是否存在 plan
-        //缓存不存在 plan ，尝试从服务器获取
-        that.getPlanFromService()
+        that.getUserInfoFromService()
       } else {
-        //两者都存在于缓存，直接跳转到主页
-        that.toIndex()
+        //user_info存在于缓存，获取 plan
+        that.getPlanFromService()
       }
     }
     //未授权的回调函数
@@ -51,10 +47,18 @@ class Login {
         loading: false, //不显示 加载中 页面
       })
     }
+    //需要删除小程序提示
+    app.needDeleteAppCallback = function() {
+      that.page.setData({
+        needAuthorize: false,
+        loading: false,
+        needDelete: true, //需要删除小程序提示
+      })
+    }
   }
 
   //从服务器获取 user_info
-  getUser_infoFromService() {
+  getUserInfoFromService() {
     var that = this
     //Todo 服务器获取信息
     //success:
@@ -71,28 +75,21 @@ class Login {
       }
       try {
         wx.setStorageSync('user_info', temp)
-        //保存完信息后，检查是否存在 plan
-        if (!(wx.getStorageSync('plan') instanceof Array)) {
-          //缓存存在 user_info ，检查是否存在 plan
-          //缓存不存在 plan ，尝试从服务器获取
-          that.getPlanFromService()
-        } else {
-          //缓存有 plan，直接跳转到主页
-          that.toIndex()
-        }
+        //尝试从服务器获取 plan
+        that.getPlanFromService()
       } catch (e) {
         //console.log("保存信息出错，错误原因：\n", e)
-        app.getInfoFail()
+        app.getInfoFail(e)
       }
     } else {
       //没有信息，一定是没有 plan 的，不需要检查是否存在 plan
       that.showSetUserInfoDialog()
     }
-    /*
-    
-    */
+
     //fail: 获取不到信息
-    //app.getInfoFail()
+    /*
+    app.getInfoFail("无法从服务器获取 user_Info 信息\n在函数 getUserInfoFromService")
+    */
   }
 
   //从服务器上获取 plan
@@ -112,13 +109,12 @@ class Login {
       that.toIndex()
     } catch (e) {
       //console.log("保存信息出错，错误原因：\n", e)
-      app.getInfoFail()
+      app.getInfoFail(e)
     }
 
     //fail:
     /*
       wx.hideLoading()
-      app.getInfoFail()
      */
   }
 
@@ -131,6 +127,7 @@ class Login {
       // Todo 执行保存到服务器操作（必须）
       //success: 服务器保存成功
       wx.setStorageSync('user_info', formData)
+      wx.setStorageSync('diary', new Array())
       wx.setStorageSync('plan', new Array()) //没有信息，一定是第一次授权或清除过数据/退出登录，即使本地有 plan 也要删除
       this.page.edit.hideEdit();
       wx.hideLoading()
@@ -156,7 +153,7 @@ class Login {
     }
   }
 
-  //需要填写用户信息
+  //填写用户信息对话框
   showSetUserInfoDialog() {
     this.page.edit = this.page.selectComponent("#edit") //获得diary组件
     this.page.edit.setData({
@@ -169,6 +166,15 @@ class Login {
   toIndex() {
     wx.switchTab({
       url: '../index/index',
+    })
+  }
+
+  //脱机提示
+  offlineTips() {
+    wx.showModal({
+      title: '提示',
+      content: '网络连接失败，你只可以查看本地的计划，不能上传到服务器进行保存',
+      showCancel: false,
     })
   }
 }

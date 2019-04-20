@@ -1,118 +1,150 @@
+import {
+  Diary
+} from "diary-model.js"
+
+var diary = new Diary()
+
 Page({
   data: {
     delBtnWidth: 160,
-    data: [{ right: 0 }, { right: 0 }],
     isScroll: true,
     windowHeight: 0,
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    var that = this;
+  onLoad: function(options) {
+    var that = this
     wx.getSystemInfo({
-      success: function (res) {
+      success: function(res) {
         that.setData({
           windowHeight: res.windowHeight
-        });
+        })
       }
-    });
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-    //获得diary组件
-    this.diary = this.selectComponent("#diary");
-    this.modifydiary = this.selectComponent("#modifydiary");
-  },
-
-  drawStart: function (e) {
-    // console.log("drawStart");  
-    var touch = e.touches[0]
-    for (var index in this.data.data) {
-      var item = this.data.data[index]
-      item.right = 0
-    }
-    // console.log(item);
-    this.setData({
-      data: this.data.data,
-      startX: touch.clientX,
     })
-
-  },
-  drawMove: function (e) {
-    var touch = e.touches[0]
-    var item = this.data.data[e.currentTarget.dataset.index]
-    var disX = this.data.startX - touch.clientX
-
-    if (disX >= 20) {
-      if (disX > this.data.delBtnWidth) {
-        disX = this.data.delBtnWidth
-      }
-      item.right = disX
-      this.setData({
-        isScroll: false,
-        data: this.data.data
-      })
-    } else {
-      item.right = 0
-      this.setData({
-        isScroll: true,
-        data: this.data.data
-      })
-    }
-  },
-  drawEnd: function (e) {
-    var item = this.data.data[e.currentTarget.dataset.index]
-    if (item.right >= this.data.delBtnWidth / 2) {
-      item.right = this.data.delBtnWidth
-      this.setData({
-        isScroll: true,
-        data: this.data.data,
-      })
-    } else {
-      item.right = 0
-      this.setData({
-        isScroll: true,
-        data: this.data.data,
-      })
-    }
+    diary.setPage(this)
+    diary.getDataFromService()
   },
 
-  modItem() {
-    console.log("修改");
-    this.modifydiary.showDiary();
-  },
-  //取消事件
-  _error() {
-    console.log('你点击了取消');
-    this.diary.hideDiary();
-  },
-  _errorModifyDiary(){
-    console.log('你点击了取消');
-    this.modifydiary.hideDiary();
-  },
-  //确认事件
-  _success() {
-    console.log('你点击了确定');
-    this.diary.hideDiary();
-  },
-  _successModifyDiary(){
-    console.log('你点击了确定');
-    this.modifydiary.hideDiary();
-  },
-  delItem: function () {
-    console.log("删除");
+  onReady: function() {
+    //Todo 刷新日记的显示，还没有实现
+    this.diary = this.selectComponent("#diary") //获得diary组件
+    // this.diary.showDiary("新增日记", null); //调试方便，调试完成删除
   },
 
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-    console.log("添加");
+  //下拉页面操作
+  onPullDownRefresh: function() {
     this.diary.showDiary();
-  }
+  },
+
+  drawStart: function(e) {
+    this.setData({
+      startX: e.touches[0].clientX,
+      startRight: this.data.data[e.currentTarget.dataset.dayindex]['data'][e.currentTarget.dataset.index]['right']
+    })
+  },
+
+  drawMove: function(e) {
+    var item = this.data.data[e.currentTarget.dataset.dayindex]['data'][e.currentTarget.dataset.index]
+    var disX = this.data.startX - e.touches[0].clientX
+    if (this.data.startRight == 0) {
+      //日记项没有展开
+      if (disX >= 20) {
+        if (disX > this.data.delBtnWidth) {
+          disX = this.data.delBtnWidth
+        }
+        item.right = disX
+        this.setData({
+          isScroll: false,
+          data: this.data.data
+        })
+      } else {
+        item.right = 0
+        this.setData({
+          isScroll: true,
+          data: this.data.data
+        })
+      }
+    } else {
+      //日记项已经展开
+      disX = -disX
+      if (disX >= 20) {
+        if (disX > this.data.delBtnWidth) {
+          disX = this.data.delBtnWidth
+        }
+        item.right = this.data.delBtnWidth - disX
+        this.setData({
+          isScroll: false,
+          data: this.data.data
+        })
+      } else {
+        item.right = this.data.delBtnWidth
+        this.setData({
+          isScroll: true,
+          data: this.data.data
+        })
+      }
+    }
+  },
+
+  drawEnd: function(e) {
+    var item = this.data.data[e.currentTarget.dataset.dayindex]['data'][e.currentTarget.dataset.index]
+    if (this.data.startRight == 0) {
+      //日记项没有展开
+      if (item.right >= this.data.delBtnWidth / 2) {
+        item.right = this.data.delBtnWidth
+        this.setData({
+          isScroll: true,
+          data: this.data.data,
+        })
+      } else {
+        item.right = 0
+        this.setData({
+          isScroll: true,
+          data: this.data.data,
+        })
+      }
+    } else {
+      //日记项已经展开
+      if (item.right <= this.data.delBtnWidth / 2) {
+        item.right = 0
+        this.setData({
+          isScroll: true,
+          data: this.data.data,
+        })
+      } else {
+        item.right = this.data.delBtnWidth
+        this.setData({
+          isScroll: true,
+          data: this.data.data,
+        })
+      }
+    }
+  },
+
+  //点击修改按钮
+  modItem(e) {
+    var item = this.data.data[e.currentTarget.dataset.dayindex]['data'][e.currentTarget.dataset.index]
+    this.diary.showDiary("修改日记", item);
+  },
+
+  //点击删除按钮
+  delItem: function(e) {
+    var item = this.data.data[e.currentTarget.dataset.dayindex]['data'][e.currentTarget.dataset.index]
+    wx.showModal({
+      title: '提示',
+      content: '你确定要删除该日记吗？\n标题：' + item.diary_title,
+      confirmColor: '#04838e',
+      success: function(res) {
+        if (res.confirm) {
+          console.log("确认删除")
+          //diary.deleteItem(item)
+        }
+      }
+    })
+  },
+
+  //确认按钮
+  _save() {
+    this.diary.hideDiary();
+  },
+
 })
