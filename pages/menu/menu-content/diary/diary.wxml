@@ -19,16 +19,14 @@
           </view>
 
           <view class="edit">
-            <image class='modify-image' src='/images/index/diary.png' bindtap="modItem"></image>
-            <image class='del-image' src='/images/index/modify/del.png' bindtap="delItem"></image>
+            <image data-dayindex='{{dayIndex}}' data-index='{{index}}' class='modify-image' src='/images/index/diary.png' bindtap="modItem" />
+            <image data-dayindex='{{dayIndex}}' data-index='{{index}}' class='del-image' src='/images/index/modify/del.png' bindtap="delItem" />
           </view>
         </view>
       </block>
     </view>
   </view>
 
-  <diary id='diary' bind:error="_error" bind:success="_success">
+  <diary id='diary' bind:error="_error" bind:save="_save">
   </diary>
-  <modifydiary id='modifydiary' bind:error="_errorModifyDiary" bind:success="_successModifyDiary">
-  </modifydiary>
 </view>
