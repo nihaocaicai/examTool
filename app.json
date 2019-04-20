@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/menu/menu-content/diary/diary",
     "pages/index/index",
+    "pages/menu/menu-content/diary/diary", 
     "pages/login/login",
     "pages/index/modify/modify",
     "pages/menu/menu",

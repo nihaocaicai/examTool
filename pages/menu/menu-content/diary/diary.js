@@ -27,7 +27,7 @@ Page({
   onReady: function() {
     //Todo 刷新日记的显示，还没有实现
     this.diary = this.selectComponent("#diary") //获得diary组件
-    this.diary.showDiary("新增日记", null); //调试方便，调试完成删除
+    // this.diary.showDiary("新增日记", null); //调试方便，调试完成删除
   },
 
   //下拉页面操作

@@ -16,6 +16,11 @@ Page({
     this.setData({
       everyday_planList: everyday_plansData.everyday_planList
     });
+    // 存缓存
+    wx.setStorage({
+      key: 'everyday_planList',
+      data: everyday_plansData.everyday_planList
+    })
   },
 
   onReady: function() {
@@ -47,7 +52,6 @@ Page({
     this.setData({
       everyday_planList: plans
     })
-    var everyday_planList = wx.getStorageSync("plans")
   },
 
   //点击 修改按钮

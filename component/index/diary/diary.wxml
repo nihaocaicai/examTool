@@ -1,6 +1,6 @@
 <view hidden="{{flag}}">
   <view class='diary-container'>
-    <view class="wx-diary-title">{{dialogTitle}}</view>
+    <view class="wx-diary-title">添加日记</view>
     <form bindsubmit="formSubmit">
       <view class='wx-diary-container'>
         <!-- 标题 -->
@@ -17,7 +17,7 @@
         <!-- 位置 -->
         <view class="wx-diary-place">
           <text>位置：</text>
-          <text decode="true" bindtap='getLocation'>{{diaryPlace}}</text>
+          <text decode="true" bindtap='getLocation'>点击获取位置</text>
         </view>
       </view>
       <!-- 按钮 -->

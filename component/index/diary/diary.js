@@ -7,25 +7,7 @@ Component({
    * 组件的属性列表
    */
   properties: {
-    title: { // 属性名
-      type: String, // 类型（必填），目前接受的类型包括：String, Number, Boolean, Object, Array, null（表示任意类型）
-      value: '标题' // 属性初始值（可选），如果未指定则会根据类型选择一个
-    },
-    // 弹窗内容
-    content: {
-      type: String,
-      value: '内容'
-    },
-    // 弹窗取消按钮文字
-    btn_no: {
-      type: String,
-      value: '取消'
-    },
-    // 弹窗确认按钮文字
-    btn_ok: {
-      type: String,
-      value: '确定'
-    }
+
   },
 
   /**
@@ -35,17 +17,12 @@ Component({
     flag: true,
     diaryContentMin: 0, //最少字数
     diaryContentMax: 140, //最多字数 (根据自己需求改变)
-    diaryPlace: "点击获取位置",
   },
 
   /**
    * 组件的方法列表
    */
   methods: {
-    formSubmit(e) {
-      this.triggerEvent("save", e)
-    },
-
     //textarea字数限制
     inputs: function(e) {
       // 获取输入框的内容
@@ -83,7 +60,6 @@ Component({
     showDiary(dialogTitle) {
       this.setData({
         flag: false,
-        dialogTitle: dialogTitle,
       })
     },
 
@@ -91,11 +67,10 @@ Component({
     _error() {
       this.hideDiary()
     },
-
-
-    //获取当前位置
-    getLocation() {
-      console.log("获取位置")
-    }
+    // 点击确认按钮
+    formSubmit(e) {
+      this.triggerEvent("save", e)
+      this.hideDiary()
+    },
   }
 })
