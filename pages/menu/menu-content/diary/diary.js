@@ -12,22 +12,27 @@ Page({
   },
 
   onLoad: function(options) {
-    var that = this;
-    diary.setPage(this)
-    diary.getDataFromService()
+    var that = this
     wx.getSystemInfo({
       success: function(res) {
         that.setData({
           windowHeight: res.windowHeight
-        });
+        })
       }
-    });
+    })
+    diary.setPage(this)
+    diary.getDataFromService()
   },
 
   onReady: function() {
-    //获得diary组件
-    this.diary = this.selectComponent("#diary");
-    this.modifydiary = this.selectComponent("#modifydiary");
+    //Todo 刷新日记的显示，还没有实现
+    this.diary = this.selectComponent("#diary") //获得diary组件
+    this.diary.showDiary("新增日记", null); //调试方便，调试完成删除
+  },
+
+  //下拉页面操作
+  onPullDownRefresh: function() {
+    this.diary.showDiary();
   },
 
   drawStart: function(e) {
@@ -115,38 +120,31 @@ Page({
     }
   },
 
-
-  //取消事件
-  //新增取消按钮
-  _error() {
-    this.diary.hideDiary();
-  },
-  //修改取消按钮
-  _errorModifyDiary() {
-    this.modifydiary.hideDiary();
-  },
-
-  //确认事件
-  //新增确认按钮
-  _success() {
-    this.diary.hideDiary();
-  },
-  //修改确认按钮
-  _successModifyDiary() {
-    this.modifydiary.hideDiary();
-  },
-
   //点击修改按钮
-  modItem() {
-    this.modifydiary.showDiary();
+  modItem(e) {
+    var item = this.data.data[e.currentTarget.dataset.dayindex]['data'][e.currentTarget.dataset.index]
+    this.diary.showDiary("修改日记", item);
   },
 
   //点击删除按钮
-  delItem: function() {
-
+  delItem: function(e) {
+    var item = this.data.data[e.currentTarget.dataset.dayindex]['data'][e.currentTarget.dataset.index]
+    wx.showModal({
+      title: '提示',
+      content: '你确定要删除该日记吗？\n标题：' + item.diary_title,
+      confirmColor: '#04838e',
+      success: function(res) {
+        if (res.confirm) {
+          console.log("确认删除")
+          //diary.deleteItem(item)
+        }
+      }
+    })
   },
 
-  onPullDownRefresh: function() {
-    this.diary.showDiary();
-  }
+  //确认按钮
+  _save() {
+    this.diary.hideDiary();
+  },
+
 })

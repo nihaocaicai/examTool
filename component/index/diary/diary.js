@@ -3,14 +3,13 @@ Component({
     multipleSlots: true // 在组件定义时的选项中启用多slot支持
   },
 
-  
   /**
    * 组件的属性列表
    */
   properties: {
-    title: {            // 属性名
-      type: String,     // 类型（必填），目前接受的类型包括：String, Number, Boolean, Object, Array, null（表示任意类型）
-      value: '标题'     // 属性初始值（可选），如果未指定则会根据类型选择一个
+    title: { // 属性名
+      type: String, // 类型（必填），目前接受的类型包括：String, Number, Boolean, Object, Array, null（表示任意类型）
+      value: '标题' // 属性初始值（可选），如果未指定则会根据类型选择一个
     },
     // 弹窗内容
     content: {
@@ -34,8 +33,9 @@ Component({
    */
   data: {
     flag: true,
-    min: 0,//最少字数
-    max: 140, //最多字数 (根据自己需求改变)
+    diaryContentMin: 0, //最少字数
+    diaryContentMax: 140, //最多字数 (根据自己需求改变)
+    diaryPlace: "点击获取位置",
   },
 
   /**
@@ -43,10 +43,11 @@ Component({
    */
   methods: {
     formSubmit(e) {
-      console.log('form发生了submit事件，携带数据为：', e.detail.value)
+      this.triggerEvent("save", e)
     },
+
     //textarea字数限制
-    inputs: function (e) {
+    inputs: function(e) {
       // 获取输入框的内容
       var value = e.detail.value;
       // 获取输入框内容的长度
@@ -63,35 +64,38 @@ Component({
         })
 
       //最多字数限制
-      if (len > this.data.max) return;
+      if (len > this.data.max)
+        return;
       // 当输入框内容的长度大于最大长度限制（max)时，终止setData()的执行
       this.setData({
         currentWordNumber: len //当前字数  
       });
     },
+
     //隐藏弹框
-    hideDiary: function () {
+    hideDiary: function() {
       this.setData({
         flag: true
       })
     },
+
     //展示弹框
-    showDiary() {
+    showDiary(dialogTitle) {
       this.setData({
-        flag: false
+        flag: false,
+        dialogTitle: dialogTitle,
       })
     },
-    /*
-    * 内部私有方法建议以下划线开头
-    * triggerEvent 用于触发事件
-    */
+
+    //点击取消按钮
     _error() {
-      //触发取消回调
-      this.triggerEvent("error")
+      this.hideDiary()
     },
-    _success() {
-      //触发成功回调
-      this.triggerEvent("success")
+
+
+    //获取当前位置
+    getLocation() {
+      console.log("获取位置")
     }
   }
 })
