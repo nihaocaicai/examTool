@@ -1,23 +1,15 @@
 // pages/menu/menu-content/exam/exam.js
+var examData = require('../../../../data/local_exam_database.js')
+
 Page({
   data: {
     delBtnWidth: 160,
-    data: [{ right: 0 }, { right: 0 }, { right: 0 }, { right: 0 }],
-    isScroll: true,
-    windowHeight: 0,
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
-    var that = this;
-    wx.getSystemInfo({
-      success: function (res) {
-        that.setData({
-          windowHeight: res.windowHeight
-        });
-      }
+    // 获取数据文件数据
+    this.setData({
+      examList:examData.examList
     });
   },
 
@@ -33,20 +25,28 @@ Page({
   drawStart: function (e) {
     // console.log("drawStart");  
     var touch = e.touches[0]
-
-    for (var index in this.data.data) {
-      var item = this.data.data[index]
-      item.right = 0
+    //console.log(touch)
+    for (var index in this.data.examList) {
+      var items = this.data.examList[index]
+      //console.log(item)
+      for(var ind in items){
+        var item=items[ind]
+        //item.right = 0
+      } 
     }
+
     this.setData({
-      data: this.data.data,
+      examList: this.data.examList,
       startX: touch.clientX,
     })
 
   },
   drawMove: function (e) {
     var touch = e.touches[0]
-    var item = this.data.data[e.currentTarget.dataset.index]
+    var ind = e.currentTarget.dataset.ind
+    var items = this.data.examList[ind].data
+    var item = items[e.currentTarget.dataset.index]
+    //console.log(item.right)
     var disX = this.data.startX - touch.clientX
 
     if (disX >= 20) {
@@ -56,33 +56,37 @@ Page({
       item.right = disX
       this.setData({
         isScroll: false,
-        data: this.data.data
+        examList: this.data.examList
       })
     } else {
       item.right = 0
       this.setData({
         isScroll: true,
-        data: this.data.data
+        examList: this.data.examList
       })
     }
   },
   drawEnd: function (e) {
-    var item = this.data.data[e.currentTarget.dataset.index]
+    var ind = e.currentTarget.dataset.ind
+    var items = this.data.examList[ind].data
+    var item = items[e.currentTarget.dataset.index]
     if (item.right >= this.data.delBtnWidth / 2) {
       item.right = this.data.delBtnWidth
       this.setData({
         isScroll: true,
-        data: this.data.data,
+        examList: this.data.examList,
       })
     } else {
       item.right = 0
       this.setData({
         isScroll: true,
-        data: this.data.data,
+        examList: this.data.examList,
       })
     }
   },
+  //滑动组件end
 
+  //修改
   modItem() {
     console.log("修改");
     this.modifyexam.showEdit();
@@ -106,7 +110,7 @@ Page({
     this.modifyexam.hideEdit();
   },
 
-
+  //删除
   delItem: function () {
     console.log("删除");
   },

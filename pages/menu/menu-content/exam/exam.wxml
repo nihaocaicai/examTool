@@ -1,17 +1,20 @@
 <!--pages/menu/menu-content/exam/exam.wxml-->
 <view>
 <view class="wx-top">
-<text class="wx-date">2020-12-22</text>
-  <block wx:key="item" wx:for="{{data}}">
-  <view data-index='{{index}}' class="order-item" bindtouchstart="drawStart" bindtouchmove="drawMove" bindtouchend="drawEnd" style="right:{{item.right}}rpx">
+<!--一重循环，循环日期-->
+<block wx:key="item" wx:for-index="ind" wx:for="{{examList}}">
+  <text class="wx-date">{{item.date}}</text>
+  <!--二重循环，循环内容-->
+  <block wx:key="item" wx:for-index="index" wx:for="{{item.data}}">
+  <view data-ind='{{ind}}' data-index='{{index}}' class="order-item" bindtouchstart="drawStart" bindtouchmove="drawMove" bindtouchend="drawEnd" style="right:{{item.right}}rpx">
     <view class='data-container'>
       <!-- 时间-->
       <view class='date-container'>
-        <text class='date-text'>8:30</text>
+        <text class='date-text'>{{item.exam_time}}</text>
       </view>
       <!-- 科目及地点 -->
       <view class='content-container'>
-        <text class='content-text' decode="{{true}}">英语 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; xx学校一教110</text>
+        <text class='content-text' decode="{{true}}">{{item.exam_content}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.exam_place}}</text>
       </view>
     </view>
     
@@ -21,6 +24,7 @@
     </view>
   </view>
   </block>
+</block>
 </view>
 
   <editexam id='editexam'
