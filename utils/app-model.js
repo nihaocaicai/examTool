@@ -130,6 +130,7 @@ class Login {
 
   //获取信息失败
   getInfoFail(e) {
+    /*调试完成记得去掉注释！
     console.log("获取信息失败，错误原因:\n", e)
     var that = this
     wx.showModal({
@@ -140,7 +141,7 @@ class Login {
       success: function() {
         that.reLunchApp()
       }
-    })
+    })*/
   }
 
   //重启小程序

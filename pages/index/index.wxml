@@ -49,5 +49,5 @@
 
 
   <!-- 日记添加组件 -->
-  <diary id='diary' bind:error="_error" bind:success="_success" />
+  <diary id='diary' bind:add_confirm="add_confirm" />
 </view>

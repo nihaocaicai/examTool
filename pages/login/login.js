@@ -3,7 +3,6 @@ import {
 } from "login-model.js"
 
 var login = new Login()
-
 Page({
   data: {
     loading: true, //是否要显示 加载中 页面

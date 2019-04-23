@@ -6,7 +6,7 @@
         <!-- 标题 -->
         <view class="wx-diary-headline">
           <text>标题：</text>
-          <input value='{{diaryTitle}}' name="title" maxlength="14" type='text' placeholder="标题" />
+          <input value='{{diaryTitle}}' name="diaryTitle" maxlength="14" type='text' placeholder="标题" />
         </view>
         <!-- 内容 -->
         <view class="wx-diary-con">
@@ -16,13 +16,12 @@
         </view>
         <!-- 位置 -->
         <view class="wx-diary-place">
-          <text>位置：</text>
-          <text decode="true" bindtap='getLocation'>点击获取位置</text>
+          <text decode="true" name="diaryLocation" bindtap='getLocation'>位置：{{diaryLocation == ""? "点击获取位置": diaryLocation}}</text>
         </view>
       </view>
       <!-- 按钮 -->
       <view class="wx-diary-btn">
-        <button bindtap='_error'>取消</button>
+        <button bindtap='hideDiary'>取消</button>
         <button form-type="submit">确认</button>
       </view>
     </form>

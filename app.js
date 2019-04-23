@@ -9,7 +9,7 @@ App({
 
   onLaunch: function(e) {
     login.setApp(this)
-    //login.getAuthorize() //获取授权
+    login.getAuthorize() //获取授权
   },
 
   //成功获取微信用户信息后的操作 此处为 login 调用接口 不要删除

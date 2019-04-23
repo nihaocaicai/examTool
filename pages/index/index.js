@@ -1,11 +1,8 @@
-var everyday_plansData = require('../../data/local-everyday-plan.js')
-
 import {
   DateUtil
 } from "../../utils/DateUtil.js";
 var app = getApp()
 var dateUtil = new DateUtil()
-
 
 Page({
   /**
@@ -14,23 +11,16 @@ Page({
   onLoad: function(options) {
     // 获取数据文件数据
     this.setData({
-      everyday_planList: everyday_plansData.everyday_planList
-    });
-    // 存缓存
-    wx.setStorage({
-      key: 'everyday_planList',
-      data: everyday_plansData.everyday_planList
+      everyday_planList: wx.getStorageSync("everyday_planList")
     })
   },
 
-  onReady: function() {
+  onReady: function () {
     this.diary = this.selectComponent("#diary") //获得diary组件
   },
 
   onShow: function() {
     var info = wx.getStorageSync("user_info")
-    var everyday_planList = wx.getStorageSync("everyday_planList")
-
     this.setData({
       goal_university: info.goal_university == "" ? "未设置目标大学" : info.goal_university, //目标
       goal_major: info.goal_major == "" ? "未设置目标专业" : info.goal_major, //目标
@@ -64,19 +54,19 @@ Page({
   /* 考研小日志 diary 对话框 */
   //显示对话框事件
   showDiary() {
-    this.diary.showDiary();
+    this.diary.showDiary("新增日记", null);
   },
 
-  //回调 取消事件
-  _error() {
-    console.log('你点击了取消');
-    this.diary.hideDiary();
-  },
   //回调 确认事件
-  _success() {
-    console.log('你点击了确定');
-    this.diary.hideDiary();
+  add_confirm() {
+    wx.showModal({
+      title: '提示',
+      content: '日记添加成功！',
+      confirmColor: '#04838e',
+      showCancel: false,
+    })
   },
+
   // 展示所有的日志，跳转到菜单页面的考研日志
   showAllDiary() {
     wx.navigateTo({

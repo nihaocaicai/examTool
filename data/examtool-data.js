@@ -56,7 +56,7 @@ var local_database = [{
     data: [{
       diary_id: 1,
       diary_title: "考研小日记",
-      diary_content: "快考研啦！",
+      diary_content: "快考研啦！1",
       diary_write_time: "8:00",
       diary_write_place: "广东财经大学",
       //  用户左滑窗口
@@ -64,26 +64,26 @@ var local_database = [{
     }, {
       diary_id: 2,
       diary_title: "考研小日记",
-      diary_content: "快考研啦！",
+      diary_content: "快考研啦！2",
       diary_write_time: "8:00",
-      diary_write_place: "广东财经大学",
+      diary_write_place: "",
       //  用户左滑窗口
       right: 0
     }]
   }, {
     diary_date: "2019-02-02",
     data: [{
-      diary_id: 1,
+      diary_id: 3,
       diary_title: "考研小日记",
-      diary_content: "快考研啦！",
+      diary_content: "快考研啦！3",
       diary_write_time: "8:00",
       diary_write_place: "广东财经大学",
       //  用户左滑窗口
       right: 0
     }, {
-      diary_id: 2,
+      diary_id: 4,
       diary_title: "考研小日记",
-      diary_content: "快考研啦！",
+      diary_content: "快考研啦！4",
       diary_write_time: "8:00",
       diary_write_place: "广东财经大学",
       //  用户左滑窗口

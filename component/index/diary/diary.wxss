@@ -25,6 +25,7 @@
 }
 
 .wx-diary-headline {
+  width:100%;
   flex-direction: row;
   display: flex;
   border-bottom-width: 1rpx;
@@ -40,6 +41,7 @@
 
 .wx-diary-headline input {
   padding-left: 10rpx;
+  padding-right:1px;
   font-size: 28rpx;
 }
 

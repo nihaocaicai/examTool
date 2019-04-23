@@ -1,6 +1,8 @@
 //login 页面登录接口
 //完成授权且获取 userInfo 和 openid 之后的操作
 var app = getApp()
+var everyday_plansData = require('../../data/local-everyday-plan.js')
+wx.setStorageSync('everyday_planList', everyday_plansData.everyday_planList)
 
 class Login {
   setPage(page) {
@@ -36,7 +38,7 @@ class Login {
         //缓存不存在 user_info ，尝试从服务器获取
         that.getUserInfoFromService()
       } else {
-        //user_info存在于缓存，获取 plan
+        //user_info存在于缓存，获取 plan 和 everyday_planList
         that.getPlanFromService()
       }
     }
@@ -92,7 +94,7 @@ class Login {
     */
   }
 
-  //从服务器上获取 plan
+  //从服务器上获取 plan 和 everyday_planList
   getPlanFromService() {
     var that = this
     var plan //要保存的计划
@@ -115,6 +117,7 @@ class Login {
     //fail:
     /*
       wx.hideLoading()
+      that.offlineTips()
      */
   }
 
@@ -173,8 +176,14 @@ class Login {
   offlineTips() {
     wx.showModal({
       title: '提示',
-      content: '网络连接失败，你只可以查看本地的计划，不能上传到服务器进行保存',
+      content: '无法连接到服务器，你只可以查看本地的计划，不能将新增的信息上传到服务器',
       showCancel: false,
+      confirmColor: '#04838e',
+      success:function(res){
+        if(res.confirm){
+          toIndex()
+        }
+      }
     })
   }
 }
