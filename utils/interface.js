@@ -20,13 +20,13 @@ var interfaces = {
     getAllDiary: "user/diarys/all", //获取用户全部考研日记
     postAddDiary: "user/diarys/add", //添加考研日记
     postModifyDiary: "user/diarys/modify", //修改考研日记
-    getDeleteDiary: " /user/diarys/delete/", //修改考研日记，需要在地址后面加上要删除的日记ID
+    getDeleteDiary: " user/diarys/delete/", //修改考研日记，需要在地址后面加上要删除的日记ID
 
     /* 用户考研安排 */
     getAllArrangements: "user/arrangements/all", //获取用户全部考研安排
     postAddArramgements: "user/arrangements/add", //添加考研安排
     postModifyArrangements: "user/arrangements/modify", //修改考研安排
-    getDeleteArrangements: " /user/arrangements/delete/", //修改考研安排，需要在地址后面加上要删除的安排ID
+    getDeleteArrangements: " user/arrangements/delete/", //修改考研安排，需要在地址后面加上要删除的安排ID
 }
 
 module.exports = {
