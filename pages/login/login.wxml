@@ -20,8 +20,9 @@
     </view>
 
     <view wx:elif="{{needDelete}}" style='text-align:center'>
-      <view>你已执行过退出操作</view>
-      <view>请在微信中删除本程序后重新进入</view>
+      <view>你已退出登录</view>
+      <view>如想重新使用</view>
+      <view>请在微信中删除本小程序后重新进入</view>
     </view>
   </view>
 

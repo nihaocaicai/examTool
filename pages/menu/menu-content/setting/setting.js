@@ -8,7 +8,8 @@ var setting = new Setting()
 Page({
   onLoad: function() {
     this.setData({
-      showDeleteModal: false
+      showDeleteModal: false,
+      hideOfflineTips: wx.getStorageSync("hideOfflineTips")
     })
     setting.setPage(this)
     setting.getUserData()
@@ -16,6 +17,18 @@ Page({
 
   onReady: function() {
     this.edit = this.selectComponent("#edit") //获得diary组件
+  },
+
+  //切换离线模式提醒按钮
+  offlineTipsChange: function(e) {
+    try {
+      wx.setStorageSync("hideOfflineTips", !e.detail.value)
+      this.setData({
+        hideOfflineTips: !e.detail.value
+      })
+    } catch (error) {
+      console.log("设置是否提示离线信息对话框出错，错误信息:\n" + error)
+    }
   },
 
   /* 点击 退出登录 按钮 */
@@ -41,10 +54,18 @@ Page({
   /* 在删除对话框点击 确定 按钮 */
   confirmDelete(e) {
     if (this.data.result == this.data.input) {
+      //回答正确
       this.setData({
         showDeleteModal: false
       })
       setting.confirmDelete(this.data.input)
+    } else {
+      //回答错误
+      wx.showToast({
+        title: '回答错误',
+        image: '/images/fail.png',
+        duration: 1200,
+      })
     }
   },
 

@@ -15,7 +15,7 @@ Page({
     })
   },
 
-  onReady: function () {
+  onReady: function() {
     this.diary = this.selectComponent("#diary") //获得diary组件
   },
 

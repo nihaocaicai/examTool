@@ -36,7 +36,20 @@ Page({
 
   //下拉页面操作
   onPullDownRefresh: function() {
-    this.selectComponent("#diary").showDiary("新增日记", null);
+    if (!this.data.show) {
+      this.selectComponent("#diary").showDiary("新增日记", null)
+      this.setData({
+        show: true,
+      })
+    }
+    wx.stopPullDownRefresh()
+  },
+
+  //点击取消按钮
+  hidden_dialog: function() {
+    this.setData({
+      show: false,
+    })
   },
 
   //点击修改按钮
@@ -44,10 +57,11 @@ Page({
     var dayIndex = e.currentTarget.dataset.dayindex
     var index = e.currentTarget.dataset.index
     var item = this.data.data[dayIndex]['data'][index]
+    this.selectComponent("#diary").showDiary("修改日记", item);
     this.setData({
+      show: true,
       modifyIndex: [dayIndex, index]
     })
-    this.selectComponent("#diary").showDiary("修改日记", item);
   },
 
   //添加成功后执行的操作

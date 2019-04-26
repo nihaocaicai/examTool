@@ -1,5 +1,5 @@
 class DateUtil {
-  getFormatDate(){
+  getFormatDate() {
     var today = new Date()
     return [today.getFullYear(), today.getMonth() + 1, today.getDate()].map(
       function formatNumber(n) {
@@ -13,7 +13,7 @@ class DateUtil {
   getIndexDate() {
     var today = new Date()
     const week = "星期" + "日一二三四五六".charAt(today.getDay());
-    return (this.getFormatDate()).toString() + ' ' + week.toString()
+    return today.getFullYear() + "年" + (today.getMonth() + 1) + "月" + today.getDate() + "日" + ' ' + week.toString()
   }
 
   //从今天开始还有多少天

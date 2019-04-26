@@ -1,8 +1,6 @@
 //login 页面登录接口
 //完成授权且获取 userInfo 和 openid 之后的操作
 var app = getApp()
-var everyday_plansData = require('../../data/local-everyday-plan.js')
-wx.setStorageSync('everyday_planList', everyday_plansData.everyday_planList)
 
 class Login {
   setPage(page) {
@@ -11,14 +9,15 @@ class Login {
 
   //用户点击授权按钮 获取用户信息
   clickAuthorzieButton(e) {
-    var userInfo = e.detail.userInfo
-    if (userInfo) {
+    var rawUserInfo = e.detail
+    if (rawUserInfo.userInfo) {
       //用户按了授权按钮
       this.page.setData({
         loading: true, //显示 加载中 页面
         needAuthorize: false, //不显示 点击授权 按钮
       })
-      app.processUserInfo(userInfo)
+      wx.setStorageSync("isFirstLogin", true)
+      app.processUserInfo(rawUserInfo)
     } else {
       //用户按了拒绝按钮
       wx.showModal({
@@ -34,12 +33,18 @@ class Login {
     var that = this
     //获取到 userInfo 的回调函数
     app.userInfoReadyCallback = function() {
-      if (!(wx.getStorageSync('user_info') instanceof Object)) {
-        //缓存不存在 user_info ，尝试从服务器获取
-        that.getUserInfoFromService()
+      if (wx.getStorageSync("isFirstLogin")) {
+        //第一次登录，需要设置信息
+        that.showSetUserInfoDialog()
       } else {
-        //user_info存在于缓存，获取 plan 和 everyday_planList
-        that.getPlanFromService()
+        //不是第一次登录
+        if (!(wx.getStorageSync('user_info') instanceof Object)) {
+          //缓存不存在 user_info，尝试从服务器获取
+          that.getUserInfoFromService()
+        } else {
+          //user_info 存在于缓存，获取 everyday_planList
+          that.getTodayPlanFromService()
+        }
       }
     }
     //未授权的回调函数
@@ -62,98 +67,122 @@ class Login {
   //从服务器获取 user_info
   getUserInfoFromService() {
     var that = this
-    //Todo 服务器获取信息
-    //success:
-    var hasInfo = true //true 表示服务器有信息
-    if (hasInfo) {
-      // 有信息
-      // temp 为模拟获取到的数据
-      var temp = {
-        "birthday": null,
-        "examDate": null,
-        "goal_university": "清华大学",
-        "goal_major": "软件工程",
-        "motto": "座右铭"
-      }
-      try {
-        wx.setStorageSync('user_info', temp)
-        //尝试从服务器获取 plan
-        that.getPlanFromService()
-      } catch (e) {
-        //console.log("保存信息出错，错误原因：\n", e)
-        app.getInfoFail(e)
-      }
-    } else {
-      //没有信息，一定是没有 plan 的，不需要检查是否存在 plan
-      that.showSetUserInfoDialog()
-    }
-
-    //fail: 获取不到信息
-    /*
-    app.getInfoFail("无法从服务器获取 user_Info 信息\n在函数 getUserInfoFromService")
-    */
+    wx.request({
+      url: app.globalData.ip + app.globalData.interface.getInfo,
+      data: ({
+        token: wx.getStorageSync("wx_user_info").token
+      }),
+      success: function(res) {
+        if (res.statusCode == 200) {
+          //服务器与本地数据代码格式不相同，需要转义
+          var target = res.data['user_target'].split("+")
+          var user_info = new Object()
+          user_info['birthday'] = res.data['user_birthday']
+          user_info['examDate'] = res.data['user_exam_date']
+          user_info['goal_university'] = target[0]
+          user_info['goal_major'] = target[1]
+          user_info['motto'] = res.data['user_motto']
+          try {
+            wx.setStorageSync('user_info', user_info)
+            that.getTodayPlanFromService()
+          } catch (e) {
+            app.getInfoFail("保存信息出错，错误原因：\n" + e)
+          }
+        } else {
+          app.getInfoFail("无法从服务器获取 user_Info 信息\n在函数 getUserInfoFromService\n服务器返回状态码: " + res.statusCode)
+        }
+      },
+      fail: function(res) {
+        app.getInfoFail("无法从服务器获取 user_Info 信息\n在函数 getUserInfoFromService\n错误原因:" + res.errMsg)
+      },
+    })
   }
 
-  //从服务器上获取 plan 和 everyday_planList
-  getPlanFromService() {
+  //从服务器上获取今天的计划 everyday_planList
+  getTodayPlanFromService() {
     var that = this
-    var plan //要保存的计划
-
-    //Todo 服务器获取信息
-    // success:
-    // 没有信息
-    plan = new Array()
-    // 有信息
-    //plan = res.data
-    //保存数据
-    try {
-      wx.setStorageSync('plan', plan)
-      that.toIndex()
-    } catch (e) {
-      //console.log("保存信息出错，错误原因：\n", e)
-      app.getInfoFail(e)
-    }
-
-    //fail:
-    /*
-      wx.hideLoading()
-      that.offlineTips()
-     */
+    wx.request({
+      url: app.globalData.ip + app.globalData.interface.getTodayPlan,
+      data: ({
+        token: wx.getStorageSync("wx_user_info").token
+      }),
+      success: function(res) {
+        if (res.statusCode == 200) {
+          try {
+            wx.setStorageSync('everyday_planList', res.data)
+            that.toIndex()
+          } catch (e) {
+            app.getInfoFail("保存信息出错，错误原因：\n" + e)
+          }
+        } else {
+          that.offlineTips("无法从服务器获取 user_Info 信息\n在函数 getTodayPlanFromService\n服务器返回状态码: " + res.statusCode)
+        }
+      },
+      fail: function(res) {
+        that.offlineTips("无法从服务器获取 user_Info 信息\n在函数 getTodayPlanFromService\n错误原因:" + res.errMsg)
+      },
+    })
   }
 
   //设置对话框 点击确定按钮
   dialogConfirm(formData) {
+    var that = this
     wx.showLoading({
       title: '信息保存中',
     })
-    try {
-      // Todo 执行保存到服务器操作（必须）
-      //success: 服务器保存成功
-      wx.setStorageSync('user_info', formData)
-      wx.setStorageSync('diary', new Array())
-      wx.setStorageSync('plan', new Array()) //没有信息，一定是第一次授权或清除过数据/退出登录，即使本地有 plan 也要删除
-      this.page.edit.hideEdit();
-      wx.hideLoading()
-      this.toIndex()
-
-      //fail: 服务器保存失败
-      /*
-      wx.hideLoading()
-      wx.showModal({
-        title: '提示',
-        content: '保存数据出错，网络连接失败，请检查网络连接是否正确
-        showCancel: false,
-      })
-      */
-    } catch (e) {
-      //console.log("保存信息出错，错误原因：\n", e)
-      wx.hideLoading()
-      wx.showModal({
-        title: '提示',
-        content: '保存数据出错，可能是存储空间不足，请尝试清理一下手机后再保存',
-        showCancel: false,
-      })
-    }
+    wx.request({
+      url: app.globalData.ip + app.globalData.interface.postModifyInfo,
+      method: "POST",
+      header: {
+        'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+      },
+      data: ({
+        token: wx.getStorageSync("wx_user_info").token,
+        user_brithday: formData.birthday,
+        user_target: formData.goal_university + "+" + formData.goal_major,
+        user_motto: formData.motto,
+        user_exam_date: formData.examDate,
+      }),
+      success: function(res) {
+        if (res.statusCode == 202) {
+          //保存成功
+          try {
+            var wx_user_info = wx.getStorageSync("wx_user_info")
+            wx.clearStorageSync() //清除所有信息
+            wx.setStorageSync("wx_user_info", wx_user_info)
+            wx.setStorageSync('user_info', formData)
+            that.page.edit.hideEdit();
+            wx.hideLoading()
+            that.toIndex()
+          } catch (e) {
+            console.log("保存信息出错，错误原因：\n", e)
+            wx.hideLoading()
+            wx.showModal({
+              title: '提示',
+              content: '保存数据出错，可能是存储空间不足，请尝试清理一下手机后再保存',
+              showCancel: false,
+            })
+          }
+        } else {
+          wx.hideLoading()
+          wx.showModal({
+            title: '提示',
+            content: '服务器出错，请稍后重试',
+            showCancel: false,
+          })
+          console.log("服务器出错，错误代码: " + res.statusCode)
+        }
+      },
+      fail: function(res) {
+        wx.showModal({
+          title: '提示',
+          content: '网络连接失败，请检查网络连接是否正确',
+          showCancel: false,
+        })
+        console.log("网络连接失败，错误原因:" + res.errMsg)
+        wx.hideLoading()
+      },
+    })
   }
 
   //填写用户信息对话框
@@ -173,18 +202,33 @@ class Login {
   }
 
   //脱机提示
-  offlineTips() {
-    wx.showModal({
-      title: '提示',
-      content: '无法连接到服务器，你只可以查看本地的计划，不能将新增的信息上传到服务器',
-      showCancel: false,
-      confirmColor: '#04838e',
-      success:function(res){
-        if(res.confirm){
-          toIndex()
+  offlineTips(errorMessage) {
+    var that = this
+    console.log("与服务器连接出错\n" + errorMessage)
+    if (!wx.getStorageSync('hideOfflineTips')) {
+      //显示离线提示
+      that.toIndex()
+      wx.showToast({
+        title: '当前为离线模式',
+        image: "/images/login_fail.png",
+        duration: 1800,
+      })
+    } else {
+      that.toIndex()
+      //隐藏离线提示
+      /*
+      wx.showModal({
+        title: '提示',
+        content: '无法连接到服务器，你只可以查看本地的计划。\r\n你可以在设置中关闭这个提示',
+        showCancel: false,
+        confirmColor: '#04838e',
+        success: function(res) {
+          if (res.confirm) {
+            that.toIndex()
+          }
         }
-      }
-    })
+      })*/
+    }
   }
 }
 

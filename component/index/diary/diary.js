@@ -133,6 +133,7 @@ Component({
       this.setData({
         flag: true
       })
+      this.triggerEvent("hidden")
     },
 
     //获取当前位置
@@ -244,6 +245,9 @@ Component({
       var beforeContent = this.data.diaryContent
       var beforeLocation = this.data.diaryLocation
       return !(beforeTitle == e.detail.value.diaryTitle && beforeContent == e.detail.value.diaryContent && beforeLocation == e.detail.value.diaryLocation)
-    }
-  }
+    },
+
+    preventTouchMove: function() {},
+
+ }
 })
