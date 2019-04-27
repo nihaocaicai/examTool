@@ -240,16 +240,9 @@ class Login {
 
     if (!wx.getStorageSync('hideOfflineTips')) {
       //显示离线提示
-      this.toIndex()
-      wx.showToast({
-        title: '当前为离线模式',
-        image: "/images/login_fail.png",
-        duration: 1800,
-      })
-    } else {
-      //隐藏离线提示
-      this.toIndex()
+      app.globalData.isOffline = true
     }
+    this.toIndex()
   }
 }
 

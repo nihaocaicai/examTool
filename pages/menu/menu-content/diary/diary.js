@@ -36,21 +36,12 @@ Page({
 
   //下拉页面操作
   onPullDownRefresh: function() {
-    if (!this.data.show) {
-      this.selectComponent("#diary").showDiary("新增日记", null)
-      this.setData({
-        show: true,
-      })
-    }
+    this.selectComponent("#diary").showDiary("新增日记", null)
     wx.stopPullDownRefresh()
   },
 
   //点击取消按钮
-  hidden_dialog: function() {
-    this.setData({
-      show: false,
-    })
-  },
+  hidden_dialog: function() {},
 
   //点击修改按钮
   modItem(e) {
@@ -59,7 +50,6 @@ Page({
     var item = this.data.data[dayIndex]['data'][index]
     this.selectComponent("#diary").showDiary("修改日记", item);
     this.setData({
-      show: true,
       modifyIndex: [dayIndex, index]
     })
   },

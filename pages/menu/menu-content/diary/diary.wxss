@@ -6,9 +6,6 @@
   border-color: black;  
   border-style: dashed;
 }
-.wx-top{
-  /*margin-top: 20rpx;*/
-}
 .wx-date{
   margin-top: 20rpx;
   margin-left: 25rpx;

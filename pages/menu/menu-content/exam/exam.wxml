@@ -1,38 +1,37 @@
 <!--pages/menu/menu-content/exam/exam.wxml-->
-<view>
-<view class="wx-top">
-<!--一重循环，循环日期-->
-<block wx:key="item" wx:for-index="ind" wx:for="{{examList}}">
-  <text class="wx-date">{{item.date}}</text>
-  <!--二重循环，循环内容-->
-  <block wx:key="item" wx:for-index="index" wx:for="{{item.data}}">
-  <view data-ind='{{ind}}' data-index='{{index}}' class="order-item" bindtouchstart="drawStart" bindtouchmove="drawMove" bindtouchend="drawEnd" style="right:{{item.right}}rpx">
-    <view class='data-container'>
-      <!-- 时间-->
-      <view class='date-container'>
-        <text class='date-text'>{{item.exam_time}}</text>
-      </view>
-      <!-- 科目及地点 -->
-      <view class='content-container'>
-        <text class='content-text' decode="{{true}}">{{item.exam_content}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.exam_place}}</text>
-      </view>
-    </view>
-    
-    <view class="editexam">
-      <image class='modify-image' src='/images/index/diary.png' bindtap="modItem"></image>
-      <image class='del-image' src='/images/index/modify/del.png' bindtap="delItem"></image>
+<view wx:if="{{!loading}}">
+  <view wx:if="{{showView}}">
+    <!--一重循环，循环日期-->
+    <view wx:key="item" style="margin-top: 20rpx; margin-bottom: 20rpx;" wx:for-index="dayIndex" wx:for="{{examList}}">
+      <text class="wx-date">{{item.date}}</text>
+      <!--二重循环，循环内容-->
+      <block wx:key="item" wx:for-index="index" wx:for="{{item.data}}">
+        <view data-dayIndex='{{dayIndex}}' data-index='{{index}}' class="order-item" bindtouchstart="drawStart" bindtouchmove="drawMove" bindtouchend="drawEnd" style="right:{{item.right}}rpx">
+          <view class='data-container'>
+            <!-- 时间-->
+            <view class='date-container'>
+              <text class='date-text'>{{item.arrangement_time}}</text>
+            </view>
+            <!-- 科目及地点 -->
+            <view class='content-container'>
+              <text class='content-text' decode="{{true}}">{{item.arrangement_content}}</text>
+              <text class='content-text' decode="{{true}}">{{item.arrangement_place}}</text>
+            </view>
+          </view>
+          <view class="editexam">
+            <image class='modify-image' src='/images/index/diary.png' data-dayindex='{{dayIndex}}' data-index='{{index}}' bindtap="modItem" />
+            <image class='del-image' src='/images/index/modify/del.png' data-dayindex='{{dayIndex}} ' data-index='{{index}} ' bindtap="delItem" />
+          </view>
+        </view>
+      </block>
     </view>
   </view>
-  </block>
-</block>
-</view>
 
-  <editexam id='editexam'
-      bind:error="_errorexam"  
-      bind:success="_successexam">
-  </editexam>
-  <modifyexam id='modifyexam'
-      bind:error="_errormodifyexam"  
-      bind:success="_successmodifyexam">
-  </modifyexam>
+  <view wx:if="{{!showView}}" style='margin-top: 8vw; height: 100%; width: 100%; display:flex; align-items:center; justify-content:center; text-align:center'>
+    <text decode='true' style='font-size:32rpx; color:#999'>
+          你还没有考研安排\n赶快下拉页面添加安排吧
+          </text>
+  </view>
+
+  <editexam id='editexam' bind:modify_confirm="modify_confirm" bind:add_confirm="add_confirm" bind:hidden_dialog="hidden_dialog" />
 </view>

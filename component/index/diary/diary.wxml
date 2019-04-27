@@ -1,4 +1,4 @@
-<view hidden="{{flag}}">
+<view hidden="{{flag}}" catchtouchmove="preventTouchMove">
   <view class='diary-container'>
     <view class="wx-diary-title">添加日记</view>
     <form bindsubmit="formSubmit">

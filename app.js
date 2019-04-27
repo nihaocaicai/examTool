@@ -1,6 +1,6 @@
 import {
   Login
-} from "utils/app-model.js"
+} from "app-model.js"
 
 var connect = require("utils/interface.js")
 var login = new Login(); //实例化 登陆模块
