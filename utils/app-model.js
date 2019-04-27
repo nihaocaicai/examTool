@@ -12,13 +12,14 @@ class Login {
       //执行过登出操作，提示需要删除小程序后再添加
       this.needDeleteApp()
     } else if (wx.getStorageSync('wx_user_info') != "") {
-      this.userInfoIsReady() //如果缓存有授权数据，则不需要发起授权申请
+      //如果缓存有数据，检查基本信息是否更改了
+      this.checkForChanges()
     } else {
       var login = this
       // 如果缓存没有数据，重新授权
       wx.login({
-        success: res => {
-          login.code = res.code
+        success: e => {
+          login.code = e.code
           if (wx.canIUse('button.open-type.getUserInfo')) {
             wx.getSetting({
               // 微信新版本，查看用户是否授权过
@@ -66,6 +67,92 @@ class Login {
     }, 1000)
   }
 
+  //检查基本信息是否更改了
+  checkForChanges() {
+    var login = this
+    wx.getUserInfo({
+      lang: "zh_CN",
+      success: res => {
+        var cache = wx.getStorageSync("wx_user_info")
+        res.userInfo.gender = res.userInfo.gender == 1 ? "男" : "女"
+        res.userInfo.city = res.userInfo.province + " " + res.userInfo.city
+        var nickNameFlag = cache['user_name'] != res.userInfo.nickName //昵称更改过标签
+        var avatarUrlFlag = cache['user_avatar'] != res.userInfo.avatarUrl //用户更改过头像
+        var genderFlag = cache['user_gender'] != res.userInfo.gender //性别更改过标签
+        var cityFlag = cache['user_city'] != res.userInfo.city //城市更改过标签
+        var changedFlag = false
+
+        //传递的参数
+        var data = new Object()
+        data.token = cache['token']
+
+        if (nickNameFlag) {
+          //昵称更改过
+          data.user_name = res.userInfo.nickName
+          changedFlag = true
+        }
+        if (avatarUrlFlag) {
+          //用户更改过
+          data.user_avatar = res.userInfo.avatarUrl
+          changedFlag = true
+        }
+        if (genderFlag) {
+          //性别更改过
+          data.user_gender = res.userInfo.gender
+          changedFlag = true
+        }
+        if (cityFlag) {
+          //城市更改过
+          data.user_city = res.userInfo.city
+          changedFlag = true
+        }
+
+        if (changedFlag) {
+          //更改过信息，尝试更改服务器上的信息
+          wx.request({
+            url: login.app.globalData.ip + login.app.globalData.interface.postModifyInfo,
+            method: "POST",
+            header: {
+              'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+            },
+            data: data,
+            success: function(e) {
+              if (nickNameFlag) {
+                //昵称更改过
+                cache['user_name'] = res.userInfo.nickName
+              }
+              if (avatarUrlFlag) {
+                //用户更改过
+                cache['user_avatar'] = res.userInfo.avatarUrl
+              }
+              if (genderFlag) {
+                //性别更改过
+                cache['user_gender'] = res.userInfo.gender
+              }
+              if (cityFlag) {
+                //城市更改过
+                cache['user_city'] = res.userInfo.city
+              }
+              wx.setStorageSync("wx_user_info", cache)
+              login.userInfoIsReady()
+            },
+            fail: function(e) {
+              //连接失败，下次再检查
+              login.userInfoIsReady()
+            },
+          })
+        } else {
+          //没有更改过，直接跳转
+          login.userInfoIsReady()
+        }
+      },
+      fail: res => {
+        //获取失败，下次再检查
+        this.userInfoIsReady()
+      }
+    })
+  }
+
   //微信的 getUserInfo 函数整合
   getUserInfo() {
     var login = this
@@ -82,13 +169,11 @@ class Login {
 
   //成功获取微信用户信息后对用户信息的操作
   processUserInfo(rawUserInfo) {
-    //var encryptedData =  rawUserInfo.encryptedData
-    //var iv = rawUserInfo.iv
     var userInfo = new Object()
     userInfo.user_name = rawUserInfo.userInfo.nickName
     userInfo.user_avatar = rawUserInfo.userInfo.avatarUrl
     userInfo.user_gender = rawUserInfo.userInfo.gender == 1 ? "男" : "女"
-    userInfo.user_city = rawUserInfo.userInfo.city + " " + rawUserInfo.userInfo.city
+    userInfo.user_city = rawUserInfo.userInfo.province + " " + rawUserInfo.userInfo.city
 
     var login = this
     wx.request({
@@ -103,7 +188,7 @@ class Login {
           wx.setStorageSync('wx_user_info', userInfo)
           login.userInfoIsReady()
         } else {
-          login.getInfoFail(res)
+          login.getInfoFail("无法从服务器获取 token 信息\n在函数 processUserInfo\n服务器返回代码: " + e.statusCode)
         }
       },
       fail: res => {

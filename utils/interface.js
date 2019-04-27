@@ -2,7 +2,7 @@ var ip = "http://127.0.0.1:8080/examTool/"
 
 var interfaces = {
   /* 用户登录 */
-  getToken: "user/token", //获取token
+  getToken: "user/token", //获取token(*)
 
   /* 用户信息 */
   getInfo: "user/info/show", //获取用户设置的基本信息(*)

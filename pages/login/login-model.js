@@ -127,6 +127,7 @@ class Login {
   //设置对话框 点击确定按钮
   dialogConfirm(formData) {
     var that = this
+    var wx_user_info = wx.getStorageSync("wx_user_info")
     wx.showLoading({
       title: '信息保存中',
     })
@@ -137,7 +138,11 @@ class Login {
         'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
       },
       data: ({
-        token: wx.getStorageSync("wx_user_info").token,
+        token: wx_user_info['token'],
+        user_name: wx_user_info['user_name'],
+        user_avatar: wx_user_info['user_avatar'],
+        user_gender: wx_user_info['user_gender'],
+        user_city: wx_user_info['user_city'],
         user_brithday: formData.birthday,
         user_target: formData.goal_university + "+" + formData.goal_major,
         user_motto: formData.motto,
@@ -151,8 +156,10 @@ class Login {
             wx.clearStorageSync() //清除所有信息
             wx.setStorageSync("wx_user_info", wx_user_info)
             wx.setStorageSync('user_info', formData)
+            wx.setStorageSync('hideOfflineTips', false)
             that.page.edit.hideEdit();
             wx.hideLoading()
+            that.checkEveryDayPlan()
             that.toIndex()
           } catch (e) {
             console.log("保存信息出错，错误原因：\n", e)
@@ -189,7 +196,8 @@ class Login {
   showSetUserInfoDialog() {
     this.page.edit = this.page.selectComponent("#edit") //获得diary组件
     this.page.edit.setData({
-      nickName: wx.getStorageSync("wx_user_info")['user_name']
+      nickName: wx.getStorageSync("wx_user_info")['user_name'],
+      isFirstLogin: true
     })
     this.page.edit.showEdit();
   }
@@ -201,13 +209,38 @@ class Login {
     })
   }
 
+  //检查每日计划是不是今天的
+  checkEveryDayPlan() {
+    //检查 everyday_planList 的内容是不是今天的，不是今天的要清除
+    var today = new Date()
+    var date = [today.getFullYear(), today.getMonth() + 1, today.getDate()].map(
+      function formatNumber(n) {
+        n = n.toString()
+        return n[1] ? n : '0' + n
+      }
+    ).join('-')
+
+    if (wx.getStorageSync("everyday_planList") instanceof Object && wx.getStorageSync("everyday_planList").date == date) {} else {
+      var everyday_planList = new Object()
+      everyday_planList.date = date
+      everyday_planList.data = new Array()
+      try {
+        wx.setStorageSync("everyday_planList", everyday_planList)
+      } catch (e) {
+        //保存错误，重启程序重试
+        app.getInfoFail("设置每日计划 everyday_planLists 出错\n在函数 checkEveryDayPlan\n错误原因:\n" + e)
+      }
+    }
+  }
+
   //脱机提示
   offlineTips(errorMessage) {
-    var that = this
     console.log("与服务器连接出错\n" + errorMessage)
+    this.checkEveryDayPlan()
+
     if (!wx.getStorageSync('hideOfflineTips')) {
       //显示离线提示
-      that.toIndex()
+      this.toIndex()
       wx.showToast({
         title: '当前为离线模式',
         image: "/images/login_fail.png",
@@ -215,7 +248,7 @@ class Login {
       })
     } else {
       //隐藏离线提示
-      that.toIndex()
+      this.toIndex()
     }
   }
 }

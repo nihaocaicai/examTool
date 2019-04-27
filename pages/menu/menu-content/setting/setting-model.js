@@ -28,7 +28,7 @@ class Setting {
       var info = wx.getStorageSync('user_info')
       var wxInfo = wx.getStorageSync('wx_user_info')
       this.page.edit.setData({
-        isLogin: false, //不是在登录的时候显示对话框
+        isFirstLogin: false, //不是在登录的时候显示对话框
         nickName: wxInfo['user_name'],
         birthday: info['birthday'],
         examDate: info['examDate'],
@@ -49,6 +49,7 @@ class Setting {
   //保存编辑
   confirmEdit(formData) {
     var that = this
+    var wx_user_info = wx.getStorageSync("wx_user_info")
     wx.request({
       url: app.globalData.ip + app.globalData.interface.postModifyInfo,
       method: "POST",
@@ -56,7 +57,11 @@ class Setting {
         'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
       },
       data: ({
-        token: wx.getStorageSync("wx_user_info").token,
+        token: wx_user_info['token'],
+        user_name: wx_user_info['user_name'],
+        user_avatar: wx_user_info['user_avatar'],
+        user_gender: wx_user_info['user_gender'],
+        user_city: wx_user_info['user_city'],
         user_brithday: formData.birthday,
         user_target: formData.goal_university + "+" + formData.goal_major,
         user_motto: formData.motto,
@@ -100,7 +105,7 @@ class Setting {
       fail: function(res) {
         wx.showModal({
           title: '提示',
-          content: '网络连接失败，请检查网络连接是否正确',
+          content: '当前是离线模式，无法保存信息，请连接网络后重新保存',
           showCancel: false,
         })
         console.log("网络连接失败，错误原因:" + res.errMsg)
