@@ -20,7 +20,7 @@
     <view style='display: flex; align-items: center;'>
       <text>离线模式时提示</text>
       <switch checked="{{!hideOfflineTips}}" bindchange='offlineTipsChange' color='#04838e' />
-      <text>什么是离线模式?</text>
+      <image bindtap='whatsOfflineMode' style="width:50rpx" src='/images/menu/question.png' mode="widthFix"/>
     </view>
   </view>
   <!-- 信息end -->

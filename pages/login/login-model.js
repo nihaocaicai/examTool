@@ -115,11 +115,11 @@ class Login {
             app.getInfoFail("保存信息出错，错误原因：\n" + e)
           }
         } else {
-          that.offlineTips("无法从服务器获取 user_Info 信息\n在函数 getTodayPlanFromService\n服务器返回状态码: " + res.statusCode)
+          that.offlineTips("无法从服务器获取 everyday_planList 信息\n在函数 getTodayPlanFromService\n服务器返回状态码: " + res.statusCode)
         }
       },
       fail: function(res) {
-        that.offlineTips("无法从服务器获取 user_Info 信息\n在函数 getTodayPlanFromService\n错误原因:" + res.errMsg)
+        that.offlineTips("无法从服务器获取 everyday_planList 信息\n在函数 getTodayPlanFromService\n错误原因:" + res.errMsg)
       },
     })
   }
@@ -214,20 +214,8 @@ class Login {
         duration: 1800,
       })
     } else {
-      that.toIndex()
       //隐藏离线提示
-      /*
-      wx.showModal({
-        title: '提示',
-        content: '无法连接到服务器，你只可以查看本地的计划。\r\n你可以在设置中关闭这个提示',
-        showCancel: false,
-        confirmColor: '#04838e',
-        success: function(res) {
-          if (res.confirm) {
-            that.toIndex()
-          }
-        }
-      })*/
+      that.toIndex()
     }
   }
 }

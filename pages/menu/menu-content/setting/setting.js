@@ -31,6 +31,16 @@ Page({
     }
   },
 
+  //什么是离线模式
+  whatsOfflineMode: function() {
+    wx.showModal({
+      title: '什么是离线模式？',
+      content: '当手机没有网络或者无法连接到服务器时，软件会进入离线模式。在离线模式下，你只能查看本地已有的计划、日记和信息，不能进行添加和修改操作',
+      showCancel: false,
+      confirmColor: '#04838e'
+    })
+  },
+
   /* 点击 退出登录 按钮 */
   clickLogoutButton() {
     var add1 = this.getRandom(1, 9);
