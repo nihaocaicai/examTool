@@ -5,6 +5,12 @@ import {
 var connect = require("utils/interface.js")
 var login = new Login(); //实例化 登陆模块
 
+
+import {
+  Token
+} from "utils/server/token.js"
+var token = new Token(); //实例化 登陆模块
+
 App({
   globalData: {
     ip: connect.ip,
