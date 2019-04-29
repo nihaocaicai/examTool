@@ -247,7 +247,7 @@ Component({
       return !(beforeTitle == e.detail.value.diaryTitle && beforeContent == e.detail.value.diaryContent && beforeLocation == e.detail.value.diaryLocation)
     },
 
+    //对话框显示时禁止下拉
     preventTouchMove: function() {},
-
  }
 })

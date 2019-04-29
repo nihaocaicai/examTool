@@ -118,6 +118,9 @@ Component({
     //点击取消按钮
     _error() {
       this.triggerEvent("error")
-    }
+    },
+
+    //对话框显示时禁止下拉
+    preventTouchMove: function() {},
   }
 })

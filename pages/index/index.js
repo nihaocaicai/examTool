@@ -17,6 +17,16 @@ Page({
 
   onReady: function() {
     this.diary = this.selectComponent("#diary") //获得diary组件
+
+    //提示离线模式
+    if (app.globalData.isOffline) {
+      app.globalData.isOffline = false
+      wx.showToast({
+        title: '当前为离线模式',
+        image: "/images/login_fail.png",
+        duration: 1800,
+      })
+    }
   },
 
   onShow: function() {

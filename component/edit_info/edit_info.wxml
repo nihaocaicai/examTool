@@ -1,4 +1,4 @@
-<view hidden="{{flag}}">
+<view hidden="{{flag}}" catchtouchmove="preventTouchMove">
   <view class='setting-container'>
     <!-- 标题 -->
     <view class="wx-setting-title">{{isFirstLogin ? "设置" : "修改"}}信息</view>

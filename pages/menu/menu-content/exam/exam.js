@@ -1,53 +1,78 @@
 // pages/menu/menu-content/exam/exam.js
-var examData = require('../../../../data/local_exam_database.js')
+import {
+  Exam
+} from "exam-model.js"
+var exam = new Exam()
 
 Page({
   data: {
     delBtnWidth: 160,
+    lastScroll: [-1, -1],
+    loading: true,
   },
 
-  onLoad: function (options) {
-    // 获取数据文件数据
+  onLoad: function(options) {
+    exam.setPage(this)
+  },
+
+  onReady: function() {
+    this.editexam = this.selectComponent("#editexam"); //获得edit组件
+    exam.getAllArrangements()
+  },
+
+  //下拉添加
+  onPullDownRefresh: function() {
+    exam.addItem()
+    wx.stopPullDownRefresh()
+  },
+
+  //点击修改
+  modItem: function(e) {
+    var index = e.currentTarget.dataset
+    exam.modItem(index)
+  },
+
+  //点击删除
+  delItem: function(e) {
+    var index = e.currentTarget.dataset
+    exam.delItem(index)
+  },
+
+  //修改保存
+  modify_confirm: function(e) {
+    exam.modify_confirm(e.detail)
+  },
+
+  //添加保存
+  add_confirm: function(e) {
+    exam.add_confirm(e.detail)
+  },
+
+  //点击取消按钮
+  hidden_dialog: function() {
+    //暂时不需要实现
+  },
+
+  //滑动组件start
+  drawStart: function(e) {
     this.setData({
-      examList:examData.examList
-    });
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-    //获得edit组件
-    this.editexam = this.selectComponent("#editexam");
-    this.modifyexam = this.selectComponent("#modifyexam");
-  },
-
-  drawStart: function (e) {
-    // console.log("drawStart");  
-    var touch = e.touches[0]
-    //console.log(touch)
-    for (var index in this.data.examList) {
-      var items = this.data.examList[index]
-      //console.log(item)
-      for(var ind in items){
-        var item=items[ind]
-        //item.right = 0
-      } 
-    }
-
-    this.setData({
-      examList: this.data.examList,
-      startX: touch.clientX,
+      startX: e.touches[0].clientX,
     })
-
   },
-  drawMove: function (e) {
+
+  drawMove: function(e) {
     var touch = e.touches[0]
-    var ind = e.currentTarget.dataset.ind
-    var items = this.data.examList[ind].data
-    var item = items[e.currentTarget.dataset.index]
-    //console.log(item.right)
+    var item = this.data.examList[e.currentTarget.dataset.dayindex]['data'][e.currentTarget.dataset.index]
     var disX = this.data.startX - touch.clientX
+
+    //上一个被滑出来的项目收缩回去
+    if (this.data.lastScroll[0] != -1) {
+      this.data.examList[this.data.lastScroll[0]]['data'][this.data.lastScroll[1]]['right'] = 0
+      this.setData({
+        examList: this.data.examList,
+        lastScroll: [-1, -1]
+      })
+    }
 
     if (disX >= 20) {
       if (disX > this.data.delBtnWidth) {
@@ -56,7 +81,7 @@ Page({
       item.right = disX
       this.setData({
         isScroll: false,
-        examList: this.data.examList
+        examList: this.data.examList,
       })
     } else {
       item.right = 0
@@ -66,60 +91,24 @@ Page({
       })
     }
   },
-  drawEnd: function (e) {
-    var ind = e.currentTarget.dataset.ind
-    var items = this.data.examList[ind].data
-    var item = items[e.currentTarget.dataset.index]
+
+  drawEnd: function(e) {
+    var item = this.data.examList[e.currentTarget.dataset.dayindex]['data'][e.currentTarget.dataset.index]
     if (item.right >= this.data.delBtnWidth / 2) {
       item.right = this.data.delBtnWidth
       this.setData({
         isScroll: true,
         examList: this.data.examList,
+        lastScroll: [e.currentTarget.dataset.dayindex, e.currentTarget.dataset.index]
       })
     } else {
       item.right = 0
       this.setData({
         isScroll: true,
         examList: this.data.examList,
+        lastScroll: [-1, -1]
       })
     }
   },
   //滑动组件end
-
-  //修改
-  modItem() {
-    console.log("修改");
-    this.modifyexam.showEdit();
-  },
-  //取消事件
-  _errorexam() {
-    console.log('你点击了取消');
-    this.editexam.hideEdit();
-  },
-  _errormodifyexam() {
-    console.log('你点击了取消');
-    this.modifyexam.hideEdit();
-  },
-  //确认事件
-  _successexam() {
-    console.log('你点击了确定');
-    this.editexam.hideEdit();
-  },
-  _successmodifyexam() {
-    console.log('你点击了确定');
-    this.modifyexam.hideEdit();
-  },
-
-  //删除
-  delItem: function () {
-    console.log("删除");
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-    console.log("添加");
-    this.editexam.showEdit();
-  }
 })

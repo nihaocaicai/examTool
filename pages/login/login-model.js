@@ -1,7 +1,22 @@
-//login 页面登录接口
-//完成授权且获取 userInfo 和 openid 之后的操作
-var app = getApp()
+import {
+  Request
+} from "../../utils/server/request.js"
 
+import {
+  Debug
+} from "../../utils/debug.js"
+
+import {
+  Storage
+} from "../../utils/storage.js"
+
+const debug = new Debug()
+const app = getApp()
+
+/**
+ * login 页面登录接口
+ * 完成授权且获取 userInfo 和 openid 之后的操作
+ */
 class Login {
   setPage(page) {
     this.page = page
@@ -67,129 +82,131 @@ class Login {
   //从服务器获取 user_info
   getUserInfoFromService() {
     var that = this
-    wx.request({
-      url: app.globalData.ip + app.globalData.interface.getInfo,
-      data: ({
-        token: wx.getStorageSync("wx_user_info").token
-      }),
-      success: function(res) {
-        if (res.statusCode == 200) {
-          //服务器与本地数据代码格式不相同，需要转义
-          var target = res.data['user_target'].split("+")
-          var user_info = new Object()
-          user_info['birthday'] = res.data['user_birthday']
-          user_info['examDate'] = res.data['user_exam_date']
-          user_info['goal_university'] = target[0]
-          user_info['goal_major'] = target[1]
-          user_info['motto'] = res.data['user_motto']
-          try {
-            wx.setStorageSync('user_info', user_info)
-            that.getTodayPlanFromService()
-          } catch (e) {
-            app.getInfoFail("保存信息出错，错误原因：\n" + e)
-          }
-        } else {
-          app.getInfoFail("无法从服务器获取 user_Info 信息\n在函数 getUserInfoFromService\n服务器返回状态码: " + res.statusCode)
-        }
-      },
-      fail: function(res) {
-        app.getInfoFail("无法从服务器获取 user_Info 信息\n在函数 getUserInfoFromService\n错误原因:" + res.errMsg)
-      },
-    })
+    var failInfo = {
+      path: 'login-model.js',
+      functionName: "getUserInfoFromService"
+    }
+    var r = new Request()
+    r.interface = "getInfo"
+    r.successCallBack = function() {
+      //服务器与本地数据代码格式不相同，需要转义
+      var target = res.data['user_target'].split("+")
+      var user_info = new Object()
+      user_info['birthday'] = res.data['user_birthday']
+      user_info['examDate'] = res.data['user_exam_date']
+      user_info['goal_university'] = target[0]
+      user_info['goal_major'] = target[1]
+      user_info['motto'] = res.data['user_motto']
+      var storage = new Storage()
+      storage.setSuccessCallBack(that.getTodayPlanFromService) //保存成功
+      storage.setFailCallBack(app.getInfoFail) //保存失败
+      storage.failInfo = failInfo
+      storage.save("user_info", user_info)
+    }
+    r.statusCodeFailCallBack = app.getInfoFail
+    r.failCallBack = app.getInfoFail
+    r.failInfo = failInfo
+    r.request()
   }
 
   //从服务器上获取今天的计划 everyday_planList
   getTodayPlanFromService() {
     var that = this
-    wx.request({
-      url: app.globalData.ip + app.globalData.interface.getTodayPlan,
-      data: ({
-        token: wx.getStorageSync("wx_user_info").token
-      }),
-      success: function(res) {
-        if (res.statusCode == 200) {
-          try {
-            wx.setStorageSync('everyday_planList', res.data)
-            that.toIndex()
-          } catch (e) {
-            app.getInfoFail("保存信息出错，错误原因：\n" + e)
-          }
-        } else {
-          that.offlineTips("无法从服务器获取 everyday_planList 信息\n在函数 getTodayPlanFromService\n服务器返回状态码: " + res.statusCode)
-        }
-      },
-      fail: function(res) {
-        that.offlineTips("无法从服务器获取 everyday_planList 信息\n在函数 getTodayPlanFromService\n错误原因:" + res.errMsg)
-      },
-    })
+    var failInfo = {
+      path: 'login-model.js',
+      functionName: "getTodayPlanFromService"
+    }
+    var r = new Request()
+    r.interface = "getTodayPlan"
+    r.successCallBack = function(res) {
+      var storage = new Storage()
+      storage.setSuccessCallBack(that.toIndex) //保存成功
+      storage.setFailCallBack(app.getInfoFail) //保存失败
+      storage.failInfo = failInfo
+      storage.save("everyday_planList", res.data)
+    }
+    r.statusCodeFailCallBack = that.offlineTips
+    r.failCallBack = that.offlineTips
+    r.failInfo = failInfo
+    r.request()
   }
 
   //设置对话框 点击确定按钮
   dialogConfirm(formData) {
     var that = this
-    var wx_user_info = wx.getStorageSync("wx_user_info")
+    var failInfo = {
+      path: 'login-model.js',
+      functionName: "dialogConfirm"
+    }
+    that.wx_user_info = that.wx_user_info ? wx.getStorageSync("wx_user_info") : that.wx_user_info
     wx.showLoading({
       title: '信息保存中',
     })
-    wx.request({
-      url: app.globalData.ip + app.globalData.interface.postModifyInfo,
-      method: "POST",
-      header: {
-        'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
-      },
-      data: ({
-        token: wx_user_info['token'],
-        user_name: wx_user_info['user_name'],
-        user_avatar: wx_user_info['user_avatar'],
-        user_gender: wx_user_info['user_gender'],
-        user_city: wx_user_info['user_city'],
-        user_brithday: formData.birthday,
-        user_target: formData.goal_university + "+" + formData.goal_major,
-        user_motto: formData.motto,
-        user_exam_date: formData.examDate,
-      }),
-      success: function(res) {
-        if (res.statusCode == 202) {
-          //保存成功
-          try {
-            var wx_user_info = wx.getStorageSync("wx_user_info")
-            wx.clearStorageSync() //清除所有信息
-            wx.setStorageSync("wx_user_info", wx_user_info)
-            wx.setStorageSync('user_info', formData)
-            wx.setStorageSync('hideOfflineTips', false)
-            that.page.edit.hideEdit();
-            wx.hideLoading()
-            that.checkEveryDayPlan()
-            that.toIndex()
-          } catch (e) {
-            console.log("保存信息出错，错误原因：\n", e)
-            wx.hideLoading()
-            wx.showModal({
-              title: '提示',
-              content: '保存数据出错，可能是存储空间不足，请尝试清理一下手机后再保存',
-              showCancel: false,
-            })
-          }
-        } else {
-          wx.hideLoading()
-          wx.showModal({
-            title: '提示',
-            content: '服务器出错，请稍后重试',
-            showCancel: false,
-          })
-          console.log("服务器出错，错误代码: " + res.statusCode)
-        }
-      },
-      fail: function(res) {
-        wx.showModal({
-          title: '提示',
-          content: '网络连接失败，请检查网络连接是否正确',
-          showCancel: false,
-        })
-        console.log("网络连接失败，错误原因:" + res.errMsg)
+
+    var r = new Request()
+    r.interface = "modifyInfo"
+    r.data = {
+      user_name: wx_user_info['user_name'],
+      user_avatar: wx_user_info['user_avatar'],
+      user_gender: wx_user_info['user_gender'],
+      user_city: wx_user_info['user_city'],
+      user_brithday: formData.birthday,
+      user_target: formData.goal_university + "+" + formData.goal_major,
+      user_motto: formData.motto,
+      user_exam_date: formData.examDate,
+    }
+    r.successCallBack = function() {
+      that.wx_user_info = that.wx_user_info ? wx.getStorageSync("wx_user_info") : that.wx_user_info
+      wx.clearStorageSync() //清除所有信息
+      var storage = new Storage()
+      var saveList = new Array()
+      saveList.push({
+        key: "wx_user_info",
+        data: that.wx_user_info,
+      })
+      saveList.push({
+        key: "user_info",
+        data: formData,
+      })
+      saveList.push({
+        key: "hideOfflineTips",
+        data: false,
+      })
+      storage.setSaveType("保存信息")
+      storage.setSaveList(saveList)
+      storage.setSuccessCallBack = function() {
+        
+        //写法错误！！应该是success = function(), 而不是set... = function()!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        
+        that.page.edit.hideEdit();
         wx.hideLoading()
-      },
-    })
+        that.afterSuccessCheckEveryDayPlan = that.toIndex
+        that.checkEveryDayPlan()
+      }
+      storage.retryCallBack = function() {
+        storage.saveList()
+      }
+      storage.failInfo = failInfo
+      storage.saveList()
+    }
+    r.statusCodeFailCallBack = function() {
+      wx.hideLoading()
+      wx.showModal({
+        title: '提示',
+        content: '服务器出错，请稍后重试',
+        showCancel: false,
+      })
+    }
+    r.failCallBack = function() {
+      wx.hideLoading()
+      wx.showModal({
+        title: '提示',
+        content: '网络连接失败，请检查网络连接是否正确',
+        showCancel: false,
+      })
+    }
+    r.failInfo = failInfo
+    r.request()
   }
 
   //填写用户信息对话框
@@ -224,32 +241,26 @@ class Login {
       var everyday_planList = new Object()
       everyday_planList.date = date
       everyday_planList.data = new Array()
-      try {
-        wx.setStorageSync("everyday_planList", everyday_planList)
-      } catch (e) {
-        //保存错误，重启程序重试
-        app.getInfoFail("设置每日计划 everyday_planLists 出错\n在函数 checkEveryDayPlan\n错误原因:\n" + e)
-      }
+
+      var storage = new Storage()
+      storage.setSuccessCallBack = this.afterSuccessCheckEveryDayPlan ? this.afterSuccessCheckEveryDayPlan : undefined
+      storage.setFailCallBack = app.getInfoFail
+      storage.setFailInfo('login-model.js', "checkEveryDayPlan")
+      storage.save("everyday_planList", everyday_planList)
     }
   }
 
   //脱机提示
-  offlineTips(errorMessage) {
-    console.log("与服务器连接出错\n" + errorMessage)
-    this.checkEveryDayPlan()
-
-    if (!wx.getStorageSync('hideOfflineTips')) {
-      //显示离线提示
-      this.toIndex()
-      wx.showToast({
-        title: '当前为离线模式',
-        image: "/images/login_fail.png",
-        duration: 1800,
-      })
-    } else {
-      //隐藏离线提示
-      this.toIndex()
+  offlineTips() {
+    var that = this
+    this.afterSuccessCheckEveryDayPlan = function() {
+      if (!wx.getStorageSync('hideOfflineTips')) {
+        //显示离线提示
+        app.globalData.isOffline = true
+      }
+      that.toIndex()
     }
+    that.checkEveryDayPlan()
   }
 }
 
