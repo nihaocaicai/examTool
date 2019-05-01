@@ -10,16 +10,21 @@ import {
   Storage
 } from "../../utils/storage.js"
 
-const debug = new Debug()
-const app = getApp()
+var debug = new Debug()
+var app = getApp()
+var thisClass = this
 
 /**
  * login 页面登录接口
  * 完成授权且获取 userInfo 和 openid 之后的操作
  */
 class Login {
+  constructor() {
+    thisClass = this
+  }
+
   setPage(page) {
-    this.page = page
+    thisClass.page = page
   }
 
   //用户点击授权按钮 获取用户信息
@@ -27,7 +32,7 @@ class Login {
     var rawUserInfo = e.detail
     if (rawUserInfo.userInfo) {
       //用户按了授权按钮
-      this.page.setData({
+      thisClass.page.setData({
         loading: true, //显示 加载中 页面
         needAuthorize: false, //不显示 点击授权 按钮
       })
@@ -45,33 +50,32 @@ class Login {
 
   /*初始化回调函数*/
   setCallBack() {
-    var that = this
     //获取到 userInfo 的回调函数
     app.userInfoReadyCallback = function() {
       if (wx.getStorageSync("isFirstLogin")) {
         //第一次登录，需要设置信息
-        that.showSetUserInfoDialog()
+        thisClass.showSetUserInfoDialog()
       } else {
         //不是第一次登录
         if (!(wx.getStorageSync('user_info') instanceof Object)) {
           //缓存不存在 user_info，尝试从服务器获取
-          that.getUserInfoFromService()
+          thisClass.getUserInfoFromService()
         } else {
           //user_info 存在于缓存，获取 everyday_planList
-          that.getTodayPlanFromService()
+          thisClass.getTodayPlanFromService()
         }
       }
     }
     //未授权的回调函数
     app.needAuthorizeCallback = function() {
-      that.page.setData({
+      thisClass.page.setData({
         needAuthorize: true, //显示 点击授权 按钮
         loading: false, //不显示 加载中 页面
       })
     }
     //需要删除小程序提示
     app.needDeleteAppCallback = function() {
-      that.page.setData({
+      thisClass.page.setData({
         needAuthorize: false,
         loading: false,
         needDelete: true, //需要删除小程序提示
@@ -81,25 +85,24 @@ class Login {
 
   //从服务器获取 user_info
   getUserInfoFromService() {
-    var that = this
     var failInfo = {
       path: 'login-model.js',
       functionName: "getUserInfoFromService"
     }
     var r = new Request()
     r.interface = "getInfo"
-    r.successCallBack = function() {
+    r.successCallBack = function(data) {
       //服务器与本地数据代码格式不相同，需要转义
-      var target = res.data['user_target'].split("+")
+      var target = data['user_target'].split("+")
       var user_info = new Object()
-      user_info['birthday'] = res.data['user_birthday']
-      user_info['examDate'] = res.data['user_exam_date']
+      user_info['birthday'] = data['user_birthday']
+      user_info['examDate'] = data['user_exam_date']
       user_info['goal_university'] = target[0]
       user_info['goal_major'] = target[1]
-      user_info['motto'] = res.data['user_motto']
+      user_info['motto'] = data['user_motto']
       var storage = new Storage()
-      storage.setSuccessCallBack(that.getTodayPlanFromService) //保存成功
-      storage.setFailCallBack(app.getInfoFail) //保存失败
+      storage.successCallBack = thisClass.getTodayPlanFromService //保存成功
+      storage.failCallBack = app.getInfoFail //保存失败
       storage.failInfo = failInfo
       storage.save("user_info", user_info)
     }
@@ -111,34 +114,32 @@ class Login {
 
   //从服务器上获取今天的计划 everyday_planList
   getTodayPlanFromService() {
-    var that = this
     var failInfo = {
       path: 'login-model.js',
       functionName: "getTodayPlanFromService"
     }
     var r = new Request()
     r.interface = "getTodayPlan"
-    r.successCallBack = function(res) {
+    r.successCallBack = function(data) {
       var storage = new Storage()
-      storage.setSuccessCallBack(that.toIndex) //保存成功
-      storage.setFailCallBack(app.getInfoFail) //保存失败
+      storage.successCallBack = thisClass.toIndex //保存成功
+      storage.failCallBack = app.getInfoFail //保存失败
       storage.failInfo = failInfo
-      storage.save("everyday_planList", res.data)
+      storage.save("everyday_planList", data)
     }
-    r.statusCodeFailCallBack = that.offlineTips
-    r.failCallBack = that.offlineTips
+    r.statusCodeFailCallBack = thisClass.offlineTips
+    r.failCallBack = thisClass.offlineTips
     r.failInfo = failInfo
     r.request()
   }
 
   //设置对话框 点击确定按钮
   dialogConfirm(formData) {
-    var that = this
     var failInfo = {
       path: 'login-model.js',
       functionName: "dialogConfirm"
     }
-    that.wx_user_info = that.wx_user_info ? wx.getStorageSync("wx_user_info") : that.wx_user_info
+    thisClass.wx_user_info = wx.getStorageSync("wx_user_info") ? wx.getStorageSync("wx_user_info") : thisClass.wx_user_info
     wx.showLoading({
       title: '信息保存中',
     })
@@ -146,23 +147,23 @@ class Login {
     var r = new Request()
     r.interface = "modifyInfo"
     r.data = {
-      user_name: wx_user_info['user_name'],
-      user_avatar: wx_user_info['user_avatar'],
-      user_gender: wx_user_info['user_gender'],
-      user_city: wx_user_info['user_city'],
+      user_name: thisClass.wx_user_info['user_name'],
+      user_avatar: thisClass.wx_user_info['user_avatar'],
+      user_gender: thisClass.wx_user_info['user_gender'],
+      user_city: thisClass.wx_user_info['user_city'],
       user_brithday: formData.birthday,
       user_target: formData.goal_university + "+" + formData.goal_major,
       user_motto: formData.motto,
       user_exam_date: formData.examDate,
     }
-    r.successCallBack = function() {
-      that.wx_user_info = that.wx_user_info ? wx.getStorageSync("wx_user_info") : that.wx_user_info
+    r.successCallBack = function(data) {
+      thisClass.wx_user_info = wx.getStorageSync("wx_user_info") ? wx.getStorageSync("wx_user_info") : thisClass.wx_user_info
       wx.clearStorageSync() //清除所有信息
       var storage = new Storage()
       var saveList = new Array()
       saveList.push({
         key: "wx_user_info",
-        data: that.wx_user_info,
+        data: thisClass.wx_user_info,
       })
       saveList.push({
         key: "user_info",
@@ -174,18 +175,13 @@ class Login {
       })
       storage.setSaveType("保存信息")
       storage.setSaveList(saveList)
-      storage.setSuccessCallBack = function() {
-        
-        //写法错误！！应该是success = function(), 而不是set... = function()!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        
-        that.page.edit.hideEdit();
+      storage.successCallBack = function() {
+        thisClass.page.edit.hideEdit();
         wx.hideLoading()
-        that.afterSuccessCheckEveryDayPlan = that.toIndex
-        that.checkEveryDayPlan()
+        thisClass.afterSuccessCheckEveryDayPlan = thisClass.toIndex
+        thisClass.checkEveryDayPlan()
       }
-      storage.retryCallBack = function() {
-        storage.saveList()
-      }
+      storage.retryCallBack = storage.saveList
       storage.failInfo = failInfo
       storage.saveList()
     }
@@ -211,12 +207,12 @@ class Login {
 
   //填写用户信息对话框
   showSetUserInfoDialog() {
-    this.page.edit = this.page.selectComponent("#edit") //获得diary组件
-    this.page.edit.setData({
+    thisClass.page.edit = thisClass.page.selectComponent("#edit") //获得diary组件
+    thisClass.page.edit.setData({
       nickName: wx.getStorageSync("wx_user_info")['user_name'],
       isFirstLogin: true
     })
-    this.page.edit.showEdit();
+    thisClass.page.edit.showEdit();
   }
 
   //跳转到首页
@@ -243,8 +239,8 @@ class Login {
       everyday_planList.data = new Array()
 
       var storage = new Storage()
-      storage.setSuccessCallBack = this.afterSuccessCheckEveryDayPlan ? this.afterSuccessCheckEveryDayPlan : undefined
-      storage.setFailCallBack = app.getInfoFail
+      storage.successCallBack = thisClass.afterSuccessCheckEveryDayPlan ? thisClass.afterSuccessCheckEveryDayPlan : undefined
+      storage.failCallBack = app.getInfoFail
       storage.setFailInfo('login-model.js', "checkEveryDayPlan")
       storage.save("everyday_planList", everyday_planList)
     }
@@ -252,18 +248,17 @@ class Login {
 
   //脱机提示
   offlineTips() {
-    var that = this
-    this.afterSuccessCheckEveryDayPlan = function() {
+    thisClass.afterSuccessCheckEveryDayPlan = function() {
       if (!wx.getStorageSync('hideOfflineTips')) {
         //显示离线提示
         app.globalData.isOffline = true
       }
-      that.toIndex()
+      thisClass.toIndex()
     }
-    that.checkEveryDayPlan()
+    thisClass.checkEveryDayPlan()
   }
 }
 
 export {
   Login
-};
+}

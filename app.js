@@ -1,12 +1,12 @@
 import {
   Login
 } from "app-model.js"
+const login = new Login() //实例化 登陆模块
 
 App({
   globalData: {},
 
   onLaunch: function(e) {
-    var login = new Login() //实例化 登陆模块
     login.setApp(this)
     login.getAuthorize() //获取授权
   },

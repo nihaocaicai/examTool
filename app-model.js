@@ -14,77 +14,79 @@ import {
   Token
 } from "utils/server/token.js"
 
-const debug = new Debug()
+var debug = new Debug()
+var thisClass = this
 
 /**
  * app 登录模块
  * 只负责获取和处理 userInfo 和 openid
  */
 class Login {
+  constructor() {
+    thisClass = this
+  }
+
   setApp(app) {
-    this.app = app
+    thisClass.app = app
   }
 
   //获取授权操作
   getAuthorize() {
     if (wx.getStorageSync('logout')) {
       //执行过登出操作，提示需要删除小程序后再添加
-      this.needDeleteApp()
+      thisClass.needDeleteApp()
     } else if (wx.getStorageSync('wx_user_info') != "") {
       //如果缓存有数据，检查基本信息是否更改了
-      this.checkForChanges()
+      thisClass.checkForChanges()
     } else {
-      var login = this
       // 如果缓存没有数据，重新授权
       if (wx.canIUse('button.open-type.getUserInfo')) {
         wx.getSetting({
           // 微信新版本，查看用户是否授权过
           success: function(res) {
             if (res.authSetting['scope.userInfo'])
-              login.getUserInfo() //授权过，获取用户信息
+              thisClass.getUserInfo() //授权过，获取用户信息
             else
-              login.needAuthorize() //没有授权，需要用户点击按钮授
+              thisClass.needAuthorize() //没有授权，需要用户点击按钮授
           },
           fail: function(res) {
             debug.printErrors("app-model.js", "getAuthorize", "获取用户设置 (wx.getSetting) 错误", res)
-            login.getInfoFail()
+            thisClass.getInfoFail()
           }
         })
       } else {
-        login.getUserInfo() //微信旧版本，在没有 open-type=getUserInfo 版本的兼容处理
+        thisClass.getUserInfo() //微信旧版本，在没有 open-type=getUserInfo 版本的兼容处理
       }
     }
   }
 
   //告诉 login 需要授权
   needAuthorize() {
-    var that = this
     var timeOut = 10;
     var interval = setInterval(function() {
       if (--timeOut != 0) {
         //未授权的回调函数
         try {
-          if (that.app.needAuthorizeCallback && timeOut != 0) {
+          if (thisClass.app.needAuthorizeCallback && timeOut != 0) {
             clearInterval(interval)
-            that.app.needAuthorizeCallback()
+            thisClass.app.needAuthorizeCallback()
           }
         } catch (e) {
           //捕获回调函数时候的错误
           debug.printErrors("app-model.js", "needAuthorize", "执行回调函数失败", e)
-          that.getInfoFail()
+          thisClass.getInfoFail()
         }
       } else {
         //超时还没有准备好回调函数，只能提示获取信息失败
         clearInterval(interval)
         debug.printErrors("app-model.js", "needAuthorize", "回调函数设置失败", "需要授权回调函数设置")
-        that.getInfoFail()
+        thisClass.getInfoFail()
       }
     }, 1000)
   }
 
   //检查基本信息是否更改了
   checkForChanges() {
-    var login = this
     wx.getUserInfo({
       lang: "zh_CN",
       success: res => {
@@ -139,39 +141,38 @@ class Login {
               cache['user_city'] = res.userInfo.city
 
             var storage = new Storage() //添加存储能力
-            storage.setSuccessCallBack = login.userInfoIsReady() //保存成功
-            storage.setFailCallBack = login.userInfoIsReady() //保存失败，下次再检查
+            storage.successCallBack = thisClass.userInfoIsReady //保存成功
+            storage.failCallBack = thisClass.userInfoIsReady //保存失败，下次再检查
             storage.setFailInfo('app-model.js', "checkForChanges")
             storage.save("wx_user_info", cache)
           }
-          r.statusCodeFailCallBack = login.userInfoIsReady() //请求失败，下次再检查
-          r.failCallBack = login.userInfoIsReady() //请求失败，下次再检查
+          r.statusCodeFailCallBack = thisClass.userInfoIsReady //请求失败，下次再检查
+          r.failCallBack = thisClass.userInfoIsReady //请求失败，下次再检查
           r.setFailInfo('app-model.js', "checkForChanges")
           r.request()
         } else {
           //没有更改过，直接跳转
-          login.userInfoIsReady()
+          thisClass.userInfoIsReady()
         }
       },
       fail: res => {
         //获取失败，下次再检查
         debug.printWxGetUserInfoError("app-model.js", "checkForChanges", res)
-        login.userInfoIsReady()
+        thisClass.userInfoIsReady()
       }
     })
   }
 
   //微信的 getUserInfo 函数整合
   getUserInfo() {
-    var login = this
     wx.getUserInfo({
       lang: "zh_CN",
       success: res => {
-        login.processUserInfo(res)
+        thisClass.processUserInfo(res)
       },
       fail: res => {
         debug.printWxGetUserInfoError("app-model.js", "getUserInfo", res)
-        login.getInfoFail()
+        thisClass.getInfoFail()
       }
     })
   }
@@ -187,52 +188,50 @@ class Login {
     var token = new Token() //获取 token
     token.successCallBack = function() {
       var storage = new Storage() //添加存储能力
-      storage.successCallBack = login.userInfoIsReady()
-      storage.failCallBack = login.getInfoFail()
+      storage.successCallBack = thisClass.userInfoIsReady
+      storage.failCallBack = thisClass.getInfoFail
       storage.setFailInfo('app-model.js', "processUserInfo")
       storage.save('wx_user_info', userInfo)
     }
-    token.statusCodeFailCallBack = login.getInfoFail()
-    token.failCallBack = login.getInfoFail()
-    token.getToken()
+    token.statusCodeFailCallBack = thisClass.getInfoFail
+    token.failCallBack = thisClass.getInfoFail
+    token.getTokenFromServer()
   }
 
   //数据保存成功后，执行回调函数，告诉 login 信息获取成功
   userInfoIsReady() {
-    var that = this
     var timeOut = 10;
     var interval = setInterval(function() {
       if (--timeOut != 0) {
         try {
-          if (that.app.userInfoReadyCallback && timeOut != 0) {
+          if (thisClass.app.userInfoReadyCallback && timeOut != 0) {
             //执行回调函数，告诉 login 信息已经获取完了
             clearInterval(interval)
-            that.app.userInfoReadyCallback()
+            thisClass.app.userInfoReadyCallback()
           }
         } catch (e) {
           //捕获回调函数时候的错误
           debug.printErrors("app-model.js", "userInfoIsReady", "执行回调函数失败", e)
-          that.getInfoFail()
+          thisClass.getInfoFail()
         }
       } else {
         //超时还没有准备好回调函数，只能提示获取信息失败
         clearInterval(interval)
         debug.printErrors("app-model.js", "userInfoIsReady", "回调函数设置失败", "UserInfo 数据获取完成回调函数设置失败")
-        that.getInfoFail()
+        thisClass.getInfoFail()
       }
     }, 1000)
   }
 
   //获取信息失败
   getInfoFail() {
-    var that = this
     wx.showModal({
       title: '提示',
       content: '获取信息失败。请检查网络连接后，点击确定重启程序重试',
       confirmColor: '#04838e',
       showCancel: false,
       success: function() {
-        that.reLunchApp()
+        thisClass.reLunchApp()
       }
     })
   }
@@ -242,25 +241,24 @@ class Login {
     wx.reLaunch({
       url: '/pages/login/login',
     })
-    this.getAuthorize()
+    thisClass.getAuthorize()
   }
 
   //需要在小程序中删除程序
   needDeleteApp() {
-    var that = this
     var timeOut = 10;
     var interval = setInterval(function() {
       if (--timeOut != 0) {
         //未授权的回调函数
         try {
-          if (that.app.needDeleteAppCallback && timeOut != 0) {
+          if (thisClass.app.needDeleteAppCallback && timeOut != 0) {
             clearInterval(interval)
-            that.app.needDeleteAppCallback()
+            thisClass.app.needDeleteAppCallback()
           }
         } catch (e) {
           //捕获回调函数时候的错误
           debug.printErrors("app-model.js", "needDeleteApp", "执行回调函数失败", e)
-          that.getInfoFail()
+          thisClass.getInfoFail()
         }
       } else {
         //超时还没有准备好回调函数，只能提示获取信息失败

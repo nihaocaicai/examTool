@@ -56,10 +56,10 @@ class Debug {
 
   /**
    * [服务器返回代码错误提示]
-   * {path, functionName, code, errMsg}
+   * {path, functionName, statusCode, errMsg}
    * (文件完整路径，函数名称，服务器返回错误代码，网页返回错误提示信息)
    */
-  printServerStateCodeFail(obj) {
+  printServerStatusCodeFail(obj) {
     if (obj) {
       obj.type = "服务器返回代码错误"
       var t = "服务器错误代码:" + obj.statusCode + "\n"
