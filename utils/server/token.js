@@ -41,8 +41,8 @@ class Token {
    * 默认为5次，推荐使用这个方法设置重试次数
    */
   setRetryTime(retryTime) {
-    this.retryTime = retryTime
-    this.isRetry = !(this.retryTime == 0)
+    thisClass.retryTime = retryTime
+    thisClass.isRetry = !(thisClass.retryTime == 0)
   }
 
   /**
@@ -53,7 +53,7 @@ class Token {
     thisClass.token = wx.getStorageSync('token')
     if (thisClass.token) {
       //有 token，从服务器验证是否正确
-      /* 为了测试，关闭这个接口this._veirfyFromServer()*/
+      /* 为了测试，关闭这个接口thisClass._veirfyFromServer()*/
       thisClass.getTokenFromServer() //调试用，正式使用需要打开
     } else {
       //没有 token
@@ -196,7 +196,7 @@ class Token {
    * [连接服务器错误时的提示]
    */
   _errorConnect() {
-    if (showErrorConnectModal)
+    if (thisClass.showErrorConnectModal)
       wx.showModal({
         title: '提示',
         content: '用户身份校检失败，你可能处于离线模式，请检查网络连接是否正确后重新尝试操作',
@@ -218,17 +218,17 @@ class Token {
               }
             } else {
               //重试次数用完，调用回调函数
-              if (this.failCallBackReplaceRetryFailCallBack) {
-                if (this.failCallBack)
-                  this.failCallBack()
+              if (thisClass.failCallBackReplaceRetryFailCallBack) {
+                if (thisClass.failCallBack)
+                  thisClass.failCallBack()
               } else if (thisClass.retryFailCallBack)
                 thisClass.retryFailCallBack()
             }
           } else if (res.cancel) {
             //点击取消，调用回调函数
-            if (this.failCallBackReplaceRetryFailCallBack) {
-              if (this.failCallBack)
-                this.failCallBack()
+            if (thisClass.failCallBackReplaceRetryFailCallBack) {
+              if (thisClass.failCallBack)
+                thisClass.failCallBack()
             } else if (thisClass.retryFailCallBack)
               thisClass.retryFailCallBack()
           }
