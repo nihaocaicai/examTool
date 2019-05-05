@@ -38,7 +38,7 @@ Component({
    */
   data: {
     flag: true,
-    isLogin: true, //是否是登录的时候设置
+    isFirstLogin: true, //是否是登录的时候设置(login-model.js设置为true，setting-model.js设置为false)
     goal_university: "",
     goal_major: "",
     motto: "",
@@ -75,7 +75,20 @@ Component({
         })
         return
       }
-      this.triggerEvent("save", formData)
+
+      if (this.data.isFirstLogin) {
+        //第一次登录，不需要检查是否修改
+        this.triggerEvent("save", formData)
+      } else {
+        //在修改页面，需要检查是否进行过修改
+        var isChanged = formData.birthday != this.data['birthday'] || formData.examDate != this.data['examDate'] || formData.goal_university != this.data['goal_university'] || formData.goal_major != this.data['goal_major'] || formData.motto != this.data['motto']
+        if (isChanged) {
+          this.triggerEvent("save", formData)
+        } else {
+          //如果没有修改，等同于点击取消
+          this.triggerEvent("error")
+        }
+      }
     },
     //隐藏弹框
     hideEdit: function() {
@@ -105,6 +118,9 @@ Component({
     //点击取消按钮
     _error() {
       this.triggerEvent("error")
-    }
+    },
+
+    //对话框显示时禁止下拉
+    preventTouchMove: function() {},
   }
 })

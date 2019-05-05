@@ -1,5 +1,5 @@
-<view wx:if="{{showView}}">
-  <view class="wx-top">
+<view wx:if="{{!loading}}">
+  <view wx:if="{{showView}}">
     <view style='margin-top:20rpx; margin-bottom:20rpx' wx:for="{{data}}" wx:key="day" wx:for-item="day" wx:for-index="dayIndex">
       <text class="wx-date">{{day.diary_date}}</text>
       <block wx:key="item" wx:for="{{day.data}}">
@@ -14,7 +14,7 @@
 
             <!-- 日期 -->
             <view class='date-container'>
-              <text decode='true' class='date-text'>{{item.diary_write_time}}&nbsp;{{item.diary_write_place}}</text>
+              <text decode='true' class='date-text'>{{item.diary_write_time}}&nbsp;{{item.diary_write_place == ""?"未设置地址":item.diary_write_place}}</text>
             </view>
           </view>
 
@@ -27,6 +27,11 @@
     </view>
   </view>
 
-  <diary id='diary' bind:error="_error" bind:save="_save">
-  </diary>
+  <view wx:if="{{!showView}}" style='margin-top: 8vw; height: 100%; width: 100%; display:flex; align-items:center; justify-content:center; text-align:center'>
+    <text decode='true' style='font-size:32rpx; color:#999'>
+          你还没有写日记\n赶快下拉页面添加日记吧
+          </text>
+  </view>
+
+  <diary id='diary' bind:modify_confirm="modify_confirm" bind:add_confirm="add_confirm" bind:hidden="hidden_dialog" />
 </view>

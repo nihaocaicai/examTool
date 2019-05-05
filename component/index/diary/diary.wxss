@@ -10,6 +10,7 @@
   transform: translate(-50%, -50%);
   overflow: hidden;
   background: #fff;
+  z-index: 9000;
 }
 
 .wx-diary-title {
@@ -25,6 +26,7 @@
 }
 
 .wx-diary-headline {
+  width: 100%;
   flex-direction: row;
   display: flex;
   border-bottom-width: 1rpx;
@@ -40,6 +42,7 @@
 
 .wx-diary-headline input {
   padding-left: 10rpx;
+  padding-right: 1px;
   font-size: 28rpx;
 }
 
@@ -97,4 +100,15 @@
   height: 88rpx;
   border: 1rpx solid #ccc;
   border-radius: 88rpx;
+}
+
+.mask {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #000;
+  z-index: 8000;
+  opacity: 0.7;
 }

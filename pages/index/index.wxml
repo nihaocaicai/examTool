@@ -16,9 +16,9 @@
   <!-- 每日计划star -->
   <view class='bottom-container'>
     <view class='edit-container'>
-      <image class='diary-image' src='/images/index/diary.png' bindtap="showDiary"></image>
-      <text class='edit-text'>{{date}}</text>
-      <image class='modify-image' src='/images/index/modify.png' bindtap="goToModify"></image>
+      <image class='diary-image' src='/images/index/diary.png' bindtap="showDiary"/>
+      <view class='edit-text'>{{date}}</view>
+      <image class='modify-image' src='/images/index/modify.png' bindtap="goToModify"/>
     </view>
 
     <scroll-view scroll-y class='scroll-view'>
@@ -49,5 +49,5 @@
 
 
   <!-- 日记添加组件 -->
-  <diary id='diary' bind:error="_error" bind:success="_success" />
+  <diary id='diary' bind:add_confirm="add_confirm" />
 </view>

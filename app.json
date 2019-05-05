@@ -1,11 +1,11 @@
 {
   "pages": [
-    "pages/index/index",
-    "pages/menu/menu-content/diary/diary",
     "pages/login/login",
+    "pages/index/index",
     "pages/index/modify/modify",
     "pages/menu/menu",
     "pages/menu/menu-content/exam/exam",
+    "pages/menu/menu-content/diary/diary",
     "pages/menu/menu-content/setting/setting",
     "pages/menu/menu-content/plan/plan",
     "pages/menu/menu-other/contact/contact",
@@ -36,5 +36,13 @@
       }
     ]
   },
+<<<<<<< HEAD
   "sitemapLocation": "sitemap.json"
+=======
+  "permission": {
+    "scope.userLocation": {
+      "desc": "获取你的位置来填写日记信息"
+    }
+  }
+>>>>>>> 14aa10ac8fa562e6346e93ce3c837cebe1526391
 }

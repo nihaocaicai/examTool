@@ -1,9 +1,8 @@
 // 本数据文件的date值都是当天，也就是此文件设置的是首页今天的计划展示
-var everyday_plan=
-  {
-    // 这里日期假设是当天的日期
-    date: "2019-04-13", 
-    data: [{
+var everyday_plan = {
+  // 这里日期假设是当天的日期
+  date: "2019-04-13",
+  data: [{
       plan_id: 1,
       plan_content: "图书馆学习",
       plan_star_time: "8:00",
@@ -50,8 +49,8 @@ var everyday_plan=
       //  用户左滑窗口
       right: 0
     }
-    ]
-  }
+  ]
+}
 
 module.exports = {
   everyday_planList: everyday_plan

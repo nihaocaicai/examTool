@@ -8,7 +8,8 @@ var setting = new Setting()
 Page({
   onLoad: function() {
     this.setData({
-      showDeleteModal: false
+      showDeleteModal: false,
+      hideOfflineTips: wx.getStorageSync("hideOfflineTips")
     })
     setting.setPage(this)
     setting.getUserData()
@@ -16,6 +17,28 @@ Page({
 
   onReady: function() {
     this.edit = this.selectComponent("#edit") //获得diary组件
+  },
+
+  //切换离线模式提醒按钮
+  offlineTipsChange: function(e) {
+    try {
+      wx.setStorageSync("hideOfflineTips", !e.detail.value)
+      this.setData({
+        hideOfflineTips: !e.detail.value
+      })
+    } catch (error) {
+      console.log("设置是否提示离线信息对话框出错，错误信息:\n" + error)
+    }
+  },
+
+  //什么是离线模式
+  whatsOfflineMode: function() {
+    wx.showModal({
+      title: '什么是离线模式？',
+      content: '当手机没有网络或者无法连接到服务器时，软件会进入离线模式。在离线模式下，你只能查看本地已有的计划、日记和信息，不能进行添加、删除和修改操作。',
+      showCancel: false,
+      confirmColor: '#04838e'
+    })
   },
 
   /* 点击 退出登录 按钮 */
@@ -41,10 +64,18 @@ Page({
   /* 在删除对话框点击 确定 按钮 */
   confirmDelete(e) {
     if (this.data.result == this.data.input) {
+      //回答正确
       this.setData({
         showDeleteModal: false
       })
       setting.confirmDelete(this.data.input)
+    } else {
+      //回答错误
+      wx.showToast({
+        title: '回答错误',
+        image: '/images/fail.png',
+        duration: 1200,
+      })
     }
   },
 

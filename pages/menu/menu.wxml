@@ -16,14 +16,46 @@
 </view>
 
 <view id='menu'>
+  <view class='wave' /> 
+  <view class='line' bindtap='clickPlan'>
+    <view class='pic'>
+      <image class='icon' mode='aspectFit' src="/images/menu/plan.png"/>
+    </view>
+    <view class='item'>考研计划</view>
+    <view class='pic2'>
+      <image class='go' mode='aspectFit' src="/images/menu/go.png"/>
+    </view>
+  </view>
   <view class='wave' />
-  <view class='item' bindtap='clickPlan'>考研计划</view>
+  <view class='line' bindtap='clickDiary'>
+    <view class='pic'>
+      <image class='icon' mode='aspectFit' src="/images/menu/diary.png"/>
+    </view>
+    <view class='item'>考研日记</view>
+    <view class='pic2'>
+      <image class='go' mode='aspectFit' src="/images/menu/go.png"/>
+    </view>
+  </view>
   <view class='wave' />
-  <view class='item' bindtap='clickDiary'>考研日记</view>
+  <view class='line' bindtap='clickExam'>
+    <view class='pic'>
+      <image class='icon' mode='aspectFit' src="/images/menu/arrange.png"/>
+    </view>
+    <view class='item'>考研安排</view>
+    <view class='pic2'>
+      <image class='go' mode='aspectFit' src="/images/menu/go.png"/>
+    </view>
+  </view>
   <view class='wave' />
-  <view class='item' bindtap='clickExam'>考研安排</view>
-  <view class='wave' />
-  <view class='item' bindtap='clickSetting'>设置</view>
+  <view class='line' bindtap='clickSetting'>
+    <view class='pic'>
+      <image class='icon' mode='aspectFit' src="/images/menu/setting.png"/>
+    </view>
+    <view class='item'>设置</view>
+    <view class='pic2'>
+      <image class='go' mode='aspectFit' src="/images/menu/go.png"/>
+    </view>
+  </view>
   <view class='wave' />
 </view>
 

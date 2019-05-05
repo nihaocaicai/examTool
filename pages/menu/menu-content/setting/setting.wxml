@@ -17,6 +17,11 @@
     <text>目标大学：{{info.goal_university == "" ? "未设置": info.goal_university}}</text>
     <text>目标专业：{{info.goal_major == "" ? "未设置": info.goal_major}}</text>
     <text>座右铭：{{info.motto  == "" ? "未设置座右铭": info.motto}}</text>
+    <view style='display: flex; align-items: center;'>
+      <text>离线模式时提示</text>
+      <switch checked="{{!hideOfflineTips}}" bindchange='offlineTipsChange' color='#04838e' />
+      <image bindtap='whatsOfflineMode' style="width:50rpx" src='/images/menu/question.png' mode="widthFix"/>
+    </view>
   </view>
   <!-- 信息end -->
 
