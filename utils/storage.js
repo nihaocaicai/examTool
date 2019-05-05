@@ -3,111 +3,113 @@ import {
 } from "debug.js"
 
 var debug = new Debug()
-var thisClass = this //转义 this，防止 this 歧义
+var thisClass = undefined //转义 this
 
 /**
  * 微信缓存保存类
  */
 class Storage {
-
   constructor() {
-    /* 转义this */
-    thisClass = this
-
-    /* 其它参数 */
-    this.saveType = undefined //保存类型(不显示对话框，设置没有意义；如果发生错误，设置的值会在对话框中提示，例如“保存个人信息”)
-    this.failInfo = undefined //保存错误信息
-    this.showRetryModel = false //默认不显示对话框
-
-    /* 回调函数 */
-    this.showRetryModal = false //显示重试对话框，默认为不显示(设置了两个重试回调函数也会显示)
-    this.successCallBack = undefined //保存成功回调函数，无返回值
-    this.failCallBack = undefined //保存失败回调函数，返回保存失败的值和错误信息(obj = {key: data, errMsg: 保存错误信息})
-    this.retryCallBack = undefined //保存失败重试回调函数
-    this.retryCancelCallBack = undefined //重试取消回调函数
+    thisClass = this //转义 this
   }
-
-  /**
-   * [设置保存错误信息]
-   * {path, functionName}
-   * (文件完整路径，函数名称)
-   */
-  setFailInfo(path, functionName) {
-    if (path && functionName) {
-      thisClass.failInfo = new Object()
-      thisClass.failInfo.path = path
-      thisClass.failInfo.functionName = functionName
-    }
-  }
-
-  /**
-    * [设置保存类型]
-    * (不显示对话框，设置没有意义)
-    如果发生错误，设置的值会在对话框中提示，例如“保存个人信息”
-    */
-  setSaveType(saveType) {
-    if (saveType)
-      this.saveType = saveType
-  }
-
 
   /**
    * [保存信息到微信的缓存]
+   * key: 保存的键;
+   * data: 保存的值;
+   * success: 保存成功回调函数，无返回值;
+   * fail: 保存失败回调函数，返回保存失败的值和错误信息(obj = {key, data, errMsg});
+   * retry: 是否要显示重试对话框;
+   * retryCancel: 重试取消回调函数;
+   * saveType: 保存类型(不显示对话框，设置没有意义；如果发生错误，设置的值会在对话框中提示，例如“个人信息”);
+   * path: 调用的函数文件路径;
+   * functionName: 调用的函数名;
    */
-  save(key, data) {
-    try {
-      wx.setStorageSync(key, data)
-      if (thisClass.successCallBack)
-        thisClass.successCallBack()
-    } catch (e) {
-      if (thisClass.failInfo) {
-        thisClass.failInfo.errMsg = e
-        debug.printStorageError(thisClass.failInfo)
-      }
-      thisClass._saveErrorDialog()
-      if (thisClass.failCallBack) {
-        var obj = new Object()
-        obj[key] = data
-        obj['errMsg'] = e
-        thisClass.failCallBack(obj)
+  save(params) {
+    if (params) {
+      try {
+        wx.setStorageSync(params.key, params.data)
+        params.success && params.success()
+      } catch (e) {
+        thisClass._debug(0, {
+          key: params.key,
+          data: params.data,
+          path: params.path,
+          functionName: params.functionName,
+          errMsg: e
+        })
+        params.retry && thisClass._saveErrorDialog({
+          retry: function() {
+            thisClass.save(params)
+          },
+          retryCancel: params.retryCancel,
+          saveType: params.saveType,
+        })
+        if (params.fail)
+          params.fail({
+            key: params.key,
+            data: params.data,
+            errMsg: e,
+          })
       }
     }
-  }
-
-  /**
-   * [批量保存列表]
-   * saveList = [{key, data}]
-   */
-  setSaveList(saveList) {
-    if (saveList)
-      thisClass.list = saveList
   }
 
   /**
    * [批量保存列表中的信息到微信缓存]
+   * (!如果不传参数，则尝试保存已有的键值对列表)
+   * saveList: 要保存的键值对列表, saveList = [{key, data}];
+   * success: 保存成功回调函数，无返回值;
+   * fail: 保存失败回调函数，返回保存失败的值和错误信息(obj = {key, data, errMsg});
+   * retry: 是否要显示重试对话框;
+   * retryCancel: 重试取消回调函数;
+   * saveType: 保存类型(不显示对话框，设置没有意义；如果发生错误，设置的值会在对话框中提示，例如“个人信息”);
+   * path: 调用的函数文件路径;
+   * functionName: 调用的函数名;
    */
-  saveList() {
-    if (thisClass.list) {
-      while (thisClass.list.length != 0) {
+  saveList(params) {
+    if (params) {
+      //保存键值对列表
+      thisClass.params = params
+      while (thisClass.params.saveList.length != 0) {
         try {
-          wx.setStorageSync(thisClass.list[0].key, thisClass.list[0].data)
-          thisClass.list.splice(0, 1)
+          wx.setStorageSync(thisClass.params.saveList[0].key, thisClass.params.saveList[0].data)
+          thisClass.params.saveList.splice(0, 1)
         } catch (e) {
-          if (thisClass.failInfo) {
-            thisClass.failInfo.errMsg = e
-            debug.printStorageError(thisClass.failInfo)
-          }
-          thisClass._saveErrorDialog()
-          if (thisClass.failCallBack) {
-            var obj = new Object()
-            obj[thisClass.list[0].key] = thisClass.list[0].data
-            obj['errMsg'] = e
-            thisClass.failCallBack(obj)
-          }
+          thisClass._debug(0, {
+            key: thisClass.params.saveList[0].key,
+            data: thisClass.params.saveList[0].data,
+            path: thisClass.params.path,
+            functionName: thisClass.params.functionName,
+            errMsg: e
+          })
+          params.retry && thisClass._saveErrorDialog({
+            retry: function() {
+              thisClass.saveList(thisClass.params)
+            },
+            retryCancel: thisClass.params.retryCancel,
+            saveType: thisClass.params.saveType,
+          })
+          if (thisClass.params.fail)
+            thisClass.params.fail({
+              key: thisClass.params.key,
+              data: thisClass.params.data,
+              errMsg: e,
+            })
         }
       }
-      if (thisClass.successCallBack)
-        thisClass.successCallBack()
+      //列表保存完成
+      thisClass.params = undefined
+      params.success && params.success()
+    } else {
+      //尝试保存已有的键值对列表
+      if (thisClass.params) {
+        //存在列表，继续保存
+        thisClass.saveList(thisClass.params)
+      } else {
+        //不存在列表，执行错误回调函数
+        thisClass._debug(1)
+      }
     }
   }
 
@@ -115,25 +117,47 @@ class Storage {
    * (*内部函数)
    * [保存失败提示框]
    */
-  _saveErrorDialog() {
-    if (thisClass.showRetryModal || thisClass.retryCallBack || thisClass.retryCancelCallBack) {
-      var thisClass = thisClass
-      var content = thisClass.saveType ? "存储" : "保存" + thisClass.saveType
+  _saveErrorDialog(params) {
+    if (params.retryCancel) {
+      var content = params.saveType ? "存储" : "保存" + params.saveType
       content += '失败，可能是手机空间不足，请清理一下手机空间后重试'
       wx.showModal({
         title: '提示',
         content: content,
-        showCancel: thisClass.retryCallBack && thisClass.retryCancelCallBack ? true : false,
-        confirmText: thisClass.retryCallBack ? "重试" : "确定",
+        showCancel: params.retryCancel,
+        confirmText: "重试",
         confirmColor: "#04838e",
         success: function(res) {
-          if (res.confirm && thisClass.retryCallBack) {
-            thisClass.retryCallBack()
-          } else if (res.cancel && thisClass.retryCancelCallBack) {
-            thisClass.retryCancelCallBack()
+          if (res.confirm && params.retry) {
+            params.retry()
+          } else if (res.cancel && params.retryCancel) {
+            params.retryCancel()
           }
         }
       })
+    }
+  }
+
+  /**
+   * (*内部函数)
+   * [显示调试信息]
+   */
+  _debug(type, res) {
+    openDebug = true //是否要开启 debug
+    if (openDebug) {
+      if (type == 0) {
+        // save 错误
+        debug.printStorageError(res)
+      } else if (type == 1) {
+        // saveList 错误: 不存在列表
+        debug.printStorageError({
+          key: '无',
+          data: '无',
+          path: 'utils/storage.js',
+          functionName: 'saveList',
+          errMsg: '不能保存一个空的键值对列表'
+        })
+      }
     }
   }
 }

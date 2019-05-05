@@ -63,7 +63,7 @@ class Debug {
     if (obj) {
       obj.type = "服务器返回代码错误"
       var t = "服务器错误代码:" + obj.statusCode + "\n"
-      obj.errMsg = obj.errMsg? t + obj.errMsg : t
+      obj.errMsg = obj.errMsg ? t + obj.errMsg : t
       this.printError(obj)
     }
   }
@@ -104,12 +104,16 @@ class Debug {
 
   /**
    * [微信缓存操作错误提示]
-   * obj = {path, functionName, errMsg}
-   * (文件完整路径，函数名称，保存失败提示信息)
+   * obj = {key, data, path, functionName, errMsg}
+   * (保存出错的键，保存出错的值，文件完整路径，函数名称，保存失败提示信息)
    */
   printStorageError(obj) {
     if (obj) {
       obj.type = "微信保存缓存错误"
+      var e = obj.errMsg
+      obj.errMsg = "键:" + obj.key + "\n"
+      obj.errMsg += "值:" + obj.data + "\n"
+      obj.errMsg += "错误原因:\n" + e
       this.printError(obj)
     }
   }

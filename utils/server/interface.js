@@ -7,11 +7,6 @@ var interfaces = {
     method: "GET",
     statusCode: 200,
   },
-  verifyToken: { //获取token(X未完成，等待补充)
-    url: "/user/verifyToken",
-    method: "GET",
-    statusCode: 200,
-  },
 
   /* 用户信息 */
   getInfo: { //获取用户设置的基本信息(*)

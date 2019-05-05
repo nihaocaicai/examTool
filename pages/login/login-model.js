@@ -10,6 +10,10 @@ import {
   Storage
 } from "../../utils/storage.js"
 
+import {
+  Token
+} from "utils/server/token.js"
+
 var debug = new Debug()
 var app = getApp()
 var thisClass = this
@@ -27,61 +31,6 @@ class Login {
     thisClass.page = page
   }
 
-  //用户点击授权按钮 获取用户信息
-  clickAuthorzieButton(e) {
-    var rawUserInfo = e.detail
-    if (rawUserInfo.userInfo) {
-      //用户按了授权按钮
-      thisClass.page.setData({
-        loading: true, //显示 加载中 页面
-        needAuthorize: false, //不显示 点击授权 按钮
-      })
-      wx.setStorageSync("isFirstLogin", true)
-      app.processUserInfo(rawUserInfo)
-    } else {
-      //用户按了拒绝按钮
-      wx.showModal({
-        title: '提示',
-        content: '必须授权才能使用考研小神器哦～',
-        showCancel: false,
-      })
-    }
-  }
-
-  /*初始化回调函数*/
-  setCallBack() {
-    //获取到 userInfo 的回调函数
-    app.userInfoReadyCallback = function() {
-      if (wx.getStorageSync("isFirstLogin")) {
-        //第一次登录，需要设置信息
-        thisClass.showSetUserInfoDialog()
-      } else {
-        //不是第一次登录
-        if (!(wx.getStorageSync('user_info') instanceof Object)) {
-          //缓存不存在 user_info，尝试从服务器获取
-          thisClass.getUserInfoFromService()
-        } else {
-          //user_info 存在于缓存，获取 everyday_planList
-          thisClass.getTodayPlanFromService()
-        }
-      }
-    }
-    //未授权的回调函数
-    app.needAuthorizeCallback = function() {
-      thisClass.page.setData({
-        needAuthorize: true, //显示 点击授权 按钮
-        loading: false, //不显示 加载中 页面
-      })
-    }
-    //需要删除小程序提示
-    app.needDeleteAppCallback = function() {
-      thisClass.page.setData({
-        needAuthorize: false,
-        loading: false,
-        needDelete: true, //需要删除小程序提示
-      })
-    }
-  }
 
   //从服务器获取 user_info
   getUserInfoFromService() {
@@ -129,78 +78,6 @@ class Login {
     }
     r.statusCodeFailCallBack = thisClass.offlineTips
     r.failCallBack = thisClass.offlineTips
-    r.failInfo = failInfo
-    r.request()
-  }
-
-  //设置对话框 点击确定按钮
-  dialogConfirm(formData) {
-    var failInfo = {
-      path: 'login-model.js',
-      functionName: "dialogConfirm"
-    }
-    thisClass.wx_user_info = wx.getStorageSync("wx_user_info") ? wx.getStorageSync("wx_user_info") : thisClass.wx_user_info
-    wx.showLoading({
-      title: '信息保存中',
-    })
-
-    var r = new Request()
-    r.interface = "modifyInfo"
-    r.data = {
-      user_name: thisClass.wx_user_info['user_name'],
-      user_avatar: thisClass.wx_user_info['user_avatar'],
-      user_gender: thisClass.wx_user_info['user_gender'],
-      user_city: thisClass.wx_user_info['user_city'],
-      user_brithday: formData.birthday,
-      user_target: formData.goal_university + "+" + formData.goal_major,
-      user_motto: formData.motto,
-      user_exam_date: formData.examDate,
-    }
-    r.successCallBack = function(data) {
-      thisClass.wx_user_info = wx.getStorageSync("wx_user_info") ? wx.getStorageSync("wx_user_info") : thisClass.wx_user_info
-      wx.clearStorageSync() //清除所有信息
-      var storage = new Storage()
-      var saveList = new Array()
-      saveList.push({
-        key: "wx_user_info",
-        data: thisClass.wx_user_info,
-      })
-      saveList.push({
-        key: "user_info",
-        data: formData,
-      })
-      saveList.push({
-        key: "hideOfflineTips",
-        data: false,
-      })
-      storage.setSaveType("保存信息")
-      storage.setSaveList(saveList)
-      storage.successCallBack = function() {
-        thisClass.page.edit.hideEdit();
-        wx.hideLoading()
-        thisClass.afterSuccessCheckEveryDayPlan = thisClass.toIndex
-        thisClass.checkEveryDayPlan()
-      }
-      storage.retryCallBack = storage.saveList
-      storage.failInfo = failInfo
-      storage.saveList()
-    }
-    r.statusCodeFailCallBack = function() {
-      wx.hideLoading()
-      wx.showModal({
-        title: '提示',
-        content: '服务器出错，请稍后重试',
-        showCancel: false,
-      })
-    }
-    r.failCallBack = function() {
-      wx.hideLoading()
-      wx.showModal({
-        title: '提示',
-        content: '网络连接失败，请检查网络连接是否正确',
-        showCancel: false,
-      })
-    }
     r.failInfo = failInfo
     r.request()
   }
@@ -256,6 +133,85 @@ class Login {
       thisClass.toIndex()
     }
     thisClass.checkEveryDayPlan()
+  }
+
+  /* 以下为新加入未修改的方法 */
+  //检查基本信息是否更改了
+  checkForChanges() {
+    wx.getUserInfo({
+      lang: "zh_CN",
+      success: res => {
+        var cache = wx.getStorageSync("wx_user_info")
+        res.userInfo.gender = res.userInfo.gender == 1 ? "男" : "女"
+        res.userInfo.city = res.userInfo.province + " " + res.userInfo.city
+        var nickNameFlag = cache['user_name'] != res.userInfo.nickName //昵称更改过标签
+        var avatarUrlFlag = cache['user_avatar'] != res.userInfo.avatarUrl //用户更改过头像
+        var genderFlag = cache['user_gender'] != res.userInfo.gender //性别更改过标签
+        var cityFlag = cache['user_city'] != res.userInfo.city //城市更改过标签
+        var changedFlag = false
+
+        //传递的参数
+        var data = new Object()
+        if (nickNameFlag) {
+          //昵称更改过
+          data.user_name = res.userInfo.nickName
+          changedFlag = true
+        }
+        if (avatarUrlFlag) {
+          //用户更改过
+          data.user_avatar = res.userInfo.avatarUrl
+          changedFlag = true
+        }
+        if (genderFlag) {
+          //性别更改过
+          data.user_gender = res.userInfo.gender
+          changedFlag = true
+        }
+        if (cityFlag) {
+          //城市更改过
+          data.user_city = res.userInfo.city
+          changedFlag = true
+        }
+        if (changedFlag) {
+          //更改过信息，尝试更改服务器上的信息
+          var r = new Request()
+          r.interface = "modifyInfo"
+          r.data = data
+          r.successCallBack = function (res) {
+            if (nickNameFlag)
+              //昵称更改过
+              cache['user_name'] = res.userInfo.nickName
+            if (avatarUrlFlag)
+              //用户更改过
+              cache['user_avatar'] = res.userInfo.avatarUrl
+            if (genderFlag)
+              //性别更改过
+              cache['user_gender'] = res.userInfo.gender
+            if (cityFlag)
+              //城市更改过
+              cache['user_city'] = res.userInfo.city
+
+            var storage = new Storage() //添加存储能力
+            storage.successCallBack = this.userInfoIsReady //保存成功
+            storage.failCallBack = this.userInfoIsReady //保存失败，下次再检查
+            storage.setFailInfo('app-model.js', "checkForChanges")
+            storage.save("wx_user_info", cache)
+          }
+          r.statusCodeFailCallBack = this.userInfoIsReady //请求失败，下次再检查
+          r.failCallBack = this.userInfoIsReady //请求失败，下次再检查
+          r.setFailInfo('app-model.js', "checkForChanges")
+          r.request()
+        } else {
+          //没有更改过，直接跳转
+          this.userInfoIsReady()
+        }
+      },
+      fail: res => {
+        //获取失败，下次再检查
+        debug.printWxGetUserInfoError("app-model.js", "checkForChanges", res)
+        this.userInfoIsReady()
+      }
+    })
   }
 }
 
