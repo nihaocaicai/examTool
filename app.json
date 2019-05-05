@@ -36,13 +36,12 @@
       }
     ]
   },
-<<<<<<< HEAD
-  "sitemapLocation": "sitemap.json"
-=======
+
+  "sitemapLocation": "sitemap.json",
   "permission": {
     "scope.userLocation": {
       "desc": "获取你的位置来填写日记信息"
     }
   }
->>>>>>> 14aa10ac8fa562e6346e93ce3c837cebe1526391
+
 }
