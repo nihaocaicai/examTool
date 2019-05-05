@@ -1,5 +1,5 @@
 // 本数据文件的date值都是当天，也就是此文件设置的是首页今天的计划展示
-var everyday_plan = {
+var everyday_planList = {
   // 这里日期假设是当天的日期
   date: "2019-04-13",
   data: [{
@@ -53,5 +53,5 @@ var everyday_plan = {
 }
 
 module.exports = {
-  everyday_planList: everyday_plan
+  everyday_planList: everyday_planList
 }

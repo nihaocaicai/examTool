@@ -7,7 +7,9 @@ class Debug {
 
   /**
    * [错误提示]
+   * 
    * obj = {path, functionName, type, errMsg}
+   * 
    * (文件完整路径，函数名称，错误类型，错误信息)
    */
   printError(obj) {
@@ -40,7 +42,9 @@ class Debug {
 
   /**
    * [错误提示]
+   * 
    * {path, functionName, type, errMsg}
+   * 
    * (文件完整路径，函数名称，错误类型，错误信息)
    */
   printErrors(path, functionName, type, errMsg) {
@@ -56,7 +60,9 @@ class Debug {
 
   /**
    * [服务器返回代码错误提示]
+   * 
    * {path, functionName, statusCode, errMsg}
+   * 
    * (文件完整路径，函数名称，服务器返回错误代码，网页返回错误提示信息)
    */
   printServerStatusCodeFail(obj) {
@@ -70,7 +76,9 @@ class Debug {
 
   /**
    * [服务器连接错误错误提示]
+   * 
    * obj = {path, functionName, errMsg}
+   * 
    * (文件完整路径，函数名称，服务器连接失败提示信息)
    */
   printServerFail(obj) {
@@ -82,7 +90,9 @@ class Debug {
 
   /**
    * [微信 wx.login 操作错误提示]
+   * 
    * {path, functionName, errMsg}
+   * 
    * (文件完整路径，函数名称，保存失败提示信息)
    */
   printWxLoginError(path, functionName, errMsg) {
@@ -93,7 +103,9 @@ class Debug {
 
   /**
    * [微信 wx.getUserInfo 操作错误提示]
+   * 
    * {path, functionName, errMsg}
+   * 
    * (文件完整路径，函数名称，保存失败提示信息)
    */
   printWxGetUserInfoError(path, functionName, errMsg) {
@@ -104,7 +116,9 @@ class Debug {
 
   /**
    * [微信缓存操作错误提示]
+   * 
    * obj = {key, data, path, functionName, errMsg}
+   * 
    * (保存出错的键，保存出错的值，文件完整路径，函数名称，保存失败提示信息)
    */
   printStorageError(obj) {

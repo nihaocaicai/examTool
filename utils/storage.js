@@ -15,15 +15,26 @@ class Storage {
 
   /**
    * [保存信息到微信的缓存]
-   * key: 保存的键;
-   * data: 保存的值;
-   * success: 保存成功回调函数，无返回值;
-   * fail: 保存失败回调函数，返回保存失败的值和错误信息(obj = {key, data, errMsg});
-   * retry: 是否要显示重试对话框;
-   * retryCancel: 重试取消回调函数;
-   * saveType: 保存类型(不显示对话框，设置没有意义；如果发生错误，设置的值会在对话框中提示，例如“个人信息”);
-   * path: 调用的函数文件路径;
-   * functionName: 调用的函数名;
+   * 
+   * key: 保存的键
+   * 
+   * data: 保存的值
+   * 
+   * success: 保存成功回调函数，无返回值
+   * 
+   * fail: 保存失败回调函数，返回保存失败的值和错误信息(obj = {key, data, errMsg})
+   * 
+   * showRetry: 是否要显示重试对话框
+   * 
+   * retry: 重试回调函数
+   * 
+   * retryCancel: 重试取消回调函数
+   * 
+   * saveType: 保存类型(不显示对话框，设置没有意义；如果发生错误，设置的值会在对话框中提示，例如“个人信息”)
+   * 
+   * path: 调用的函数文件路径
+   * 
+   * functionName: 调用的函数名
    */
   save(params) {
     if (params) {
@@ -38,8 +49,9 @@ class Storage {
           functionName: params.functionName,
           errMsg: e
         })
-        params.retry && thisClass._saveErrorDialog({
-          retry: function() {
+        params.showRetry && thisClass._saveErrorDialog({
+          retry: thisClass.params.retry,
+          retrySave: function() {
             thisClass.save(params)
           },
           retryCancel: params.retryCancel,
@@ -57,15 +69,24 @@ class Storage {
 
   /**
    * [批量保存列表中的信息到微信缓存]
-   * (!如果不传参数，则尝试保存已有的键值对列表)
-   * saveList: 要保存的键值对列表, saveList = [{key, data}];
-   * success: 保存成功回调函数，无返回值;
-   * fail: 保存失败回调函数，返回保存失败的值和错误信息(obj = {key, data, errMsg});
-   * retry: 是否要显示重试对话框;
-   * retryCancel: 重试取消回调函数;
-   * saveType: 保存类型(不显示对话框，设置没有意义；如果发生错误，设置的值会在对话框中提示，例如“个人信息”);
-   * path: 调用的函数文件路径;
-   * functionName: 调用的函数名;
+   * 
+   * (如果不传参数，则尝试保存已有的键值对列表)
+   * 
+   * saveList: 要保存的键值对列表, saveList = [{key, data}]
+   * 
+   * success: 保存成功回调函数，无返回值
+   * 
+   * fail: 保存失败回调函数，返回保存失败的值和错误信息(obj = {key, data, errMsg})
+   * 
+   * retry: 重试回调函数
+   *
+   * retryCancel: 重试取消回调函数
+   * 
+   * saveType: 保存类型(不显示对话框，设置没有意义；如果发生错误，设置的值会在对话框中提示，例如“个人信息”)
+   * 
+   * path: 调用的函数文件路径
+   * 
+   * functionName: 调用的函数名
    */
   saveList(params) {
     if (params) {
@@ -83,8 +104,9 @@ class Storage {
             functionName: thisClass.params.functionName,
             errMsg: e
           })
-          params.retry && thisClass._saveErrorDialog({
-            retry: function() {
+          params.showRetry && thisClass._saveErrorDialog({
+            retry: thisClass.params.retry,
+            retrySave: function() {
               thisClass.saveList(thisClass.params)
             },
             retryCancel: thisClass.params.retryCancel,
@@ -130,6 +152,7 @@ class Storage {
         success: function(res) {
           if (res.confirm && params.retry) {
             params.retry()
+            params.retrySave()
           } else if (res.cancel && params.retryCancel) {
             params.retryCancel()
           }

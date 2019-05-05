@@ -19,9 +19,12 @@ class Token {
 
   /**
    * [从服务器获取 token]
-   * callbacks = {success, fail};
-   * success: 检查成功回调函数(选填)，不返回任何值;
-   * fail: 连接失败回调函数(选填)，返回错误信息
+   * 
+   * callbacks = {success, fail}
+   * 
+   * success: 检查成功回调函数，不返回任何值
+   * 
+   * fail: 连接失败回调函数，返回错误信息
    */
   getTokenFromServer(callBacks) {
     wx.login({

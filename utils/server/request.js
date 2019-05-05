@@ -18,20 +18,25 @@ class Request {
 
   /**
    * [请求连接]
+   * 
    * params = {url, method, data, success, statusCodeFail, fail};
-   * success: 检查成功回调函数(选填)，返回成功获取到的值(res.data); 
+   * 
+   * success: 检查成功回调函数，返回成功获取到的值(res.data); 
+   * 
    * statusCodeFail: 服务器返回代码错误信息，返回错误信息(obj = {statusCode, data}); 
-   * fail : 连接失败回调函数(选填)，返回错误信息(res); 
+   * 
+   * fail : 连接失败回调函数，返回错误信息(res); 
+   * 
    * noRefetch: 是否不做未授权重试机制（避免循环重试下去）
    */
 
   request(params, noRefetch) {
     wx.request({
       url: require("interface.js").url + params.url,
-      method: params.type,
+      method: params.method ? params.method : 'GET',
       data: params.data,
       header: {
-        'content-type': 'application/json',
+        'content-type': params.method == 'POST' ? 'application/x-www-form-urlencoded' : 'application/json',
         'token': wx.getStorageSync('token')
       },
       success: function(res) {
@@ -67,7 +72,6 @@ class Request {
 
   /**
    * [设置错误信息]
-   * {path, functionName}
    * (文件路径, 函数名称)
    */
   setFailInfo(path, functionName) {
@@ -83,7 +87,7 @@ class Request {
    * [显示调试信息]
    */
   _debug(type, res) {
-    openDebug = true //是否要开启 debug
+    var openDebug = true //是否要开启 debug
     if (openDebug) {
       var debug = new Debug() // 导入调试能力
       if (thisClass.failInfo == undefined)
