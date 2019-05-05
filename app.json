@@ -1,7 +1,7 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/menu/menu-content/diary/diary", 
+    "pages/menu/menu-content/diary/diary",
     "pages/login/login",
     "pages/index/modify/modify",
     "pages/menu/menu",
@@ -35,5 +35,6 @@
         "selectedIconPath": "images/tab/menu-1.png"
       }
     ]
-  }
+  },
+  "sitemapLocation": "sitemap.json"
 }

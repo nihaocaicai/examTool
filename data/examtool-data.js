@@ -1,3 +1,4 @@
+
 var local_database = [{
   // 微信授权后得到的信息
   wx_user_info: {
@@ -13,7 +14,7 @@ var local_database = [{
   user_info: {
     // 用户生日
     user_brithday: "1998-02-01",
-    user_target: "复旦大学",
+    user_target: "复旦大学+计算机科学与技术",
     user_motto: "考研路上，我们都不是孤单的",
     // 用户设置的考研日期
     user_exam_date: "2020-12-22"
