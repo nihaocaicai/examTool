@@ -2,20 +2,6 @@ import {
   Request
 } from "../../utils/server/request.js"
 
-import {
-  Debug
-} from "../../utils/debug.js"
-
-import {
-  Storage
-} from "../../utils/storage.js"
-
-import {
-  Token
-} from "../../utils/server/token.js"
-
-var debug = new Debug()
-var app = getApp()
 var thisClass = this
 
 class Index {
