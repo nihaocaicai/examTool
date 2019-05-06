@@ -166,7 +166,7 @@ class Storage {
    * [显示调试信息]
    */
   _debug(type, res) {
-    openDebug = true //是否要开启 debug
+    var openDebug = true //是否要开启 debug
     if (openDebug) {
       if (type == 0) {
         // save 错误
