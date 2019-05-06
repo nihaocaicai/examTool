@@ -61,10 +61,7 @@ class Login {
    */
   saveUserInfo(params) {
     var r = new Request()
-    r.failInfo = {
-      path: 'login-model.js',
-      functionName: "saveUserInfo"
-    }
+    r.setFailInfo('login-model.js', "saveUserInfo")
     r.request({
       url: '/user/info/modify',
       method: 'POST',

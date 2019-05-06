@@ -68,7 +68,7 @@ class Debug {
   printServerStatusCodeFail(obj) {
     if (obj) {
       obj.type = "服务器返回代码错误"
-      var t = "服务器错误代码:" + obj.statusCode + "\n"
+      var t = "服务器错误代码: " + obj.statusCode + "\n"
       obj.errMsg = obj.errMsg ? t + obj.errMsg : t
       this.printError(obj)
     }

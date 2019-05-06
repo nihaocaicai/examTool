@@ -10,6 +10,7 @@ import {
   Debug
 } from "../../utils/debug.js"
 
+
 var model = new Login()
 var debug = new Debug()
 var openDebug = true //开启调试功能
@@ -299,6 +300,7 @@ Page({
    * [保存用户信息事件]
    */
   _save(e) {
+    var that = this
     wx.showLoading({
       title: '信息保存中',
     })
@@ -308,9 +310,9 @@ Page({
       data: {
         user_name: wx_user_info['user_name'],
         user_avatar: wx_user_info['user_avatar'],
-        user_gender: wx_user_info['user_gender'],
+        user_gender: wx_user_info['user_gender'] == '男' ? 1 : 2,
         user_city: wx_user_info['user_city'],
-        user_brithday: formData.birthday,
+        user_birthday: formData.birthday,
         user_target: formData.goal_university + "+" + formData.goal_major,
         user_motto: formData.motto,
         user_exam_date: formData.examDate,
@@ -385,7 +387,7 @@ Page({
         user_avatar: wx_user_info['user_avatar'],
         user_gender: wx_user_info['user_gender'],
         user_city: wx_user_info['user_city'],
-        user_brithday: null,
+        user_birthday: null,
         user_target: "",
         user_motto: "",
         user_exam_date: null,
@@ -406,12 +408,6 @@ Page({
             {
               key: "hideOfflineTips",
               data: false,
-            }, {
-              key: 'everyday_plan',
-              data: {
-                date: '2019-05-05',
-                data: []
-              },
             }
           ],
           success: function() {
