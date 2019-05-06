@@ -16,33 +16,33 @@ class Login {
   /**
    * [获取token]
    */
-  get_token(successCallback) {
+  get_token(callbacks) {
     var token = new Token()
     token.getTokenFromServer({
-      success: successCallback,
-      fail: thisClass._loginFail
+      success: callbacks.success,
+      fail: callbacks.fail,
     })
   }
 
   /**
    * [获取 user_info]
    */
-  get_user_info(successCallback) {
+  get_user_info(callbacks) {
     var r = new Request()
     r.setFailInfo('login-model.js', "get_user_info")
     r.request({
       url: '/user/info/show',
       success: function(data) {
-        successCallback(data)
+        callbacks.success(data)
       },
-      fail: thisClass._loginFail
+      fail: callbacks.fail
     })
   }
 
   /**
    * [更新信息 wx_user_info]
    */
-  update_wx_user_info(data, successCallback) {
+  update_wx_user_info(data, callbacks) {
     //更改过信息，尝试更改服务器上的信息
     var r = new Request()
     r.setFailInfo('login-model.js', "update_wx_user_info")
@@ -50,8 +50,8 @@ class Login {
       url: "/user/info/modify",
       method: "POST",
       data: data,
-      success: successCallback,
-      fail: thisClass._toIndex,
+      success: callbacks.success,
+      fail: callbacks.fail,
     })
   }
 
@@ -72,36 +72,6 @@ class Login {
       success: params.success,
       statusCodeFail: params.statusCodeFail,
       fail: params.fail,
-    })
-  }
-
-  /**
-   * (*内部函数)
-   * [登录失败]
-   */
-  _loginFail() {
-    var that = this
-    wx.showModal({
-      title: '提示',
-      content: '获取信息失败。请检查网络连接后重试',
-      confirmColor: '#04838e',
-      confirmText: '重试',
-      showCancel: false,
-      success: function() {
-        wx.reLaunch({
-          url: '/pages/login/login',
-        })
-      }
-    })
-  }
-
-  /**
-   * (*内部函数)
-   * [跳转到首页]
-   */
-  _toIndex() {
-    wx.switchTab({
-      url: '../index/index',
     })
   }
 }

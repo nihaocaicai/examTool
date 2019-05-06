@@ -31,7 +31,7 @@ class Token {
       success: function(l) {
         wx.request({
           url: require("interface.js").url + '/user/token',
-          method: 'GET',
+          method: 'POST',
           data: {
             code: l.code
           },
@@ -81,7 +81,7 @@ class Token {
    * [显示调试信息]
    */
   _debug(type, res) {
-    openDebug = true //是否要开启 debug
+    var openDebug = true //是否要开启 debug
     if (openDebug) {
       var debug = new Debug() // 导入调试能力
       var path = "utils/server/token.js"

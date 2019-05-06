@@ -76,28 +76,34 @@ Page({
     var that = this
     if (!(wx.getStorageSync('token'))) {
       /* 没有 token */
-      model.get_token(that._checkStorage)
+      model.get_token({
+        success: that._checkStorage,
+        fail: that._loginFail,
+      })
     } else if (!(wx.getStorageSync('user_info') instanceof Object)) {
       /* 没有 user_info */
-      model.get_user_info(function(data) {
-        var target = data['user_target'].split("+")
-        var storage = new Storage()
-        storage.save({
-          key: 'user_info',
-          data: {
-            birthday: data['user_birthday'],
-            examDate: data['user_exam_date'],
-            goal_university: target[0],
-            goal_major: target[1],
-            motto: data['user_motto'],
-          },
-          success: function() {
-            that._checkStorage()
-          },
-          fail: that._loginFail,
-          path: '/pages/login/login',
-          functionName: '_checkStorage'
-        })
+      model.get_user_info({
+        success: function(data) {
+          var target = data['user_target'].split("+")
+          var storage = new Storage()
+          storage.save({
+            key: 'user_info',
+            data: {
+              birthday: data['user_birthday'],
+              examDate: data['user_exam_date'],
+              goal_university: target[0],
+              goal_major: target[1],
+              motto: data['user_motto'],
+            },
+            success: function() {
+              that._checkStorage()
+            },
+            fail: that._loginFail,
+            path: '/pages/login/login',
+            functionName: '_checkStorage'
+          })
+        },
+        fail: that._loginFail,
       })
     } else if (!(wx.getStorageSync('wx_user_info') instanceof Object)) {
       /* 没有 wx_user_info */
@@ -174,28 +180,31 @@ Page({
         }
         if (changedFlag) {
           // 信息被更改过
-          model.update_wx_user_info(data, function() {
-            if (nickNameFlag)
-              //昵称更改过
-              cache['user_name'] = res.userInfo.nickName
-            if (avatarUrlFlag)
-              //用户更改过
-              cache['user_avatar'] = res.userInfo.avatarUrl
-            if (genderFlag)
-              //性别更改过
-              cache['user_gender'] = res.userInfo.gender
-            if (cityFlag)
-              //城市更改过
-              cache['user_city'] = res.userInfo.city
-            var storage = new Storage() //添加存储能力
-            storage.save({
-              key: "wx_user_info",
-              data: cache,
-              success: that._toIndex,
-              fail: that._toIndex,
-              path: "login-model.js",
-              functionName: "_checkForChanges",
-            })
+          model.update_wx_user_info(data, {
+            success: function() {
+              if (nickNameFlag)
+                //昵称更改过
+                cache['user_name'] = res.userInfo.nickName
+              if (avatarUrlFlag)
+                //用户更改过
+                cache['user_avatar'] = res.userInfo.avatarUrl
+              if (genderFlag)
+                //性别更改过
+                cache['user_gender'] = res.userInfo.gender
+              if (cityFlag)
+                //城市更改过
+                cache['user_city'] = res.userInfo.city
+              var storage = new Storage() //添加存储能力
+              storage.save({
+                key: "wx_user_info",
+                data: cache,
+                success: that._toIndex,
+                fail: that._toIndex,
+                path: "login-model.js",
+                functionName: "_checkForChanges",
+              })
+            },
+            fail: that._toIndex()
           })
         } else {
           // 信息没有被更改过
