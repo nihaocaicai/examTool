@@ -40,6 +40,5 @@
     "scope.userLocation": {
       "desc": "获取你的位置来填写日记信息"
     }
-  },
-  "sitemapLocation": "sitemap.json"
+  }
 }

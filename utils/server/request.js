@@ -6,8 +6,6 @@ import {
   Token
 } from "token.js"
 
-import { Config } from 'config.js';
-
 var thisClass = undefined //转义 this
 
 /**
@@ -16,7 +14,6 @@ var thisClass = undefined //转义 this
 class Request {
   constructor() {
     thisClass = this //转义 this
-    this.baseRestUrl = Config.restUrl;
   }
 
   /**
@@ -26,7 +23,7 @@ class Request {
    * 
    * success: 检查成功回调函数，返回成功获取到的值(res.data); 
    * 
-   * statusCodeFail: 服务器返回代码错误信息，返回错误信息(obj = {statusCode, data}); 
+   * statusCodeFail: 服务器返回代码错误信息回调函数，返回错误信息(obj = {statusCode, data}); 
    * 
    * fail : 连接失败回调函数，返回错误信息(res); 
    * 
@@ -34,12 +31,10 @@ class Request {
    */
 
   request(params, noRefetch) {
-    if (!params.type) {
-      params.type = 'GET';
-    }
-    url: thisClass.baseRestUrl + params.url
     wx.request({
+      url: require("interface.js").url + params.url,
       data: params.data,
+      method: params.method ? params.method : 'GET',
       header: {
         'content-type': 'application/json',
         'token': wx.getStorageSync('token')
