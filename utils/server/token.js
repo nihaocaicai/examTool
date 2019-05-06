@@ -7,6 +7,8 @@ import {
   Storage
 } from "../storage.js"
 
+import { Config } from 'config.js';
+
 var thisClass = undefined //转义 this
 
 /**
@@ -15,6 +17,7 @@ var thisClass = undefined //转义 this
 class Token {
   constructor() {
     thisClass = this //转义 this
+    this.tokenUrl = Config.restUrl + '/token';
   }
 
   /**
@@ -30,7 +33,7 @@ class Token {
     wx.login({
       success: function(l) {
         wx.request({
-          url: require("interface.js").url + '/user/token',
+          url: thisClass.tokenUrl,
           method: 'POST',
           data: {
             code: l.code

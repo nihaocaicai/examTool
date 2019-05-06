@@ -6,6 +6,8 @@ import {
   Token
 } from "token.js"
 
+import { Config } from 'config.js';
+
 var thisClass = undefined //转义 this
 
 /**
@@ -14,6 +16,7 @@ var thisClass = undefined //转义 this
 class Request {
   constructor() {
     thisClass = this //转义 this
+    this.baseRestUrl = Config.restUrl;
   }
 
   /**
@@ -31,12 +34,14 @@ class Request {
    */
 
   request(params, noRefetch) {
+    if (!params.type) {
+      params.type = 'GET';
+    }
+    url: thisClass.baseRestUrl + params.url
     wx.request({
-      url: require("interface.js").url + params.url,
-      method: params.method ? params.method : 'GET',
       data: params.data,
       header: {
-        'content-type': params.method == 'POST' ? 'application/x-www-form-urlencoded' : 'application/json',
+        'content-type': 'application/json',
         'token': wx.getStorageSync('token')
       },
       success: function(res) {
