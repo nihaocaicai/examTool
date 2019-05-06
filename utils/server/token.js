@@ -32,6 +32,7 @@ class Token {
   getTokenFromServer(callBacks) {
     wx.login({
       success: function(l) {
+        console.log(l.code)
         wx.request({
           url: thisClass.tokenUrl,
           method: 'POST',
