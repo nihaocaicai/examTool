@@ -1,5 +1,5 @@
 //服务器地址
-var url = "http://127.0.0.1:8080/examTool"
+var url = "http://182.254.187.111/tool/v1"
 
 //接口表只用于参考，不使用
 var interfaces = {
