@@ -138,7 +138,6 @@ Page({
    * [初始化]
    */
   _init(data) {
-    console.log(data)
     var that = this
     if (data) {
       //获取到数据

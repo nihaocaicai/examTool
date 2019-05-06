@@ -33,7 +33,7 @@ class Request {
   request(params, noRefetch) {
     wx.request({
       url: require("interface.js").url + params.url,
-      data: params.data,
+      data: params.data ? params.data : {},
       method: params.method ? params.method : 'GET',
       header: {
         'content-type': 'application/json',
