@@ -4,6 +4,6 @@ class Config {
   }
 }
 
-Config.restUrl = 'http://localhost:8080/tool/v1';
+Config.restUrl = 'http://127.0.0.1:8080/examTool';
 
 export { Config };
