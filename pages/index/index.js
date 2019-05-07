@@ -25,8 +25,8 @@ Page({
     this._checkEverydayPlan() //检查计划是不是今天的
   },
 
-  onReady: function() {
-    this.diary = this.selectComponent("#diary") //获得diary组件
+  onShow: function() {
+
   },
 
   /**
@@ -72,6 +72,8 @@ Page({
    * [显示对话框事件]
    */
   showDiary() {
+    if (!(this.diary))
+      this.diary = this.selectComponent("#diary") //获得diary组件
     this.diary.showDiary("新增日记", null);
   },
 
@@ -141,6 +143,13 @@ Page({
     var that = this
     if (data) {
       //获取到数据
+      if (JSON.stringify(data) == "{}") {
+        //今天没计划，自己本地生成新的列表
+        data = {
+          date: dateUtil.getFormatDate(),
+          data: [],
+        }
+      }
       var s = new Storage()
       s.save({
         key: 'everyday_planList',

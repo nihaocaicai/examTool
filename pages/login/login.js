@@ -329,11 +329,7 @@ Page({
               data: false,
             }
           ],
-          success: function() {
-            that.edit.hideEdit();
-            wx.hideLoading()
-            that._toIndex()
-          },
+          success: that._firstGetToken,
           fail: function() {
             wx.hideLoading()
           },
@@ -378,7 +374,7 @@ Page({
   _cancel() {
     var that = this
     wx.showLoading({
-      title: '信息保存中',
+      title: '加载中',
     })
     var wx_user_info = wx.getStorageSync("wx_user_info")
     model.saveUserInfo({
@@ -410,11 +406,7 @@ Page({
               data: false,
             }
           ],
-          success: function() {
-            that.edit.hideEdit();
-            wx.hideLoading()
-            that._toIndex()
-          },
+          success: that._firstGetToken,
           fail: function() {
             wx.hideLoading()
           },
@@ -448,6 +440,27 @@ Page({
           content: '网络连接失败，请检查网络连接是否正确',
           showCancel: false,
         })
+      },
+    })
+  },
+
+  /**
+   * (*内部函数)
+   * [第一次登录，获取token]
+   */
+  _firstGetToken() {
+    var that = this
+    /* 无论能否获取到 token, 都直接跳转到首页 */
+    model.get_token({
+      success: function() {
+        that.edit.hideEdit()
+        wx.hideLoading()
+        that._toIndex()
+      },
+      fail: function() {
+        that.edit.hideEdit()
+        wx.hideLoading()
+        that._toIndex()
       },
     })
   },
