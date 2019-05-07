@@ -65,6 +65,83 @@ Page({
   },
 
   /**
+   * [事件_添加对话框_确定]
+   */
+  add_confirm: function(e) {
+    var that = this
+    var formData = e.detail
+    model.addArramgements({
+      data: formData,
+      success: function() {
+        //添加成功
+        var newList = that.data.examList
+        var dateTag = new Date(formData.arrange_date).getTime() //需要插入的日期
+        var dayindex = -1
+
+        for (var i in newList) {
+          var nowDate = new Date(newList[i].date).getTime() //当前正在遍历的日期
+          //日期升序才可以这么用
+          if (dateTag > nowDate) {
+            if (dateTag == nowDate) {
+              //存在日期，获取下标
+              dayindex = i
+              break
+            } else {
+              //继续遍历
+              continue
+            }
+          } else {
+            //需要插入的日期小于当前正在遍历的日期，还是没有，就是没有了
+            break
+          }
+        }
+        if (dayindex == -1) {
+          //原来列表没有该日期，需要新建
+          newList.push({
+            date: formData.arrange_date,
+            data: [formData]
+          })
+          newList = that._sort(0, newList) //排序 newList
+        } else {
+          //存在日期，直接往里面添加
+          newList[dayindex]['data'].push(formData)
+          newList[dayindex]['data'] = that._sort(1, newList[dayindex]['data']) //排序  newList[dayindex]['data']
+        }
+
+        //写入缓存
+        var s = new Storage()
+        s.save({
+          key: 'exam_arrangement',
+          data: newList,
+          success: function() {
+            that.setData({
+              examList: newList,
+            })
+            wx.hideLoading()
+            that.editexam.hideEdit()
+            wx.showToast({
+              title: '添加成功',
+              duration: 1800,
+            })
+          },
+          fail: function() {
+            wx.hideLoading()
+            that._errorSave()
+          },
+        })
+      },
+      statusCodeFail: function() {
+        wx.hideLoading()
+        that._errorServer()
+      },
+      fail: function() {
+        wx.hideLoading()
+        that.isOffline()
+      }
+    })
+  },
+
+  /**
    * [事件_点击删除]
    */
   delItem: function(e) {
@@ -83,7 +160,32 @@ Page({
           model.deleteArrangements({
             id: that.data.examList[index.dayindex]['data'][index.index].arrange_id,
             success: function() {
-              that._removeItemFromList(index.dayindex, index.index)
+              var newList = that.data.examList
+              newList[index.dayindex].data.splice(index.index, 1) //删除指定项目
+              if (newList[index.dayindex].data.length == 0) {
+                //如果删除项目后该日期的数组长度为，移除该日期
+                newList.splice(index.dayindex, 1)
+              }
+              var s = new Storage()
+              s.save({
+                key: 'exam_arrangement',
+                data: newList, //新的列表
+                success: function() {
+                  that.setData({
+                    examList: wx.getStorageSync('exam_arrangement'),
+                    lastScroll: [-1, -1], //重设上一个滑出的项
+                  })
+                  wx.hideLoading()
+                  wx.showToast({
+                    title: '删除成功',
+                    duration: 1800,
+                  })
+                },
+                fail: function() {
+                  wx.hideLoading()
+                  that._errorSave()
+                },
+              })
             },
             statusCodeFail: function() {
               wx.hideLoading()
@@ -111,18 +213,56 @@ Page({
     model.modifyArrangements({
       data: formData,
       success: function() {
+        //先收缩上一个被划出的项目
+        that.data.examList[that.data.lastScroll[0]]['data'][that.data.lastScroll[1]].right = 0
+        that.setData({
+          examList: that.data.examList
+        })
+
         var index = that.data.modifyIndex
-        var newData = that.data.examList
-        newData[index.dayindex]['data'][index.index] = formData
+        var newList = that.data.examList
+        if (formData.arrange_date == newList[index.dayindex]['data'][index.index].arrange_date) {
+          //时间没变，直接修改
+          newList[index.dayindex]['data'][index.index] = formData
+          newList[index.dayindex]['data'] = that._sort(1, newList[index.dayindex]['data']) // 排序 newList[index.dayindex]['data']
+        } else {
+          //考研时间变了，需要移动时间
+          //从列表中删除原来的项
+          newList[index.dayindex]['data'].splice(index.index, 1)
+          if (newList[index.dayindex]['data'].length == 0) {
+            //删除后当天日期不存在内容了，要把这一天的项目一同删掉
+            newList.splice(index.dayindex, 1)
+          }
+          var dayindex = -1
+          for (var i in newList) {
+            if (formData.arrange_date == newList[i].date) {
+              //如果修改后的时间在列表里面有，就结束循环
+              dayindex = i
+              break
+            }
+          }
+          if (dayindex == -1) {
+            //不存在日期，需要重新建一个新的
+            newList.push({
+              date: formData.arrange_date,
+              data: [formData],
+            })
+            newList = that._sort(0, newList) //排序 newList
+          } else {
+            //存在日期，直接往里面添加
+            newList[dayindex]['data'].push(formData)
+            newList[dayindex]['data'] = that._sort(1, newList[dayindex]['data']) //排序  newList[dayindex]['data']
+          }
+        }
 
         //服务器修改成功，写入缓存
         var s = new Storage()
         s.save({
           key: 'exam_arrangement',
-          data: newData,
+          data: newList,
           success: function() {
             that.setData({
-              examList: newData,
+              examList: newList,
               modifyIndex: {}, //修改完成，清空下标
             })
             wx.hideLoading()
@@ -147,22 +287,6 @@ Page({
         that.isOffline()
       }
     })
-  },
-
-  /**
-   * [事件_添加对话框_确定]
-   */
-  add_confirm: function(e) {
-    var formData = e.detail
-    console.log(formData)
-    /*
-    model.addArramgements({
-      data: formData,
-      success: function() {},
-      statusCodeFail: function() {},
-      fail: function() {},
-    })
-    */
   },
 
   /**
@@ -226,39 +350,6 @@ Page({
   },
 
   /**
-   * [从列表中移除指定的项目]
-   */
-  _removeItemFromList(dayindex, index) {
-    var that = this
-    var newList = that.data.examList
-    newList[dayindex].data.splice(index, 1) //删除指定项目
-    if (newList[dayindex].data.length == 0) {
-      //如果删除项目后该日期的数组长度为，移除该日期
-      newList.splice(dayindex, 1)
-    }
-    var s = new Storage()
-    s.save({
-      key: 'exam_arrangement',
-      data: newList, //新的列表
-      success: function() {
-        that.setData({
-          examList: wx.getStorageSync('exam_arrangement'),
-          lastScroll: [-1, -1], //重设上一个滑出的项
-        })
-        wx.hideLoading()
-        wx.showToast({
-          title: '删除成功',
-          duration: 1800,
-        })
-      },
-      fail: function() {
-        wx.hideLoading()
-        that._errorSave()
-      },
-    })
-  },
-
-  /**
    * [服务器错误提示]
    */
   _errorServer() {
@@ -293,6 +384,44 @@ Page({
       showCancel: false,
       confirmColor: "#04838e",
     })
+  },
+
+  /**
+   * [按时间排序安排]
+   * 
+   * type = 1: 排序 exam_arrangement
+   * 
+   * type = 2: 排序某一天日期的数据
+   * 
+   * index = {dayindex, index} 修改的日期下标和数据下标
+   *
+   */
+  _sort(type, list, index) {
+    if (type == 0) {
+      list.sort(function(a, b) {
+        var a1 = new Date(a.date).getTime()
+        var b1 = new Date(b.date).getTime()
+        if (a1 < b1)
+          return -1
+        else if (a1 > b1)
+          return 1
+        return 0
+      })
+      return list
+    } else if (type == 1) {
+      list.sort(function(a, b) {
+        var a1 = new Date(a.arrange_date + " " + a.arrange_time).getTime()
+        var b1 = new Date(b.arrange_date + " " + b.arrange_time).getTime()
+        console.log(a1)
+        console.log(b1)
+        if (a1 < b1)
+          return -1
+        else if (a1 > b1)
+          return 1
+        return 0
+      })
+      return list
+    }
   },
 
   /* 滑动组件*/
