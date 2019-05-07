@@ -81,7 +81,7 @@ Component({
         this.triggerEvent("save", formData)
       } else {
         //在修改页面，需要检查是否进行过修改
-        var isChanged = formData.birthday != this.data['birthday'] || formData.examDate != this.data['examDate'] || formData.goal_university != this.data['goal_university'] || formData.goal_major != this.data['goal_major'] || formData.motto != this.data['motto']
+        var isChanged = formData.birthday != this.data.beforeData['birthday'] || formData.examDate != this.data.beforeData['examDate'] || formData.goal_university != this.data.beforeData['goal_university'] || formData.goal_major != this.data.beforeData['goal_major'] || formData.motto != this.data.beforeData['motto']
         if (isChanged) {
           this.triggerEvent("save", formData)
         } else {
