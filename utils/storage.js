@@ -44,7 +44,7 @@ class Storage {
       } catch (e) {
         thisClass._debug(0, {
           key: params.key,
-          data: params.data,
+          data: params.data instanceof Object ? JSON.stringify(params.data) : params.data,
           path: params.path,
           functionName: params.functionName,
           errMsg: e
