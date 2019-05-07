@@ -10,7 +10,7 @@
           <view class='data-container'>
             <!-- 时间-->
             <view class='date-container'>
-              <text class='date-text'>{{item.arrangement_time}}</text>
+              <text class='date-text'>{{item.arrangement_date}} {{item.arrangement_time}} </text>
             </view>
             <!-- 科目及地点 -->
             <view class='content-container'>
@@ -20,7 +20,7 @@
           </view>
           <view class="editexam">
             <image class='modify-image' src='/images/index/diary.png' data-dayindex='{{dayIndex}}' data-index='{{index}}' bindtap="modItem" />
-            <image class='del-image' src='/images/index/modify/del.png' data-dayindex='{{dayIndex}} ' data-index='{{index}} ' bindtap="delItem" />
+            <image class='del-image' src='/images/index/modify/del.png' data-dayindex='{{dayIndex}}' data-index='{{index}}' bindtap="delItem" />
           </view>
         </view>
       </block>
