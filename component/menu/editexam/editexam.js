@@ -38,7 +38,7 @@ Component({
    */
   data: {
     flag: true,
-    plan_if_prompt: false,
+    arrange_if_prompt: false,
     promptTimeSelect: [
       ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15 ', '16', '17', '18', '19', '20', '21', '22', '23'],
       ['00']
@@ -53,38 +53,38 @@ Component({
     formSubmit(e) {
       var formData = e.detail.value
 
-      if (this.data.plan_if_prompt)
+      if (this.data.arrange_if_prompt)
         //设置了微信提醒
-        formData.plan_if_prompt_time = this.data.plan_if_prompt_time
+        formData.arrange_if_prompt_time = this.data.arrange_if_prompt_time
 
       //检查数据是否填写
-      if (formData.arrangement_content == "") {
+      if (formData.arrange_content == "") {
         this.tips("请输入内容")
         return
-      } else if (formData.arrangement_place == "") {
+      } else if (formData.arrange_place == "") {
         this.tips("请输入地点")
         return
-      } else if (formData.arrangement_date == "") {
+      } else if (formData.arrange_date == "") {
         this.tips("请设置考研的日期")
         return
-      } else if (formData.arrangement_time == "") {
+      } else if (formData.arrange_time == "") {
         this.tips("请设置考研的时间")
         return
-      } else if (dateUtil.isEarlyFromNow(formData.arrangement_date, formData.arrangement_time)) {
+      } else if (dateUtil.isEarlyFromNow(formData.arrange_date, formData.arrange_time)) {
         this.tips("考研的时间不能早于现在的时间")
         return
-      } else if (formData.plan_if_prompt) {
+      } else if (formData.arrange_if_prompt) {
         //设置了提醒，需要检查提醒时间是否正确
-        if (formData.plan_if_prompt_date == "") {
+        if (formData.arrange_if_prompt_date == "") {
           this.tips("请设置提醒日期")
           return
-        } else if (formData.plan_if_prompt_time == "") {
+        } else if (formData.arrange_if_prompt_time == "") {
           this.tips("请设置提醒时间")
           return
-        } else if (dateUtil.isEarlyFromNow(formData.plan_if_prompt_date, formData.plan_if_prompt_time)) {
+        } else if (dateUtil.isEarlyFromNow(formData.arrange_if_prompt_date, formData.arrange_if_prompt_time)) {
           this.tips("提醒时间不能早于现在的时间")
           return
-        } else if (dateUtil.isLateFromDate(formData.plan_if_prompt_date, formData.plan_if_prompt_time, formData.arrangement_date, formData.arrangement_time)) {
+        } else if (dateUtil.isLateFromDate(formData.arrange_if_prompt_date, formData.arrange_if_prompt_time, formData.arrange_date, formData.arrange_time)) {
           this.tips("提醒时间不能晚于考研的时间")
           return
         }
@@ -93,15 +93,17 @@ Component({
       //数据没有问题，区分是修改计划还是添加计划
       if (this.data.isModify) {
         //修改计划，检查是否修改过
-        var changeFlag = formData.arrangement_content != this.data.arrangement_content ||
-          formData.arrangement_place != this.data.arrangement_place ||
-          formData.arrangement_date != this.data.arrangement_date ||
-          formData.arrangement_time != this.data.arrangement_time ||
-          (this.data.plan_if_prompt ? 0 : 1 != formData.plan_if_prompt ? 0 : 1) ||
-          formData.plan_if_prompt_date != this.data.plan_if_prompt_date ||
-          formData.plan_if_prompt_time != this.data.plan_if_prompt_time
+        var changeFlag = formData.arrange_content != this.data.arrange_content ||
+          formData.arrange_place != this.data.arrange_place ||
+          formData.arrange_date != this.data.arrange_date ||
+          formData.arrange_time != this.data.arrange_time ||
+          (this.data.arrange_if_prompt ? 0 : 1 != formData.arrange_if_prompt ? 0 : 1) ||
+          formData.arrange_if_prompt_date != this.data.arrange_if_prompt_date ||
+          formData.arrange_if_prompt_time != this.data.arrange_if_prompt_time
         if (changeFlag) {
           //修改过
+          formData.arrange_id = this.data.arrange_id
+          formData.arrange_form_id = e.detail.formId
           this.triggerEvent("modify_confirm", formData)
         } else {
           //没有修改过，等同于取消
@@ -129,20 +131,20 @@ Component({
           dateStart: dateUtil.getFormatDate(),
           timeStart: dateUtil.getFormatTime(),
           promptDateStart: dateUtil.getFormatDate(),
-          promptDateEnd: this.data.arrangement_date,
+          promptDateEnd: this.data.arrange_date,
         })
       } else {
         //添加
         this.setData({
           flag: false,
-          arrangement_id: "",
-          arrangement_content: "",
-          arrangement_place: "",
-          plan_if_prompt: false,
-          arrangement_date: "",
-          arrangement_time: "",
-          plan_if_prompt_date: "",
-          plan_if_prompt_time: "",
+          arrange_id: "",
+          arrange_content: "",
+          arrange_place: "",
+          arrange_if_prompt: false,
+          arrange_date: "",
+          arrange_time: "",
+          arrange_if_prompt_date: "",
+          arrange_if_prompt_time: "",
           dateStart: dateUtil.getFormatDate(),
           timeStart: dateUtil.getFormatTime(),
           promptDateStart: dateUtil.getFormatDate(),
@@ -166,9 +168,9 @@ Component({
           timeStart: dateUtil.getFormatTime(),
         })
         //现在时刻晚于重设日期后的时间，时间要重设
-        if (this.data.arrangement_time != "" && dateUtil.isLateFromDate(dateUtil.getFormatDate(), dateUtil.getFormatTime(), e.detail.value, this.data.arrangement_time)) {
+        if (this.data.arrange_time != "" && dateUtil.isLateFromDate(dateUtil.getFormatDate(), dateUtil.getFormatTime(), e.detail.value, this.data.arrange_time)) {
           this.setData({
-            arrangement_time: dateUtil.getFormatTime(),
+            arrange_time: dateUtil.getFormatTime(),
           })
         }
       } else {
@@ -178,33 +180,33 @@ Component({
         })
       }
       this.setData({
-        arrangement_date: e.detail.value,
+        arrange_date: e.detail.value,
         promptDateEnd: e.detail.value,
-        plan_if_prompt_date: "",
-        plan_if_prompt_time: "",
+        arrange_if_prompt_date: "",
+        arrange_if_prompt_time: "",
       })
     },
 
     //时间选择
     bindTimeChange(e) {
       this.setData({
-        arrangement_time: e.detail.value,
-        plan_if_prompt_date: "",
-        plan_if_prompt_time: "",
+        arrange_time: e.detail.value,
+        arrange_if_prompt_date: "",
+        arrange_if_prompt_time: "",
       })
     },
 
     //是否设置微信提醒
     switchChange(e) {
       this.setData({
-        plan_if_prompt: e.detail.value
+        arrange_if_prompt: e.detail.value
       })
     },
 
     //改变微信提醒日期
     bindPromptDateChange(e) {
       this.setData({
-        plan_if_prompt_date: e.detail.value
+        arrange_if_prompt_date: e.detail.value
       })
     },
 
@@ -214,7 +216,7 @@ Component({
       var i = e.detail.value
       this.setData({
         promptTimeSelectIndex: e.detail.value,
-        plan_if_prompt_time: t[0][i[0]] + ":" + t[1][i[1]]
+        arrange_if_prompt_time: t[0][i[0]] + ":" + t[1][i[1]]
       })
     },
 

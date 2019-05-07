@@ -41,21 +41,21 @@ Page({
   modItem: function(e) {
     var index = e.currentTarget.dataset
     var data = this.data.examList[index.dayindex]['data'][index.index]
-    this.data.modify_arrangement_id = this.data.examList[index.dayindex]['data'][index.index].arrangement_id
+    this.data.modify_arrange_id = this.data.examList[index.dayindex]['data'][index.index].arrange_id
 
     if (!this.editexam)
       this.editexam = this.selectComponent("#editexam") //获得edit组件
 
     this.editexam.setData({
       isModify: true,
-      arrangement_id: data.arrangement_id,
-      arrangement_content: data.arrangement_content,
-      arrangement_place: data.arrangement_place,
-      plan_if_prompt: data.plan_if_prompt,
-      arrangement_date: data.arrangement_date,
-      arrangement_time: data.arrangement_time,
-      plan_if_prompt_date: data.plan_if_prompt_date,
-      plan_if_prompt_time: data.plan_if_prompt_time,
+      arrange_id: data.arrange_id,
+      arrange_content: data.arrange_content,
+      arrange_place: data.arrange_place,
+      arrange_if_prompt: data.arrange_if_prompt,
+      arrange_date: data.arrange_date,
+      arrange_time: data.arrange_time,
+      arrange_if_prompt_date: data.arrange_if_prompt_date,
+      arrange_if_prompt_time: data.arrange_if_prompt_time,
     })
     this.editexam.showEdit()
   },
@@ -68,13 +68,16 @@ Page({
     var index = e.currentTarget.dataset //index: {dayindex: "0", index: "0"}
     wx.showModal({
       title: '提示',
-      content: '你确定要删除这项计划吗？\r\n',
+      content: '你确定要删除这项计划吗？\r\n' + that.data.examList[index.dayindex]['data'][index.index].arrange_content,
       confirmColor: "#04838e",
       success(res) {
         if (res.confirm) {
           //确认删除
+          wx.showLoading({
+            title: '删除中',
+          })
           model.deleteArrangements({
-            id: that.data.examList[index.dayindex]['data'][index.index].arrangement_id,
+            id: that.data.examList[index.dayindex]['data'][index.index].arrange_id,
             success: function() {
               that._removeItemFromList(index.dayindex, index.index)
             },
@@ -97,8 +100,6 @@ Page({
    */
   modify_confirm: function(e) {
     var formData = e.detail
-    formData.arrangement_id = this.data.modify_arrangement_id
-    console.log("修改")
     console.log(formData)
   },
 
@@ -108,8 +109,12 @@ Page({
   add_confirm: function(e) {
     var formData = e.detail
     console.log(formData)
-    console.log("添加")
-    console.log(formData)
+    model.addArramgements({
+      data: params.data,
+      success: params.success,
+      statusCodeFail: params.statusCodeFail,
+      fail: params.fail,
+    })
   },
 
   /**
@@ -178,7 +183,7 @@ Page({
   _removeItemFromList(dayindex, index) {
     var that = this
     var newList = that.data.examList
-    newList[dayindex].data.splice(index, 1) //删除制定项目
+    newList[dayindex].data.splice(index, 1) //删除指定项目
     if (newList[dayindex].data.length == 0) {
       //如果删除项目后该日期的数组长度为，移除该日期
       newList.splice(dayindex, 1)
@@ -279,6 +284,13 @@ Page({
         isScroll: true,
         examList: this.data.examList,
         lastScroll: [e.currentTarget.dataset.dayindex, e.currentTarget.dataset.index]
+      })
+    } else {
+      item.right = 0
+      this.setData({
+        isScroll: true,
+        examList: this.data.examList,
+        lastScroll: [-1, -1],
       })
     }
   },
