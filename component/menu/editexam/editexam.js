@@ -93,13 +93,13 @@ Component({
       //数据没有问题，区分是修改计划还是添加计划
       if (this.data.isModify) {
         //修改计划，检查是否修改过
-        var changeFlag = formData.arrange_content != this.data.arrange_content ||
-          formData.arrange_place != this.data.arrange_place ||
-          formData.arrange_date != this.data.arrange_date ||
-          formData.arrange_time != this.data.arrange_time ||
-          (this.data.arrange_if_prompt ? 0 : 1 != formData.arrange_if_prompt ? 0 : 1) ||
-          formData.arrange_if_prompt_date != this.data.arrange_if_prompt_date ||
-          formData.arrange_if_prompt_time != this.data.arrange_if_prompt_time
+        var changeFlag = formData.arrange_content != this.data.beforeData.arrange_content ||
+          formData.arrange_place != this.data.beforeData.arrange_place ||
+          formData.arrange_date != this.data.beforeData.arrange_date ||
+          formData.arrange_time != this.data.beforeData.arrange_time ||
+          (formData.arrange_if_prompt ? 0 : 1 != this.data.beforeData.arrange_if_prompt ? 0 : 1) ||
+          formData.arrange_if_prompt_date != this.data.beforeData.arrange_if_prompt_date ||
+          formData.arrange_if_prompt_time != this.data.beforeData.arrange_if_prompt_time
         if (changeFlag) {
           //修改过
           formData.arrange_id = this.data.arrange_id

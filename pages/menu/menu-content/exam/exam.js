@@ -42,20 +42,24 @@ Page({
     var index = e.currentTarget.dataset
     var data = this.data.examList[index.dayindex]['data'][index.index]
     this.data.modify_arrange_id = this.data.examList[index.dayindex]['data'][index.index].arrange_id
+    this.setData({
+      modifyIndex: index,
+    })
 
     if (!this.editexam)
       this.editexam = this.selectComponent("#editexam") //获得edit组件
 
     this.editexam.setData({
       isModify: true,
+      beforeData: data, //原始信息，用于判断是否修改过信息
       arrange_id: data.arrange_id,
       arrange_content: data.arrange_content,
       arrange_place: data.arrange_place,
-      arrange_if_prompt: data.arrange_if_prompt,
       arrange_date: data.arrange_date,
       arrange_time: data.arrange_time,
-      arrange_if_prompt_date: data.arrange_if_prompt_date,
-      arrange_if_prompt_time: data.arrange_if_prompt_time,
+      arrange_if_prompt: data.arrange_if_prompt,
+      arrange_if_prompt_date: data.arrange_if_prompt ? data.arrange_if_prompt_date : "",
+      arrange_if_prompt_time: data.arrange_if_prompt ? data.arrange_if_prompt_time : "",
     })
     this.editexam.showEdit()
   },
@@ -99,8 +103,50 @@ Page({
    * [事件_修改对话框_确定]
    */
   modify_confirm: function(e) {
-    var formData = e.detail
-    console.log(formData)
+    var formData = e.detail //修改后的数据
+    var that = this
+    wx.showLoading({
+      title: '修改中',
+    })
+    model.modifyArrangements({
+      data: formData,
+      success: function() {
+        var index = that.data.modifyIndex
+        var newData = that.data.examList
+        newData[index.dayindex]['data'][index.index] = formData
+
+        //服务器修改成功，写入缓存
+        var s = new Storage()
+        s.save({
+          key: 'exam_arrangement',
+          data: newData,
+          success: function() {
+            that.setData({
+              examList: newData,
+              modifyIndex: {}, //修改完成，清空下标
+            })
+            wx.hideLoading()
+            that.editexam.hideEdit()
+            wx.showToast({
+              title: '修改成功',
+              duration: 1800,
+            })
+          },
+          fail: function() {
+            wx.hideLoading()
+            that._errorSave()
+          },
+        })
+      },
+      statusCodeFail: function() {
+        wx.hideLoading()
+        that._errorServer()
+      },
+      fail: function() {
+        wx.hideLoading()
+        that.isOffline()
+      }
+    })
   },
 
   /**
@@ -109,12 +155,14 @@ Page({
   add_confirm: function(e) {
     var formData = e.detail
     console.log(formData)
+    /*
     model.addArramgements({
-      data: params.data,
-      success: params.success,
-      statusCodeFail: params.statusCodeFail,
-      fail: params.fail,
+      data: formData,
+      success: function() {},
+      statusCodeFail: function() {},
+      fail: function() {},
     })
+    */
   },
 
   /**
@@ -198,10 +246,14 @@ Page({
           lastScroll: [-1, -1], //重设上一个滑出的项
         })
         wx.hideLoading()
+        wx.showToast({
+          title: '删除成功',
+          duration: 1800,
+        })
       },
       fail: function() {
-        that._errorSave()
         wx.hideLoading()
+        that._errorSave()
       },
     })
   },
