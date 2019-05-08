@@ -11,6 +11,7 @@ class Exam {
    */
   getAllArrangements(params) {
     var r = new Request()
+    r.setFailInfo("exam-model.js", "getAllArrangements")
     r.request({
       url: '/user/arrangements/all',
       success: params.success,
@@ -23,6 +24,7 @@ class Exam {
    */
   addArramgements(params) {
     var r = new Request()
+    r.setFailInfo("exam-model.js", "addArramgements")
     r.request({
       url: '/user/arrangements/add',
       method: "POST",
@@ -38,6 +40,7 @@ class Exam {
    */
   modifyArrangements(params) {
     var r = new Request()
+    r.setFailInfo("exam-model.js", "modifyArrangements")
     r.request({
       url: '/user/arrangements/modify',
       method: "POST",
@@ -53,6 +56,7 @@ class Exam {
    */
   deleteArrangements(params) {
     var r = new Request()
+    r.setFailInfo("exam-model.js", "deleteArrangements")
     r.request({
       url: '/user/arrangements/delete',
       data: {
