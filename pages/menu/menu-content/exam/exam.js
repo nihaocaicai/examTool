@@ -172,9 +172,15 @@ Page({
                 data: newList, //新的列表
                 success: function() {
                   that.setData({
-                    examList: wx.getStorageSync('exam_arrangement'),
+                    examList: newList,
                     lastScroll: [-1, -1], //重设上一个滑出的项
                   })
+                  if (newList.length == 0) {
+                    //没有数据了，要设置提示
+                    that.setData({
+                      showView: false,
+                    })
+                  }
                   wx.hideLoading()
                   wx.showToast({
                     title: '删除成功',
@@ -302,7 +308,7 @@ Page({
   _initData() {
     var that = this
     wx.showLoading({
-      title: '加载中',
+      title: '拼命加载中',
     })
     model.getAllArrangements({
       success: function(data) {

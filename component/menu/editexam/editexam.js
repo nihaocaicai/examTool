@@ -41,7 +41,7 @@ Component({
   data: {
     flag: true,
     arrange_if_prompt: false,
-    limitTips: '由于微信限制，只能在未来 7 天内的时间内提示你',
+    limitTips: '由于微信限制，只能设置在未来 7 天内提示',
   },
 
   /**
