@@ -32,20 +32,26 @@
         <!-- 是否开启微信提示 -->
         <view class="plan-content-container">
           <text>微信提示：</text>
-          <switch name='arrange_if_prompt' checked="{{arrange_if_prompt}}" color="#04838e" bindchange="switchChange" />
+          <switch name='arrange_if_prompt' bindtap="tapSwitch" disabled="{{disableSwitchChange}}" checked="{{arrange_if_prompt}}" color="#04838e" bindchange="switchChange" />
         </view>
         <!-- 微信提示时间选择 -->
-        <view>
-          <view class="plan-content-container" wx:if="{{arrange_if_prompt}}">
+        <view wx:if="{{arrange_if_prompt}}">
+          <view class="plan-content-container">
             <picker name='arrange_if_prompt_date' mode="date" value="{{arrange_if_prompt_date}}" start="{{promptDateStart}}" end="{{promptDateEnd}}" bindchange="bindPromptDateChange">
               <text>提示日期: {{arrange_if_prompt_date}}</text>
             </picker>
           </view>
-          <view class="plan-content-container" wx:if="{{arrange_if_prompt}}">
-            <picker mode="multiSelector" range="{{promptTimeSelect}}" value="{{promptTimeSelectIndex}}" bindchange="bindPromptTimeChange">
+          <view class="plan-content-container">
+            <picker range="{{promptTimeSelect}}" value="{{promptTimeSelectIndex}}" bindchange="bindPromptTimeChange">
               <text>提示时间: {{arrange_if_prompt_time}}</text>
             </picker>
           </view>
+          <view wx:if="{{isModify}}" style='margin-top: 20rpx; text-align:center; font-size: 28rpx; color: black;'>
+            {{limitTips}}
+          </view>
+        </view>
+        <view wx:if="{{!isModify}}" style='margin-top: 20rpx; text-align:center; font-size: 28rpx; color: black;'>
+          {{limitTips}}
         </view>
       </view>
 

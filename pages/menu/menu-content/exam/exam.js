@@ -136,7 +136,7 @@ Page({
       },
       fail: function() {
         wx.hideLoading()
-        that.isOffline()
+        that._isOffline("添加")
       }
     })
   },
@@ -193,7 +193,7 @@ Page({
             },
             fail: function() {
               wx.hideLoading()
-              that.isOffline()
+              that._isOffline("删除")
             }
           })
         }
@@ -284,7 +284,7 @@ Page({
       },
       fail: function() {
         wx.hideLoading()
-        that.isOffline()
+        that._isOffline("修改")
       }
     })
   },
@@ -412,8 +412,6 @@ Page({
       list.sort(function(a, b) {
         var a1 = new Date(a.arrange_date + " " + a.arrange_time).getTime()
         var b1 = new Date(b.arrange_date + " " + b.arrange_time).getTime()
-        console.log(a1)
-        console.log(b1)
         if (a1 < b1)
           return -1
         else if (a1 > b1)

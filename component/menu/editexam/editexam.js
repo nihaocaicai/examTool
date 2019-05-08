@@ -2,6 +2,8 @@ import {
   DateUtil
 } from "../../../utils/DateUtil.js"
 var dateUtil = new DateUtil()
+const defaultPromptTimeSelect = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15 ', '16', '17', '18', '19', '20', '21', '22', '23'] // 默认提醒时间选择器
+const defaultPromptTimeSelectIndex = [0, 0]
 
 Component({
   options: {
@@ -39,11 +41,7 @@ Component({
   data: {
     flag: true,
     arrange_if_prompt: false,
-    promptTimeSelect: [
-      ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15 ', '16', '17', '18', '19', '20', '21', '22', '23'],
-      ['00']
-    ], //提醒时间选择器
-    promptTimeSelectIndex: [0, 0],
+    limitTips:'由于微信限制，只能在未来 7 天内的时间内提示你',
   },
 
   /**
@@ -122,6 +120,8 @@ Component({
     hideEdit: function() {
       this.setData({
         flag: true,
+        arrange_if_prompt: false,
+        disableSwitchChange: false,
       })
     },
 
@@ -129,17 +129,28 @@ Component({
     showEdit() {
       if (this.data.isModify) {
         //修改
+        var d = new Date(this.data.arrange_date + " " + this.data.arrange_time)
+        var ifPrompt = this.data.arrange_if_prompt
         this.setData({
           flag: false,
+          arrange_if_prompt: dateUtil.countDownTimeFromToday(d, 604800000) == 1 ? false : ifPrompt,
           dateStart: dateUtil.getFormatDate(),
-          timeStart: dateUtil.getFormatTime(),
-          promptDateStart: dateUtil.getFormatDate(),
-          promptDateEnd: this.data.arrange_date,
+          timeStart: this.data.arrange_date == dateUtil.getFormatDate() ? dateUtil.getFormatTime() : "00:00",
+          promptDateStart: dateUtil.getFormatTime(1) == 23 ? dateUtil.getNextDate() : dateUtil.getFormatDate(),
+          promptDateEnd: dateUtil.getPromptDate(this.data.arrange_date),
         })
+        if (!this.data.arrange_if_prompt) {
+          this.setData({
+            arrange_if_prompt_date: "",
+            arrange_if_prompt_time: "",
+          })
+        }
+        this._changePromptTimeChangeSelect(0)
       } else {
         //添加
         this.setData({
           flag: false,
+          disableSwitchChange: true,
           arrange_id: "",
           arrange_content: "",
           arrange_place: "",
@@ -148,8 +159,10 @@ Component({
           arrange_time: "",
           arrange_if_prompt_date: "",
           arrange_if_prompt_time: "",
+          promptTimeSelect: defaultPromptTimeSelect,
+          promptTimeSelectIndex: defaultPromptTimeSelectIndex,
           dateStart: dateUtil.getFormatDate(),
-          timeStart: dateUtil.getFormatTime(),
+          timeStart: "00:00",
           promptDateStart: dateUtil.getFormatDate(),
           promptDateEnd: "",
         })
@@ -164,39 +177,67 @@ Component({
 
     //日期选择
     bindDateChange(e) {
-      //检查是不是今天的日期
-      if (dateUtil.countDownFromToday(e.detail.value) == 0) {
-        //今天的日期，时间要从现在时刻开始选择
-        this.setData({
-          timeStart: dateUtil.getFormatTime(),
-        })
-        //现在时刻晚于重设日期后的时间，时间要重设
-        if (this.data.arrange_time != "" && dateUtil.isLateFromDate(dateUtil.getFormatDate(), dateUtil.getFormatTime(), e.detail.value, this.data.arrange_time)) {
+      if (this.data.arrange_date != e.detail.value) {
+        //检查是不是今天的日期
+        if (dateUtil.countDownDateFromToday(e.detail.value) == 0) {
+          //今天的日期，时间要从现在时刻开始选择
           this.setData({
-            arrange_time: dateUtil.getFormatTime(),
+            timeStart: dateUtil.getFormatTime(),
+          })
+          //现在时刻晚于重设日期后的时间，时间要重设
+          if (this.data.arrange_time != "" && dateUtil.isLateFromDate(dateUtil.getFormatDate(), dateUtil.getFormatTime(), e.detail.value, this.data.arrange_time)) {
+            this.setData({
+              arrange_time: dateUtil.getFormatTime(),
+            })
+          }
+        } else {
+          //不是今天的日期，时间可以从0点开始选择
+          this.setData({
+            timeStart: "00:00",
           })
         }
-      } else {
-        //不是今天的日期，时间可以从0点开始选择
+
         this.setData({
-          timeStart: "00:00",
+          arrange_date: e.detail.value,
+          disableSwitchChange: true,
+          arrange_if_prompt: false,
+          arrange_if_prompt_date: "",
+          arrange_if_prompt_time: "",
         })
+        this._checkDate()
       }
-      this.setData({
-        arrange_date: e.detail.value,
-        promptDateEnd: e.detail.value,
-        arrange_if_prompt_date: "",
-        arrange_if_prompt_time: "",
-      })
     },
 
     //时间选择
     bindTimeChange(e) {
-      this.setData({
-        arrange_time: e.detail.value,
-        arrange_if_prompt_date: "",
-        arrange_if_prompt_time: "",
-      })
+      if (this.data.arrange_time != e.detail.value) {
+        this.setData({
+          arrange_time: e.detail.value,
+          disableSwitchChange: true,
+          arrange_if_prompt: false,
+          arrange_if_prompt_date: "",
+          arrange_if_prompt_time: "",
+        })
+        this._checkDate()
+      }
+    },
+
+    //检查日期
+    _checkDate() {
+      var date = this.data.arrange_date
+      var time = this.data.arrange_time
+      if (this.data.disableSwitchChange && date && time) {
+        //日期设置好了，解除按钮禁止
+        this.setData({
+          disableSwitchChange: false,
+        })
+      }
+      if (date && time) {
+        this.setData({
+          promptDateEnd: dateUtil.getPromptDate(date),
+        })
+        this._changePromptTimeChangeSelect()
+      }
     },
 
     //是否设置微信提醒
@@ -204,12 +245,54 @@ Component({
       this.setData({
         arrange_if_prompt: e.detail.value
       })
+      if (!e.detail.value) {
+        //不开启提醒，清除数据
+        this.setData({
+          arrange_if_prompt_date: "",
+          arrange_if_prompt_time: "",
+        })
+      }
+    },
+
+    /**
+     * [点击微信提醒按钮] 
+     * 点击微信提醒按钮前检查是否设置考研的日期和时间
+     */
+    tapSwitch() {
+      if (!this.data.arrange_date || !this.data.arrange_time) {
+        wx.showModal({
+          title: '提示',
+          content: '请先设置考研的日期和时间后再试试',
+          showCancel: false,
+          confirmText: "好的",
+          confirmColor: "#04838e"
+        })
+      }
     },
 
     //改变微信提醒日期
     bindPromptDateChange(e) {
+      if (this.data.arrange_if_prompt_date != e.detail.value) {
+        this.setData({
+          arrange_if_prompt_date: e.detail.value,
+          arrange_if_prompt_time: "",
+        })
+        this._changePromptTimeChangeSelect()
+      }
+    },
+
+    //改变微信提醒时间选择范围
+    _changePromptTimeChangeSelect(type) {
+      var date = this.data.arrange_if_prompt_date
+      var promptTimeSelect = [].concat(defaultPromptTimeSelect) //数组是引用，不是赋值，需要进行复制操作
+      if (date) {
+        var dayArray = dateUtil.getPromptTime(date)
+        if (dayArray[1] - dayArray[0] != 24)
+          promptTimeSelect = promptTimeSelect.splice(dayArray[0], dayArray[1])
+      }
       this.setData({
-        arrange_if_prompt_date: e.detail.value
+        promptTimeSelect: promptTimeSelect,
+        promptTimeSelectIndex: 0,
       })
     },
 
@@ -218,8 +301,8 @@ Component({
       var t = this.data.promptTimeSelect
       var i = e.detail.value
       this.setData({
-        promptTimeSelectIndex: e.detail.value,
-        arrange_if_prompt_time: t[0][i[0]] + ":" + t[1][i[1]]
+        promptTimeSelectIndex: i,
+        arrange_if_prompt_time: t[i] + ":00"
       })
     },
 
