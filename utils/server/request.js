@@ -23,7 +23,8 @@ class Request {
    * 
    * success: 检查成功回调函数，返回成功获取到的值(res.data); 
    * 
-   * statusCodeFail: 服务器返回代码错误信息回调函数，返回错误信息(obj = {statusCode, data}); 
+   * statusCodeFail: 服务器返回代码错误信息回调函数，返回错误信息(obj = {statusCode, data});
+   * 如果不设置statusCodeFail, 将默认调用 fail 
    * 
    * fail : 连接失败回调函数，返回错误信息(res); 
    * 
