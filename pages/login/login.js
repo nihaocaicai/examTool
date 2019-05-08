@@ -1,5 +1,5 @@
 import {
-  Login
+  LoginComponent
 } from "login-model.js"
 
 import {
@@ -11,7 +11,7 @@ import {
 } from "../../utils/debug.js"
 
 
-var model = new Login()
+var model = new LoginComponent()
 var debug = new Debug()
 var openDebug = true //开启调试功能
 
@@ -19,7 +19,8 @@ Page({
   data: {
     loading: true, //是否要显示 加载中 页面
     needAuthorize: false, //是否需要显示 点击授权 按钮
-    needDelete: false, //需要删除小程序提示
+    needDeleteTips: false, //需要删除小程序提示
+    loginFailTips: false, //提示加载失败
   },
 
   onShow: function() {
@@ -37,7 +38,7 @@ Page({
       this.setData({
         needAuthorize: false,
         loading: false,
-        needDelete: true, //需要删除小程序提示
+        needDeleteTips: true, //需要删除小程序提示
       })
     } else {
       //检查微信授权
@@ -493,14 +494,22 @@ Page({
     var that = this
     wx.showModal({
       title: '提示',
-      content: '获取信息失败。请检查网络连接后重试',
+      content: '获取信息失败。请检查网络连接后尝试重新连接',
       confirmColor: '#04838e',
+      cancelText: "算了",
       confirmText: '重试',
-      showCancel: false,
-      success: function() {
-        wx.reLaunch({
-          url: '/pages/login/login',
-        })
+      success: function(res) {
+        if (res.confirm) {
+          //重试
+          wx.reLaunch({
+            url: '/pages/login/login',
+          })
+        } else if (res.cancel) {
+          //取消
+          that.setData({
+            loginFailTips: true,
+          })
+        }
       }
     })
   },
