@@ -7,11 +7,12 @@ import {
 } from "../../utils/storage.js"
 
 import {
-  Index
+  IndexComponent
 } from "index-model.js"
 
 var dateUtil = new DateUtil()
-var model = new Index()
+var model = new IndexComponent()
+var planModifyList = new Map()
 
 Page({
   data: {
@@ -20,7 +21,7 @@ Page({
 
   onLoad: function() {
     wx.showLoading({
-      title: '加载计划中',
+      title: '拼命加载中',
     })
     this._checkEverydayPlan() //检查计划是不是今天的
   },
@@ -29,14 +30,30 @@ Page({
 
   },
 
+  onHide: function() {
+    if (planModifyList.size != 0) {
+      this._modifyFinish() // 批量提交修改的计划
+    }
+  },
+
   /**
    * [星标按钮点击事件]
    */
   clickStar: function(e) {
     var index = e.currentTarget.dataset.index
+    var plan_id = e.currentTarget.dataset.id
     var plans = this.data.everyday_planList
     var flag = plans.data[index].plan_if_finish // 获取星标状态
     plans.data[index].plan_if_finish = !flag //修改对应计划的星标状态
+
+    //将修改过的记录添加到列表中
+    if (planModifyList.get(plan_id) != undefined) {
+      //有记录，移除
+      planModifyList.delete(plan_id)
+    } else {
+      //没有记录，添加
+      planModifyList.set(plan_id, !flag ? 1 : 0)
+    }
     this.setData({
       everyday_planList: plans
     })
@@ -45,8 +62,45 @@ Page({
   /**
    * [批量提交星星]
    */
-  modifyFinish() {
-
+  _modifyFinish() {
+    var ids = new Array()
+    var values = new Array()
+    var that = this
+    planModifyList.forEach(function(value, id) {
+      ids.push(id)
+      values.push(value)
+    })
+    model.batchModifyToServer({
+      data: {
+        plan_id: "[" + ids.toString() + "]",
+        plan_if_finish: "[" + values.toString() + "]",
+      },
+      success: function() {
+        var s = new Storage()
+        s.save({
+          key: 'everyday_planList',
+          data: that.data.everyday_planList,
+          success: function() {
+            planModifyList = new Map()
+            wx.showToast({
+              title: '计划已同步',
+            })
+          },
+          fail: function() {
+            wx.showToast({
+              title: '计划同步失败',
+              image: '/images/fail.png'
+            })
+          },
+        })
+      },
+      fail: function() {
+        wx.showToast({
+          title: '计划同步失败',
+          image: '/images/fail.png'
+        })
+      },
+    })
   },
 
   /**
