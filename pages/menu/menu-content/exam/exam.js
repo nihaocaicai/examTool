@@ -1,12 +1,12 @@
 import {
-  Exam
+  ExamComponent
 } from "exam-model.js"
 
 import {
   Storage
 } from "../../../../utils/storage.js"
 
-var model = new Exam()
+var model = new ExamComponent()
 
 Page({
   data: {

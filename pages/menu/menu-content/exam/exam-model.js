@@ -5,7 +5,7 @@ import {
 //var examData = require('../../../../data/local_exam_database.js')
 //wx.setStorageSync("exam_arrangement", examData.examList)
 
-class Exam {
+class ExamComponent {
   /**
    * [获取考研安排]
    */
@@ -70,5 +70,5 @@ class Exam {
 }
 
 export {
-  Exam
+  ExamComponent
 }

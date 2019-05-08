@@ -1,12 +1,12 @@
 import {
-  Setting
+  SettingComponent
 } from "setting-model.js"
 
 import {
   Storage
 } from "../../../../utils/storage.js"
 
-var model = new Setting()
+var model = new SettingComponent()
 
 Page({
   onLoad: function() {
@@ -237,6 +237,7 @@ Page({
       title: '什么是离线模式？',
       content: '当手机没有网络或者无法连接到服务器时，软件会进入离线模式。在离线模式下，你只能查看本地已有的计划、日记和信息，不能进行添加、删除和修改操作。',
       showCancel: false,
+      confirmText: '知道了',
       confirmColor: '#04838e'
     })
   },
