@@ -1,3 +1,9 @@
+import {
+  DiaryComponent
+} from "diary-model.js"
+
+var model = new DiaryComponent()
+
 Component({
   options: {
     multipleSlots: true // 在组件定义时的选项中启用多slot支持
@@ -6,16 +12,14 @@ Component({
   /**
    * 组件的属性列表
    */
-  properties: {
-
-  },
+  properties: {},
 
   /**
    * 组件的初始数据
    */
   data: {
     flag: true,
-    diaryLocation: "",
+    diary_write_place: "",
     diaryContentMin: 0, //最少字数
     diaryContentMax: 140, //最多字数 (根据自己需求改变)
   },
@@ -26,10 +30,10 @@ Component({
   methods: {
     formSubmit(e) {
       var rawData = e.detail.value
-      e.detail.value['diaryLocation'] = this.data.diaryLocation
+      e.detail.value['diary_write_place'] = this.data.diary_write_place
       if (this.data.item == null) {
         //新增日记
-        if (rawData.diaryTitle == "") {
+        if (rawData.diary_title == "") {
           wx.showModal({
             title: '提示',
             content: '请填写标题',
@@ -37,7 +41,7 @@ Component({
             confirmColor: "#04838e",
           })
           return
-        } else if (rawData.diaryContent == "") {
+        } else if (rawData.diary_content == "") {
           wx.showModal({
             title: '提示',
             content: '请填写内容',
@@ -53,7 +57,7 @@ Component({
           //没有修改过日记，将对话框隐藏后返回
           this.hideDiary()
           return
-        } else if (rawData.diaryTitle == "") {
+        } else if (rawData.diary_title == "") {
           wx.showModal({
             title: '提示',
             content: '请填写标题',
@@ -61,7 +65,7 @@ Component({
             confirmColor: "#04838e",
           })
           return
-        } else if (rawData.diaryContent == "") {
+        } else if (rawData.diary_content == "") {
           wx.showModal({
             title: '提示',
             content: '请填写内容',
@@ -136,6 +140,9 @@ Component({
       this.triggerEvent("hidden")
     },
 
+    //对话框显示时禁止下拉
+    preventTouchMove: function() {},
+
     //获取当前位置
     getLocation() {
       var that = this
@@ -144,45 +151,74 @@ Component({
         success: function(res) {
           if (res.name != "")
             that.setData({
-              diaryLocation: res.name
+              diary_write_place: res.name
             })
         },
       })
     },
 
+
+    //获取新建/修改日记时候的日期和时间
+    getFormatTime(ifDate) {
+      var that =this
+      var date = new Date()
+      var year = date.getFullYear()
+      var month = date.getMonth() + 1
+      var day = date.getDate()
+
+      var hour = date.getHours()
+      var minute = date.getMinutes()
+      var second = date.getSeconds()
+
+      if (ifDate == "date") {
+        return [year, month, day].map(that.formatNumber).join('-') 
+      } else {
+        return [hour, minute, second].map(that.formatNumber).join(':')
+      }
+
+    },
+    formatNumber(n) {
+      n = n.toString()
+      return n[1] ? n : '0' + n
+    },
+
+
+    //检查是否有信息键入/修改过
+    checkChange(e) {
+      var beforeTitle = this.data.diaryTitle
+      var beforeContent = this.data.diaryContent
+      var beforeLocation = this.data.diaryLocation
+      return !(beforeTitle == e.detail.value.diaryTitle && beforeContent == e.detail.value.diaryContent && beforeLocation == e.detail.value.diaryLocation)
+    },
+
     //保存日记
     addDiary(rawData) {
-      //未完成
       var that = this
       wx.showLoading({
         title: '保存信息中',
       })
-      //向服务器发起请求，要求保存日记
-      //传送数据：封装好的数据
-      //success: 服务器存储成功，修改本地缓存
+      //向服务器发起请求，添加日记
+      rawData.diary_write_date = that.getFormatTime("date")
+      rawData.diary_write_time = that.getFormatTime("time")
+      // 显示加载中
       wx.hideLoading()
-      try {
-        this.triggerEvent("add_confirm", rawData)
-        this.hideDiary()
-      } catch (e) {
-        console.log("修改单条日记出错，在 modifyDiary 中，错误原因:\n", e)
-        wx.showModal({
-          title: '提示',
-          content: '修改日记失败，可能是是手机存储空间不足，请清理一下手机空间后重试',
-          confirmColor: '#04838e',
-          showCancel: false,
-        })
-      }
-      //fail: 服务器连接失败
-      /*
-      wx.hideLoading()
-      wx.showModal({
-        title: '提示',
-        content: '保存日记失败，请检查网络连接是否正确',
-        confirmColor: '#04838e',
-        showCancel: false,
-      })
-      */
+      model.addDiary(((data) => {
+        if (data.error_code == '0') {
+          wx.showToast({
+            title: '添加成功',
+            icon: 'success',
+            duration: 800
+          })
+          this.hideDiary()
+        } else {
+          wx.showToast({
+            title: '添加失败',
+            icon: 'fail',
+            duration: 800
+          })
+          this.hideDiary()
+        }
+      }), rawData);
     },
 
     //修改日记
@@ -209,45 +245,7 @@ Component({
           showCancel: false,
         })
       }
-      //fail: 服务器连接失败
-      /*
-      wx.hideLoading()
-      wx.showModal({
-        title: '提示',
-        content: '修改日记失败，请检查网络连接是否正确',
-        confirmColor: '#04838e',
-        showCancel: false,
-      })
-      */
     },
 
-    //检查是否有信息键入/修改过
-    checkChange(e) {
-      var beforeTitle = this.data.diaryTitle
-      var beforeContent = this.data.diaryContent
-      var beforeLocation = this.data.diaryLocation
-      return !(beforeTitle == e.detail.value.diaryTitle && beforeContent == e.detail.value.diaryContent && beforeLocation == e.detail.value.diaryLocation)
-    },
-    //获取新建/修改日记时候的日期
-    getFormatTime() {
-      var today = new Date()
-      return [today.getHours(), today.getMinutes()].map(
-        function formatNumber(n) {
-          n = n.toString()
-          return n[1] ? n : '0' + n
-        }
-      ).join(':')
-    },
-
-    //检查是否有信息键入/修改过
-    checkChange(e) {
-      var beforeTitle = this.data.diaryTitle
-      var beforeContent = this.data.diaryContent
-      var beforeLocation = this.data.diaryLocation
-      return !(beforeTitle == e.detail.value.diaryTitle && beforeContent == e.detail.value.diaryContent && beforeLocation == e.detail.value.diaryLocation)
-    },
-
-    //对话框显示时禁止下拉
-    preventTouchMove: function() {},
- }
+  }
 })
