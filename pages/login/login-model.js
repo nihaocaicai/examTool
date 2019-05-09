@@ -8,7 +8,7 @@ import {
 
 var thisClass = this
 
-class Login {
+class LoginComponent {
   constructor() {
     thisClass = this
   }
@@ -74,5 +74,5 @@ class Login {
 }
 
 export {
-  Login
+  LoginComponent
 }

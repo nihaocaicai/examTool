@@ -4,7 +4,7 @@ import {
 
 var thisClass = this
 
-class Index {
+class IndexComponent {
   constructor() {
     thisClass = this
   }
@@ -26,8 +26,23 @@ class Index {
       fail: callbacks.fail,
     })
   }
+
+  /**
+   * [向服务器提交修改的星星]
+   */
+  batchModifyToServer(params) {
+    var r = new Request()
+    r.setFailInfo("index-model.js", "batchModifyToServer")
+    r.request({
+      url: '/user/plans/batchmodify',
+      method: "POST",
+      data: params.data,
+      success: params.success,
+      fail: params.fail,
+    })
+  }
 }
 
 export {
-  Index
+  IndexComponent
 }

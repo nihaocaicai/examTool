@@ -5,12 +5,13 @@ import {
 //var examData = require('../../../../data/local_exam_database.js')
 //wx.setStorageSync("exam_arrangement", examData.examList)
 
-class Exam {
+class ExamComponent {
   /**
    * [获取考研安排]
    */
   getAllArrangements(params) {
     var r = new Request()
+    r.setFailInfo("exam-model.js", "getAllArrangements")
     r.request({
       url: '/user/arrangements/all',
       success: params.success,
@@ -23,6 +24,7 @@ class Exam {
    */
   addArramgements(params) {
     var r = new Request()
+    r.setFailInfo("exam-model.js", "addArramgements")
     r.request({
       url: '/user/arrangements/add',
       method: "POST",
@@ -38,6 +40,7 @@ class Exam {
    */
   modifyArrangements(params) {
     var r = new Request()
+    r.setFailInfo("exam-model.js", "modifyArrangements")
     r.request({
       url: '/user/arrangements/modify',
       method: "POST",
@@ -53,6 +56,7 @@ class Exam {
    */
   deleteArrangements(params) {
     var r = new Request()
+    r.setFailInfo("exam-model.js", "deleteArrangements")
     r.request({
       url: '/user/arrangements/delete',
       data: {
@@ -66,5 +70,5 @@ class Exam {
 }
 
 export {
-  Exam
+  ExamComponent
 }
