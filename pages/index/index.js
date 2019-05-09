@@ -26,9 +26,7 @@ Page({
     this._init() //检查计划是不是今天的
   },
 
-  onShow: function() {
-
-  },
+  onShow: function() {},
 
   onHide: function() {
     if (planModifyList.size != 0) {
