@@ -23,7 +23,7 @@ Page({
     wx.showLoading({
       title: '拼命加载中',
     })
-    this._checkEverydayPlan() //检查计划是不是今天的
+    this._init() //检查计划是不是今天的
   },
 
   onShow: function() {
@@ -70,11 +70,12 @@ Page({
       ids.push(id)
       values.push(value)
     })
+    var data = {
+      plan_id: "[" + ids.toString() + "]",
+      plan_if_finish: "[" + values.toString() + "]",
+    }
     model.batchModifyToServer({
-      data: {
-        plan_id: "[" + ids.toString() + "]",
-        plan_if_finish: "[" + values.toString() + "]",
-      },
+      data: data,
       success: function() {
         var s = new Storage()
         s.save({
@@ -82,25 +83,30 @@ Page({
           data: that.data.everyday_planList,
           success: function() {
             planModifyList = new Map()
-            wx.showToast({
-              title: '计划已同步',
-            })
+            console.log('计划已同步')
           },
           fail: function() {
-            wx.showToast({
-              title: '计划同步失败',
-              image: '/images/fail.png'
-            })
+            that._updatePlanFinishFail(data)
           },
         })
       },
       fail: function() {
-        wx.showToast({
-          title: '计划同步失败',
-          image: '/images/fail.png'
-        })
+        that._updatePlanFinishFail(data)
       },
     })
+  },
+
+  /**
+   * [更新计划完成状态失败]
+   */
+  _updatePlanFinishFail(failPlanFinish) {
+    var s = new Storage()
+    s.save({
+      key: 'failPlanFinish',
+      data: failPlanFinish,
+    })
+    console.log('计划同步失败')
+    // 保存失败就丢弃
   },
 
   /**
@@ -145,12 +151,12 @@ Page({
 
   /* 跳转到这个页面时执行的动作 */
   /**
-   * [检查每日计划是不是今天的]
+   * [初始化]
    *
-    检查 everyday_planList 的内容是不是今天的，不是今天的要清除
    */
-  _checkEverydayPlan() {
+  _init() {
     var that = this
+    //检查 everyday_planList 的内容是不是今天的，不是今天的要清除
     var everyday_planList = wx.getStorageSync("everyday_planList")
     if (everyday_planList == "" || everyday_planList.date != dateUtil.getFormatDate()) {
       //没有计划或者计划不是今天的，要重新建新的列表
@@ -161,20 +167,69 @@ Page({
           date: dateUtil.getFormatDate(),
           data: [],
         },
-        success: function() {
-          model.getEverydayPlanFromServer({
-            success: that._init,
-            fail: that._offline,
-          })
-        },
+        success: that._checkIfHasFailPlanFinish,
         fail: that._initFail,
       })
     } else {
-      model.getEverydayPlanFromServer({
-        success: that._init,
-        fail: that._offline,
+      that._checkIfHasFailPlanFinish()
+    }
+  },
+
+  /**
+   * 检查有没有没更新的计划完成状态
+   */
+  _checkIfHasFailPlanFinish() {
+    var that = this
+    // 获取信息之前先检查是不是存在上次没保存的星星
+    var data = wx.getStorageSync('failPlanFinish')
+    if (data == "") {
+      that._getEverydayPlanFromServer()
+    } else {
+      //如果存在没保存的信息，先进行更新
+      //不管成不成功，都清除上次未保存的记录
+      model.batchModifyToServer({
+        data: data,
+        success: function() {
+          console.log('再次保存失败')
+          wx.removeStorageSync("failPlanFinish")
+          that._getEverydayPlanFromServer()
+        },
+        fail: function() {
+          console.log('再次保存失败')
+          wx.removeStorageSync("failPlanFinish")
+          that._getEverydayPlanFromServer()
+        },
       })
     }
+  },
+
+  /**
+   * [从服务器获取当天计划]
+   */
+  _getEverydayPlanFromServer() {
+    var that = this
+    model.getEverydayPlanFromServer({
+      success: function(data) {
+        //获取到数据
+        var s = new Storage()
+        if (JSON.stringify(data) == "[]") {
+          //今天没计划，自己本地生成新的列表
+          data = {
+            date: dateUtil.getFormatDate(),
+            data: [],
+          }
+        }
+        s.save({
+          key: 'everyday_planList',
+          data: data,
+          success: that._initData,
+          fail: that._initFail,
+          path: '/pages/index/index',
+          functionName: '_init',
+        })
+      },
+      fail: that._offline,
+    })
   },
 
   /** 
@@ -188,34 +243,6 @@ Page({
         image: "/images/login_fail.png",
         duration: 1800,
       })
-  },
-
-  /**
-   * [初始化]
-   */
-  _init(data) {
-    var that = this
-    if (data) {
-      //获取到数据
-      if (JSON.stringify(data) == "{}") {
-        //今天没计划，自己本地生成新的列表
-        data = {
-          date: dateUtil.getFormatDate(),
-          data: [],
-        }
-      }
-      var s = new Storage()
-      s.save({
-        key: 'everyday_planList',
-        data: data,
-        success: that._initData,
-        fail: that._initFail,
-        path: '/pages/index/index',
-        functionName: '_init',
-      })
-    } else {
-      wx.hideLoading()
-    }
   },
 
   /**
@@ -238,7 +265,7 @@ Page({
   },
 
   /**
-   * 初始化数据
+   * [初始化数据]
    */
   _initData() {
     var info = wx.getStorageSync("user_info")
