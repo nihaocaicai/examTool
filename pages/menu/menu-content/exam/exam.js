@@ -2,17 +2,13 @@ import {
   ExamComponent
 } from "exam-model.js"
 
-import {
-  Storage
-} from "../../../../utils/storage.js"
-
 var model = new ExamComponent()
 
 Page({
   data: {
     delBtnWidth: 160,
     lastScroll: [-1, -1],
-    loading: true,
+    loading: false, //true,
   },
 
   onReady: function() {
@@ -77,26 +73,14 @@ Page({
         //重新从服务器拉取信息
         model.getAllArrangements({
           success: function(data) {
-            //写入缓存
-            var s = new Storage()
-            s.save({
-              key: 'exam_arrangement',
-              data: data,
-              success: function() {
-                that.setData({
-                  examList: data,
-                })
-                wx.hideLoading()
-                that.editexam.hideEdit()
-                wx.showToast({
-                  title: '添加成功',
-                  duration: 1800,
-                })
-              },
-              fail: function() {
-                wx.hideLoading()
-                that._errorSave()
-              },
+            that.setData({
+              examList: data,
+            })
+            wx.hideLoading()
+            that.editexam.hideEdit()
+            wx.showToast({
+              title: '添加成功',
+              duration: 1800,
             })
           },
         })
@@ -137,31 +121,21 @@ Page({
                 //如果删除项目后该日期的数组长度为，移除该日期
                 newList.splice(index.dayindex, 1)
               }
-              var s = new Storage()
-              s.save({
-                key: 'exam_arrangement',
-                data: newList, //新的列表
-                success: function() {
-                  that.setData({
-                    examList: newList,
-                    lastScroll: [-1, -1], //重设上一个滑出的项
-                  })
-                  if (newList.length == 0) {
-                    //没有数据了，要设置提示
-                    that.setData({
-                      showView: false,
-                    })
-                  }
-                  wx.hideLoading()
-                  wx.showToast({
-                    title: '删除成功',
-                    duration: 1800,
-                  })
-                },
-                fail: function() {
-                  wx.hideLoading()
-                  that._errorSave()
-                },
+              that.setData({
+                examList: newList,
+                lastScroll: [-1, -1], //重设上一个滑出的项
+              })
+              if (newList.length == 0) {
+                //没有数据了
+                that.setData({
+                  showView: false,
+                  noArrangement: true,
+                })
+              }
+              wx.hideLoading()
+              wx.showToast({
+                title: '删除成功',
+                duration: 1800,
               })
             },
             statusCodeFail: function() {
@@ -196,6 +170,7 @@ Page({
           examList: that.data.examList
         })
 
+        //服务器修改成功，写入临时变量
         var index = that.data.modifyIndex
         var newList = that.data.examList
         if (formData.arrange_date == newList[index.dayindex]['data'][index.index].arrange_date) {
@@ -231,28 +206,15 @@ Page({
             newList[dayindex]['data'] = that._sort(1, newList[dayindex]['data']) //排序  newList[dayindex]['data']
           }
         }
-
-        //服务器修改成功，写入缓存
-        var s = new Storage()
-        s.save({
-          key: 'exam_arrangement',
-          data: newList,
-          success: function() {
-            that.setData({
-              examList: newList,
-              modifyIndex: {}, //修改完成，清空下标
-            })
-            wx.hideLoading()
-            that.editexam.hideEdit()
-            wx.showToast({
-              title: '修改成功',
-              duration: 1800,
-            })
-          },
-          fail: function() {
-            wx.hideLoading()
-            that._errorSave()
-          },
+        that.setData({
+          examList: newList,
+          modifyIndex: {}, //修改完成，清空下标
+        })
+        wx.hideLoading()
+        that.editexam.hideEdit()
+        wx.showToast({
+          title: '修改成功',
+          duration: 1800,
         })
       },
       statusCodeFail: function() {
@@ -283,44 +245,25 @@ Page({
     })
     model.getAllArrangements({
       success: function(data) {
-        var s = new Storage()
-        s.save({
-          key: 'exam_arrangement',
-          data: data, //保存服务器获取到的数据到微信缓存
-          success: function() {
-            that._getArrangementFromStorage()
-          },
-          fail: function() {
-            that._getArrangementFromStorage(true)
-          },
+        // 加载成功
+        that.setData({
+          examList: data,
+          showView: data.length != 0,
+          noArrangement: data.length == 0,
+          loading: false,
+          loadingFail: false,
         })
+        wx.hideLoading()
       },
       fail: function() {
-        that._getArrangementFromStorage(true)
+        // 加载失败
+        that.setData({
+          loading: false,
+          loadingFail: true,
+        })
+        wx.hideLoading()
       },
     })
-  },
-
-  /**
-   * [从缓存读取信息]
-   */
-  _getArrangementFromStorage(isOffline) {
-    var arrangements = wx.getStorageSync('exam_arrangement')
-    if (arrangements != undefined) {
-      this.setData({
-        examList: arrangements,
-        showView: arrangements.length != 0,
-        loading: false,
-      })
-    }
-    wx.hideLoading()
-    if (isOffline && !wx.getStorageSync('hideOfflineTips')) {
-      wx.showToast({
-        title: '当前为离线模式',
-        image: "/images/login_fail.png",
-        duration: 1800,
-      })
-    }
   },
 
   /**
@@ -343,22 +286,9 @@ Page({
   _isOffline(type) {
     wx.showModal({
       title: '提示',
-      content: '当前为离线模式，不能进行' + type + '操作',
+      content: type + '失败，请检查网络连接是否正常',
       showCancel: false,
       confirmText: '知道了',
-      confirmColor: "#04838e",
-    })
-  },
-
-  /**
-   * [信息保存失败提示]
-   */
-  _errorSave() {
-    wx.showModal({
-      title: '提示',
-      content: '数据已经保存到服务器，但保存到本地失败，可能是手机空间不足，请尝试清理一下手机空间后，重新进入考研小神器试试',
-      confirmText: '好的',
-      showCancel: false,
       confirmColor: "#04838e",
     })
   },
@@ -451,43 +381,4 @@ Page({
     }
   },
   /* 滑动组件end*/
-
-  /**
-   * [被弃用的方法]
-   * 这个方法是在添加计划后本地添加到列表中，而不是从服务器重新拉取
-   *
-  __desperateAddSuccess(){
-    var dateTag = new Date(formData.arrange_date).getTime() //需要插入的日期
-    var dayindex = -1
-
-    for (var i in newList) {
-      var nowDate = new Date(newList[i].date).getTime() //当前正在遍历的日期
-      //日期升序才可以这么用
-      if (dateTag > nowDate) {
-        if (dateTag == nowDate) {
-          //存在日期，获取下标
-          dayindex = i
-          break
-        } else {
-          //继续遍历
-          continue
-        }
-      } else {
-        //需要插入的日期小于当前正在遍历的日期，还是没有，就是没有了
-        break
-      }
-    }
-    if (dayindex == -1) {
-      //原来列表没有该日期，需要新建
-      newList.push({
-        date: formData.arrange_date,
-        data: [formData]
-      })
-      newList = that._sort(0, newList) //排序 newList
-    } else {
-      //存在日期，直接往里面添加
-      newList[dayindex]['data'].push(formData)
-      newList[dayindex]['data'] = that._sort(1, newList[dayindex]['data']) //排序  newList[dayindex]['data']
-    }
-  },*/
 })
