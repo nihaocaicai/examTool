@@ -115,6 +115,19 @@ class Debug {
   }
 
   /**
+  * [微信 wx.getSetting 操作错误提示]
+  * 
+  * {path, functionName, errMsg}
+  * 
+  * (文件完整路径，函数名称，保存失败提示信息)
+  */
+  printWxGeSettingError(path, functionName, errMsg) {
+    if (path && functionName && errMsg) {
+      this.printErrors(path, functionName, "微信 wx.getSetting 错误", errMsg)
+    }
+  }
+
+  /**
    * [微信缓存操作错误提示]
    * 
    * obj = {key, data, path, functionName, errMsg}

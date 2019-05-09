@@ -46,23 +46,24 @@ Page({
         success: res => {
           if (res.authSetting['scope.userInfo']) {
             // 用户已经授权
-            this._checkStorage()
+            that._checkStorage()
           } else {
             // 用户没有授权，需要用户授权
             if (wx.canIUse('button.open-type.getUserInfo')) {
               //微信新版本，需要点击授权按钮
-              this.setData({
+              that.setData({
                 needAuthorize: true,
                 loading: false,
               })
             } else {
               //微信旧版本，在没有 open-type=getUserInfo 版本的兼容处理
-              this._getUserInfo()
+              that._getUserInfo()
             }
           }
         },
-        fail: function() {
-          that._loginFail()
+        fail: function(res) {
+          openDebug && debug.printWxGeSettingError("login.js", "_login", res)
+          that._checkStorage(true)
         }
       })
     }
@@ -74,14 +75,20 @@ Page({
    * [检查缓存]
    * 检查缓存是否有相应的信息
    */
-  _checkStorage() {
+  _checkStorage(isGetSettingFail) {
+    // isGetSettingFail = true 表示现在离线，但是我不知道你有没有获取授权
     var that = this
     if (!(wx.getStorageSync('token'))) {
       /* 没有 token */
-      model.get_token({
-        success: that._checkStorage,
-        fail: that._loginFail,
-      })
+      if (isGetSettingFail) {
+        // 一定是没有授权/ token 信息丢失，无论如何都要获取
+        that._loginFail()
+      } else {
+        model.get_token({
+          success: that._checkStorage,
+          fail: that._loginFail,
+        })
+      }
     } else if (!(wx.getStorageSync('user_info') instanceof Object)) {
       /* 没有 user_info */
       model.get_user_info({
@@ -494,7 +501,7 @@ Page({
     var that = this
     wx.showModal({
       title: '提示',
-      content: '获取信息失败。请检查网络连接后尝试重新连接',
+      content: '获取信息失败。请检查网络连接后重试',
       confirmColor: '#04838e',
       cancelText: "算了",
       confirmText: '重试',
@@ -507,6 +514,7 @@ Page({
         } else if (res.cancel) {
           //取消
           that.setData({
+            loading: false,
             loginFailTips: true,
           })
         }
