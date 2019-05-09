@@ -3,6 +3,8 @@ import {
 } from "modify-model.js"
 
 var model = new Modify()
+var plansData = require("../../../data/local_plan_database.js")
+
 Page({
   data: {
     // 设置滑动删除、编辑的宽度
@@ -13,16 +15,19 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+    this.setData({
+      planList: plansData.planList
+    })
+    /*
     model.getAllDiary(((data) => {
       if (data.error_code == '0') {
         // 获取数据文件数据
-        this.setData({
-          planList: data
-        });
+        
       } else {
         
       }
-    }));
+    }))
+    */
   },
 
   /**
