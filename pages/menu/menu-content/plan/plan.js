@@ -1,63 +1,98 @@
-var app = getApp()
-var testData = require('../../../../data/testData.js') //测试数据
+import {
+  PlanComponent
+} from "plan-model.js"
+
+var model = new PlanComponent()
 
 Page({
-  /**
-   * 页面的初始数据
-   */
   data: {
     color: ['#9DD3FA', '#1F6FB5', '#FCD692', '#FAFFEB', '#FFFFFF'], //左侧边条颜色，数目无限制
-    totalPlan: [],
-    hasMorePlan: true
+    hasMorePlan: true,
+    loading: true,
+    showView: false,
+    loadingFail: false,
+    noPlan: false,
+    nowPage: 1, //当前页码
   },
 
   onLoad: function(options) {
-    this._init()
+    this._initData()
   },
-
-  onShow: function() {},
 
   onShareAppMessage: function() {},
 
   /**
    * [初始化数据]
    */
-  _init(){
-    this.setData({
-      totalPlan: testData.plan
+  _initData() {
+    var that = this
+    wx.showLoading({
+      title: '玩命加载中',
+    })
+    model.getBeforePlan({
+      data: {
+        page: that.data.nowPage,
+      },
+      success: function(data) {
+        // 有计划
+        that.setData({
+          loading: false,
+          showView: true,
+          totalPlan: data,
+          nowPage: that.data.nowPage + 1,
+        })
+        /* Todo 没计划
+          that.setData({
+            loading: false,
+            noPlan: true,
+          })
+          */
+        wx.hideLoading()
+      },
+      fail: function() {
+        that.setData({
+          loading: false,
+          loadingFail: true,
+        })
+        wx.hideLoading()
+      },
     })
   },
 
   /**
    * [加载更早的计划]
    */
-  loadMore: function () {
-    //如果还有计划就加载，没有就不加载
-    if (this.data.hasMorePlan) {
-      var that = this
-      wx.showLoading({
-        title: '玩命加载中',
-      })
-      //Todo 加载计划列表
-      setTimeout(function () {
-        var newPlans = testData.morePlan
-        var setPlan = that.data.totalPlan
-        
-        for (var i in newPlans) {
-          setPlan.push(newPlans[i])
-        }
-        //如果没有更多计划了，就设置flag
-        if (true) {
+  loadMore: function() {
+    var that = this
+    wx.showLoading({
+      title: '玩命加载中',
+    })
+    model.getBeforePlan({
+      data: {
+        page: that.data.nowPage,
+      },
+      success: function(data) {
+        //这是还有更多的情况
+        that.setData({
+          loading: false,
+          showView: true,
+          totalPlan: data,
+          nowPage: that.data.nowPage + 1,
+        })
+        if (false) {
+          //如果没有更多了
           that.setData({
             hasMorePlan: false,
           })
         }
-        that.setData({
-          totalPlan: setPlan,
-        })
         wx.hideLoading()
-      }, 500)
-    }
-
+      },
+      fail: function() {
+        wx.hideLoading()
+        wx.showToast({
+          title: '加载失败',
+        })
+      },
+    })
   },
 })

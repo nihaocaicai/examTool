@@ -1,6 +1,6 @@
 import {
   Request
-} from "../../utils/server/request.js"
+} from "../../../../utils/server/request.js"
 
 class PlanComponent {
   /**
@@ -11,23 +11,9 @@ class PlanComponent {
     var r = new Request()
     r.request({
       url: "/user/plan/all/before",
-      success:params.success,
-      statusCodeFail: params.statusCodeFail,
-      fail:params.fail,
-    })
-
-  }
-  /**
-   * [获取用户全部考研计划]
-   * 当天之后的，包括当天的
-   */
-  getAfterPlan(params) {
-    var r = new Request()
-    r.request({
-      url: "/user/plan/all/after",
-      success:params.success,
-      statusCodeFail: params.statusCodeFail,
-      fail:params.fail,
+      data: params.data,
+      success: params.success,
+      fail: params.fail,
     })
   }
 }

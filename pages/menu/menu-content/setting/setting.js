@@ -17,7 +17,7 @@ Page({
     this.edit = this.selectComponent("#edit") //获得diary组件
   },
 
-  /* 考研小日志 diary 对话框 */
+  /* 信息设置对话框 */
   /**
    * [事件_显示设置信息]
    */
@@ -91,29 +91,17 @@ Page({
           },
           fail: function() {
             wx.hideLoading()
-            wx.showModal({
-              title: '提示',
-              content: '保存数据出错，可能是存储空间不足，请尝试清理一下手机后再保存',
-              showCancel: false,
-            })
+            that._errorSave('保存信息')
           },
         })
       },
       statusCodeFail: function() {
         wx.hideLoading()
-        wx.showModal({
-          title: '提示',
-          content: '服务器出错，请稍后重试',
-          showCancel: false,
-        })
+        that._errorServer()
       },
       fail: function() {
         wx.hideLoading()
-        wx.showModal({
-          title: '提示',
-          content: '当前是离线模式，无法保存信息，请连接网络后重新保存',
-          showCancel: false,
-        })
+        that._errorConnect()
       },
     })
   },
@@ -141,11 +129,9 @@ Page({
    * [事件_删除对话框点确认按钮]
    */
   confirmDelete(e) {
+    var that = this
     if (this.data.result == this.data.input) {
       //回答正确
-      this.setData({
-        showDeleteModal: false
-      })
       wx.showLoading({
         title: '清除数据中',
       })
@@ -157,6 +143,9 @@ Page({
             data: true,
             success: function() {
               wx.hideLoading()
+              this.setData({
+                showDeleteModal: false
+              })
               wx.showModal({
                 title: '提示',
                 content: '退出成功，请在微信中删除小程序完成退出操作',
@@ -172,23 +161,13 @@ Page({
             fail: function() {
               //如果没办法删除，可能是没有存储空间设置标签，清除存储空间后重试
               wx.hideLoading()
-              wx.showModal({
-                title: '提示',
-                content: '退出失败，请清理一下手机空间后重试',
-                showCancel: false,
-                confirmColor: '#04838e',
-              })
+              that._errorSave('退出')
             },
           })
         },
         fail: function() {
           wx.hideLoading()
-          wx.showModal({
-            title: '提示',
-            content: '退出失败，请检查网络后重试',
-            showCancel: false,
-            confirmColor: '#04838e',
-          })
+          that._errorConnect()
         },
       })
     } else {
@@ -273,6 +252,47 @@ Page({
       info: info,
       showDeleteModal: false,
       hideOfflineTips: wx.getStorageSync("hideOfflineTips")
+    })
+  },
+
+  /**
+   * [服务器返回错误代码]
+   */
+  _errorServer() {
+    wx.showModal({
+      title: '提示',
+      content: '服务器出错，请稍后重试',
+      showCancel: false,
+      confirmText: '知道了',
+      confirmColor: '#04838e',
+    })
+  },
+
+  /**
+   * [服务器连接失败]
+   */
+  _errorConnect() {
+    wx.showModal({
+      title: '提示',
+      content: '当前是离线模式，无法进行操作，请连接网络后重试',
+      showCancel: false,
+      confirmText: '知道了',
+      confirmColor: '#04838e',
+    })
+  },
+
+  /**
+   * [数据保存失败]
+   * 
+   * @type XX 出错
+   */
+  _errorSave(type) {
+    wx.showModal({
+      title: '提示',
+      content: '失败，可能是存储空间不足，请尝试清理一下手机后再保存',
+      showCancel: false,
+      confirmText: '好的',
+      confirmColor: '#04838e',
     })
   },
 

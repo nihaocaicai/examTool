@@ -27,10 +27,16 @@
     </view>
   </view>
 
-  <view wx:if="{{!showView}}" style='margin-top: 8vw; height: 100%; width: 100%; display:flex; align-items:center; justify-content:center; text-align:center'>
-    <text decode='true' style='font-size:32rpx; color:#999'>
-          你还没有考研安排\n赶快下拉页面添加安排吧
-          </text>
+  <view wx:if="{{loadingFail}}" class='tips'>
+    <view style='margin-bottom:1vh'>
+      哎呀，考研安排获取失败了
+    </view>
+    <button class='button' bindtap='_initData'>再试试</button>
+  </view>
+
+  <view wx:if="{{noArrangement}}" class='tips'>
+    <view style='margin-bottom:1vh'>你还没有考研安排</view>
+    <view>赶快下拉页面添加安排吧</view>
   </view>
 
   <editexam id='editexam' bind:modify_confirm="modify_confirm" bind:add_confirm="add_confirm" bind:hidden_dialog="hidden_dialog" />
