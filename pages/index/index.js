@@ -26,7 +26,14 @@ Page({
     this._init() //检查计划是不是今天的
   },
 
-  onShow: function() {},
+  onShow: function() {
+    // 调试用
+   /*
+    wx.redirectTo({
+      url: '/pages/index/modify/modify',
+    })
+    */
+  },
 
   onHide: function() {
     if (planModifyList.size != 0) {

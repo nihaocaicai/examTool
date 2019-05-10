@@ -21,13 +21,15 @@ Page({
    * 添加计划
    */
   onPullDownRefresh: function() {
-    if (!this.editexam)
-      this.editexam = this.selectComponent("#editexam") //获得edit组件
+    if (this.data.showView) {
+      if (!this.editexam)
+        this.editexam = this.selectComponent("#editexam") //获得edit组件
 
-    this.editexam.setData({
-      isModify: false,
-    })
-    this.editexam.showEdit()
+      this.editexam.setData({
+        isModify: false,
+      })
+      this.editexam.showEdit()
+    }
     wx.stopPullDownRefresh()
   },
 
@@ -53,7 +55,7 @@ Page({
       arrange_place: data.arrange_place,
       arrange_date: data.arrange_date,
       arrange_time: data.arrange_time,
-      arrange_if_prompt: data.arrange_if_prompt,
+      arrange_if_prompt: data.arrange_if_prompt == 0 ? false : true,
       arrange_if_prompt_date: data.arrange_if_prompt ? data.arrange_if_prompt_date : "",
       arrange_if_prompt_time: data.arrange_if_prompt ? data.arrange_if_prompt_time : "",
     })

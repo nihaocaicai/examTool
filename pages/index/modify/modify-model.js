@@ -2,37 +2,73 @@ import {
   Request
 } from "../../../utils/server/request.js"
 
-var thisClass = this
+var path = "/pages/index/modify/modify-model"
 
-class Modify {
-  constructor() {
-    thisClass = this
-  }
-
-  setPage(page) {
-    thisClass.page = page
+class ModifyComponent {
+  /**
+   * [获取用户当天之后的（包括当天的）考研计划]
+   */
+  getAfterPlan(params) {
+    var r = new Request()
+    r.setFailInfo(path, "getAfterPlan")
+    r.request({
+      url: "/user/plan/all/after",
+      data: params.data,
+      success: params.success,
+      fail: params.fail,
+    })
   }
 
   /**
-   * [从服务器上获取今天的计划 everyday_planList]
+   * [添加考研计划]
+   * 只能添加当天的或以后日期的
    */
-  getAllDiary(callbacks) {
+  addPlan(params) {
     var r = new Request()
-    r.setFailInfo("diary-model.js", "getAllDiary")
+    r.setFailInfo(path, "addPlan")
     r.request({
-      url: "/user/diarys/all",
-      success: function (data) {
-        //不做处理，直接把data返回到index.js回去 data = data;
-        callbacks && callbacks(data);
-      },
-      fail: function (data) {
-        //不做处理，直接把data返回到index.js回去 data = data;
-        callbacks && callbacks(data);
-      },
+      url: "/user/plans/add",
+      method: "POST",
+      data: params.data,
+      success: params.success,
+      statusCodeFail: params.statusCodeFail,
+      fail: params.fail,
+    })
+  }
+
+  /**
+   * [修改考研计划]
+   */
+  modifyPlan(params) {
+    var r = new Request()
+    r.setFailInfo(path, "modifyPlan")
+    r.request({
+      url: "/user/plans/modify",
+      method: "POST",
+      data: params.data,
+      success: params.success,
+      statusCodeFail: params.statusCodeFail,
+      fail: params.fail,
+    })
+  }
+
+  /**
+   * [删除考研计划]
+   * 参数为计划 ID
+   */
+  deletePlan(params) {
+    var r = new Request()
+    r.setFailInfo(path, "deletePlan")
+    r.request({
+      url: "/user/plans/delete",
+      data: params.data,
+      success: params.success,
+      statusCodeFail: params.statusCodeFail,
+      fail: params.fail,
     })
   }
 }
 
 export {
-  Modify
+  ModifyComponent
 }

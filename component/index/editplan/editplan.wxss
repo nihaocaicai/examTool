@@ -7,52 +7,60 @@
   border: 1rpx solid #ccc;
   border-radius: 10rpx;
   box-sizing: bordre-box;
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
   overflow: hidden;
   background: #fff;
+  z-index: 9000;
 }
+
 .wx-plan-title {
-  width: 100%;
   padding: 20rpx;
   text-align: center;
   font-size: 40rpx;
   border-bottom: 1rpx solid black;
 }
+
 .wx-plan-con {
   margin: 25rpx 10rpx;
   padding: 10rpx;
 }
-.plan-content-container{
-  flex-direction:row;
-  display:flex;
-  margin-bottom:15rpx; 
-  border-bottom-width: 1rpx;  
-  border-bottom-color: black;  
+
+.plan-content-container {
+  flex-direction: row;
+  display: flex;
+  margin-bottom: 15rpx;
+  border-bottom-width: 1rpx;
+  border-bottom-color: black;
   border-bottom-style: dashed;
   height: 65rpx;
   align-items: center;
 }
-.plan-content-container input{
+
+.plan-content-container input {
   font-size: 28rpx;
 }
-.plan-content-container switch{
-  margin-left:340rpx; 
-  margin-bottom:10rpx; 
+
+.plan-content-container switch {
+  margin-left: 340rpx;
+  margin-bottom: 10rpx;
 }
 
-.plan-content-container picker{
+.plan-content-container picker {
   width: 100%;
 }
-.plan-content-container text{
+
+.plan-content-container text {
   font-size: 28rpx;
 }
 
 /* 按钮 */
+
 .wx-plan-btn {
   display: flex;
   justify-content: space-around;
   margin-bottom: 25rpx;
 }
+
 .wx-plan-btn button {
   display: flex;
   align-items: center;
@@ -61,4 +69,15 @@
   height: 88rpx;
   border: 1rpx solid #ccc;
   border-radius: 88rpx;
+}
+
+.mask {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #000;
+  z-index: 8000;
+  opacity: 0.7;
 }

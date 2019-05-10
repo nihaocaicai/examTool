@@ -112,7 +112,7 @@ var morePlans = [{
 }]
 
 module.exports = {
-  index_plan: index_plans, //首页显示的计划
-  plan: plans, //初始计划
-  morePlan: morePlans, //更多计划
+  //index_plan: index_plans, //首页显示的计划
+  //plan: plans, //初始计划
+  //morePlan: morePlans, //更多计划
 }

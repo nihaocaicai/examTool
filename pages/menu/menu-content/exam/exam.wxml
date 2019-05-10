@@ -25,13 +25,16 @@
         </view>
       </block>
     </view>
+
+    <view wx:if='{{hasMorePlan}}' class="tips_more" bindtap='loadMore'>点我加载更多计划</view>
+    <view wx:else class="tips_more">没有更多了</view>
   </view>
 
   <view wx:if="{{loadingFail}}" class='tips'>
     <view style='margin-bottom:1vh'>
-      哎呀，考研安排获取失败了
+      哎呀，服务器开小差了
     </view>
-    <button class='button' bindtap='_initData'>再试试</button>
+    <button class='button' bindtap='_initData'>再试一次</button>
   </view>
 
   <view wx:if="{{noArrangement}}" class='tips'>

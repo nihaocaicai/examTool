@@ -1,11 +1,9 @@
-/* pages/menu/menu-content/plan/plan.wxss */
-
 page {
   height: 100%;
   font-family: 'PingFang SC',
                  'Helvetica Neue',
                  Helvetica,
-                 'Droid Sans Fallback',
+                 'Drosid Sans Fallback',
                  'Microsoft Yahei',
                  sans-serif;
 }
@@ -50,6 +48,13 @@ page {
   text-align: center;
   font-size: 32rpx;
   color: #999;
+}
+
+.tips_more {
+  margin-top: 1vw;
+  margin-bottom: 1vw;
+  text-align: center;
+  font-size: 33rpx;
 }
 
 .button {

@@ -66,7 +66,7 @@ class DateUtil {
    */
   getIndexDate() {
     var today = new Date()
-    const week = "星期" + "日一二三四五六".charAt(today.getDay());
+    var week = "星期" + "日一二三四五六".charAt(today.getDay());
     return today.getFullYear() + "年" + (today.getMonth() + 1) + "月" + today.getDate() + "日" + ' ' + week.toString()
   }
 
@@ -112,7 +112,12 @@ class DateUtil {
   isEarlyFromNow(date, time) {
     var time1 = new Date(date + " " + time).getTime()
     var time2 = new Date().getTime()
-    return time1 < time2
+    if (time1 < time2)
+      return -1
+    else if (time1 > time2)
+      return 1
+    else
+      return 0
   }
 
   /**

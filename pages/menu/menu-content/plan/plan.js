@@ -34,19 +34,21 @@ Page({
         page: that.data.nowPage,
       },
       success: function(data) {
-        // 有计划
-        that.setData({
-          loading: false,
-          showView: true,
-          totalPlan: data,
-          nowPage: that.data.nowPage + 1,
-        })
-        /* Todo 没计划
+        if (data.length == 0) {
+          //没数据
           that.setData({
             loading: false,
             noPlan: true,
           })
-          */
+        } else {
+          // 有数据
+          that.setData({
+            loading: false,
+            showView: true,
+            totalPlan: data,
+            nowPage: that.data.nowPage + 1,
+          })
+        }
         wx.hideLoading()
       },
       fail: function() {
@@ -91,6 +93,7 @@ Page({
         wx.hideLoading()
         wx.showToast({
           title: '加载失败',
+          image: '/images/fail.png',
         })
       },
     })

@@ -2,7 +2,6 @@
   "navigationBarTitleText": "每日计划",
   "enablePullDownRefresh":true,
   "usingComponents": {
-    "edit": "/component/index/edit/edit",
-    "modify": "/component/index/modify/modify"
+    "editplan": "/component/index/editplan/editplan"
   }
 }

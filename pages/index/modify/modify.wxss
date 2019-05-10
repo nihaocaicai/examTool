@@ -1,26 +1,28 @@
-.container{
+.container {
   margin-top: 20rpx;
 }
-.container-text{
+
+.container-text {
   margin-left: 25rpx;
   font-size: 48rpx;
   color: #d6d6d6;
 }
 
-.data-container{
+.data-container {
   margin-top: 35rpx;
   margin-bottom: 35rpx;
   margin-left: 40rpx;
   margin-right: 40rpx;
-  border-width: 1rpx;  
-  border-color: black;  
+  border-width: 1rpx;
+  border-color: black;
   border-style: dashed;
 }
 
 /* 日期和星标star */
-.date-container{
-  flex-direction:row;
-  display:flex;
+
+.date-container {
+  flex-direction: row;
+  display: flex;
   align-items: center;
   /* justify-content: center; */
   width: 100%;
@@ -29,52 +31,86 @@
   margin-bottom: 5rpx;
   margin-left: 15rpx;
 }
-.date-text{
+
+.date-text {
   font-size: 28rpx;
   width: 500rpx;
 }
-.date-image{
-  width:32rpx;
-  height:32rpx;
+
+.date-image {
+  width: 32rpx;
+  height: 32rpx;
   margin-left: 80rpx;
 }
+
 /* 日期和星标end */
+
 /* 内容star */
-.content-container{
+
+.content-container {
   width: 100%;
   height: 100%;
   margin-top: 15rpx;
   margin-bottom: 24rpx;
   margin-left: 15rpx;
 }
-.content-text{
+
+.content-text {
   font-size: 28rpx;
 }
+
 /* 内容end */
 
 .order-item {
   position: relative;
 }
 
-.edit{  
-  width: 160rpx;  
+.edit {
+  width: 160rpx;
   height: 100%;
-  background-color:#d6d6d6; 
-  color: white; 
-  position: absolute;  
-  top: 0;  
-  right: -160rpx;  
-  display: flex;  
-  justify-content: center;  
-  align-items: center;  
+  background-color: #d6d6d6;
+  color: white;
+  position: absolute;
+  top: 0;
+  right: -160rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.modify-image{
+.modify-image {
   width: 85rpx;
   height: 85rpx;
 }
 
-.del-image{
+.del-image {
   width: 75rpx;
   height: 75rpx;
+}
+
+.tips {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 32rpx;
+  color: #999;
+}
+
+.tips_more {
+  margin-top: 1vw;
+  margin-bottom: 1vw;
+  text-align: center;
+  font-size: 33rpx;
+}
+
+.button {
+  background: #04838e;
+  color: #fff;
+}
+
+button::after {
+  border: none;
 }
