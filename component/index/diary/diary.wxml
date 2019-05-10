@@ -27,7 +27,6 @@
       </view>
     </form>
 
-
   </view>
 </view>
 <view class="mask" catchtouchmove="preventTouchMove" wx:if="{{!flag}}" />

@@ -1,36 +1,40 @@
-<view wx:if="{{!loading}}">
-  <view wx:if="{{showView}}">
-    <view style='margin-top:20rpx; margin-bottom:20rpx' wx:for="{{data}}" wx:key="day" wx:for-item="day" wx:for-index="dayIndex">
-      <text class="wx-date">{{day.diary_date}}</text>
-      <block wx:key="item" wx:for="{{day.data}}">
-        <view data-dayindex='{{dayIndex}}' data-index='{{index}}' class="order-item" bindtouchstart="drawStart" bindtouchmove="drawMove" bindtouchend="drawEnd" style="right:{{item.right}}rpx">
+<view>
+  <view style='margin-top:20rpx; margin-bottom:20rpx' wx:for="{{data}}" wx:key="day" wx:for-item="day" wx:for-index="dayIndex">
+    <text class="wx-date">{{day.date}}</text>
+    <block wx:key="item" wx:for="{{day.data}}">
+      <view data-dayindex='{{dayIndex}}' data-index='{{index}}' class="order-item" bindtouchstart="drawStart" bindtouchmove="drawMove" bindtouchend="drawEnd" style="right:{{item.right}}rpx">
 
-          <view class='data-container'>
-            <!-- 内容 -->
-            <view class='content-container'>
-              <text class='content-title'>{{item.diary_title}}</text>
-              <text class='content-text'>{{item.diary_content}}</text>
-            </view>
-
-            <!-- 日期 -->
-            <view class='date-container'>
-              <text decode='true' class='date-text'>{{item.diary_write_time}}&nbsp;{{item.diary_write_place == ""?"未设置地址":item.diary_write_place}}</text>
-            </view>
+        <view class='data-container'>
+          <!-- 内容 -->
+          <view class='content-container'>
+            <text class='content-title'>{{item.diary_title}}</text>
+            <text class='content-text'>{{item.diary_content}}</text>
           </view>
 
-          <view class="edit">
-            <image data-dayindex='{{dayIndex}}' data-index='{{index}}' class='modify-image' src='/images/index/diary.png' bindtap="modItem" />
-            <image data-dayindex='{{dayIndex}}' data-index='{{index}}' class='del-image' src='/images/index/modify/del.png' bindtap="delItem" />
+          <!-- 日期 -->
+          <view class='date-container'>
+            <text decode='true' class='date-text'>{{item.diary_write_time}}&nbsp;{{item.diary_write_place == ""?"未设置地址":item.diary_write_place}}</text>
           </view>
         </view>
-      </block>
-    </view>
-  </view>
 
-  <view wx:if="{{!showView}}" style='margin-top: 8vw; height: 100%; width: 100%; display:flex; align-items:center; justify-content:center; text-align:center'>
-    <text decode='true' style='font-size:32rpx; color:#999'>
-          你还没有写日记\n赶快下拉页面添加日记吧
-          </text>
+        <view class="edit">
+          <image data-diary_id='{{item.diary_id}}'
+          data-title='{{item.diary_title}}'
+          data-content='{{item.diary_content}}'
+          data-date='{{item.diary_write_date}}'
+          data-time='{{item.diary_write_time}}'
+          data-place='{{item.diary_write_place}}'
+          class='modify-image'
+          src='/images/index/diary.png'
+          bindtap="modItem" />
+          <image data-diary_id='{{item.diary_id}}'
+          data-title='{{item.diary_title}}'
+          class='del-image'
+          src='/images/index/modify/del.png'
+          bindtap="delItem" />
+        </view>
+      </view>
+    </block>
   </view>
 
   <diary id='diary' bind:modify_confirm="modify_confirm" bind:add_confirm="add_confirm" bind:hidden="hidden_dialog" />

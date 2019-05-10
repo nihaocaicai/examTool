@@ -30,7 +30,26 @@ class DiaryComponent {
     })
   }
 
-
+  /**
+     * [向服务器上修改计划]
+     */
+  modifyDiary(callbacks, data) {
+    var r = new Request()
+    r.setFailInfo("diary-model.js", "modifyDiary")
+    r.request({
+      url: "/user/diarys/modify",
+      method: "POST",
+      data: data,
+      success: function (data) {
+        //不做处理，直接把data返回到index.js回去 data = data;
+        callbacks && callbacks(data);
+      },
+      fail: function (data) {
+        //不做处理，直接把data返回到index.js回去 data = data;
+        callbacks && callbacks(data);
+      },
+    })
+  }
 
 
 }
