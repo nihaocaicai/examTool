@@ -57,7 +57,7 @@ Component({
       var notSetFlag = null
 
       //检查生日设置是否正确
-      if (formData.birthday != notSetFlag && parseInt(dateUtil.countDownFromToday(formData.birthday)) >= 0) {
+      if (formData.birthday != notSetFlag && parseInt(dateUtil.countDownTimeFromToday(formData.birthday)) >= 0) {
         wx.showModal({
           title: '提示',
           content: '生日不能设置为今天或未来的日期',
@@ -67,7 +67,7 @@ Component({
       }
 
       //检查考研日期是否设置正确
-      if (formData.examDate != notSetFlag && parseInt(dateUtil.countDownFromToday(formData.examDate)) < 0) {
+      if (formData.examDate != notSetFlag && parseInt(dateUtil.countDownTimeFromToday(formData.examDate)) < 0) {
         wx.showModal({
           title: '提示',
           content: '考研日期不能设置为过去的日期',
@@ -78,6 +78,9 @@ Component({
 
       if (this.data.isFirstLogin) {
         //第一次登录，不需要检查是否修改
+        formData.birthday = formData.birthday == null ? "" : formData.birthday
+        formData.examDate = formData.examDate == null ? "" : formData.examDate
+        console.log(formData)
         this.triggerEvent("save", formData)
       } else {
         //在修改页面，需要检查是否进行过修改
