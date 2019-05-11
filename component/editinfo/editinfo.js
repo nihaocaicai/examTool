@@ -147,7 +147,7 @@ Component({
           user_avatar: wx_user_info['user_avatar'],
           user_gender: wx_user_info['user_gender'],
           user_city: wx_user_info['user_city'],
-          user_brithday: formData.birthday,
+          user_birthday: formData.birthday,
           user_target: formData.goal_university + "+" + formData.goal_major,
           user_motto: formData.motto,
           user_exam_date: formData.examDate,
