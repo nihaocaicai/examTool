@@ -2,8 +2,13 @@ import {
   Modify
 } from "modify-model.js"
 
+import {
+  Storage
+} from "../../../utils/storage.js"
+
 var model = new Modify()
-var thisClass = undefined
+var thisClass = null
+var planModifyList = null
 
 Page({
   data: {
@@ -16,7 +21,15 @@ Page({
 
   onLoad: function(options) {
     thisClass = this
-    this._initData()
+    planModifyList = new Map()
+    this._checkIfHasFailPlanFinish()
+  },
+
+  onUnload: function() {
+    console.log(planModifyList)
+    if (planModifyList.size != 0) {
+      this._modifyFinish() // 批量提交修改的计划
+    }
   },
 
   /**
@@ -103,6 +116,32 @@ Page({
         }
       }
     })
+  },
+
+  /**
+   * [事件_更改计划完成状态]
+   */
+  changeFinish(e) {
+    var dayindex = e.target.dataset.dayindex
+    var index = e.target.dataset.index
+    var plan_id = e.target.dataset.plan_id
+
+    //更改显示的列表
+    var newList = this.data.planList
+    var flag = !(newList[dayindex].data[index].plan_if_finish)
+    newList[dayindex].data[index].plan_if_finish = flag
+    this.setData({
+      planList: newList
+    })
+
+    //将修改过的记录添加到列表中
+    if (planModifyList.get(plan_id) != undefined) {
+      //有记录，移除
+      planModifyList.delete(plan_id)
+    } else {
+      //没有记录，添加
+      planModifyList.set(plan_id, flag ? 1 : 0)
+    }
   },
 
   /**
@@ -208,6 +247,61 @@ Page({
         })
       }
     })
+  },
+
+  /**
+   * [批量提交星星]
+   */
+  _modifyFinish() {
+    var ids = new Array()
+    var values = new Array()
+    var that = this
+    planModifyList.forEach(function(value, id) {
+      ids.push(id)
+      values.push(value)
+    })
+    var data = {
+      plan_id: "[" + ids.toString() + "]",
+      plan_if_finish: "[" + values.toString() + "]",
+    }
+    model.batchModifyToServer({
+      data: data,
+      success: function() {},
+      fail: function() {
+        //失败就暂存到缓存，暂存失败就直接丢弃
+        var s = new Storage()
+        s.save({
+          key: 'failPlanFinish',
+          data: data,
+        })
+      },
+    })
+  },
+
+  /**
+   * 检查有没有没更新的计划完成状态
+   */
+  _checkIfHasFailPlanFinish() {
+    var that = this
+    // 获取信息之前先检查是不是存在上次没保存的星星
+    var data = wx.getStorageSync('failPlanFinish')
+    if (data == "") {
+      that._initData()
+    } else {
+      //如果存在没保存的信息，先进行更新
+      //不管成不成功，都清除上次未保存的记录
+      model.batchModifyToServer({
+        data: data,
+        success: function() {
+          wx.removeStorageSync("failPlanFinish")
+          that._initData()
+        },
+        fail: function() {
+          wx.removeStorageSync("failPlanFinish")
+          that._initData()
+        },
+      })
+    }
   },
 
   // 滑动组件start
