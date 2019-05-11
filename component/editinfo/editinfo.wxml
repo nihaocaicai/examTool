@@ -37,12 +37,12 @@
         <view class="motto">
           <view class="mottoedit">座右铭:</view>
           <input name="motto" class="wx-motto-con" maxlength="16" placeholder='激励你的名言' value="{{motto}}" />
-          <view wx:if="{{isLogin}}" style="color: #999; text-align:center; font-size: 30rpx">没有想好可以稍后设置哦～</view>
+          <view wx:if="{{isFirstLogin}}" style="color: #999; text-align:center; font-size: 30rpx">没有想好可以稍后设置哦～</view>
         </view>
       </view>
       <!-- 按钮 -->
       <view class="wx-setting-btn">
-        <button wx:if="{{!isLogin}}" bindtap='_cancel'>取消</button>
+        <button wx:if="{{!isFirstLogin}}" bindtap='_cancel'>取消</button>
         <button form-type="submit">确定</button>
       </view>
     </form>

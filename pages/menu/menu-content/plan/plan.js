@@ -42,7 +42,7 @@ Page({
             loadingFail: false,
             showView: false,
             hasMorePlan: false,
-            noPlan: false,
+            noPlan: true,
           })
         } else {
           // 有数据

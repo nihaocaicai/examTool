@@ -64,6 +64,7 @@ Component({
      */
     _saveUserInfo(formData) {
       var that = this
+      var wx_user_info = wx.getStorageSync("wx_user_info")
       wx.showLoading({
         title: '信息保存中',
       })
@@ -115,11 +116,11 @@ Component({
         },
         statusCodeFail: function() {
           wx.hideLoading()
-          this._showErrorModel('服务器出错，请稍后重试')
+          that._showErrorModel('服务器出错，请稍后重试')
         },
         fail: function() {
           wx.hideLoading()
-          this._showErrorModel('网络连接失败，请检查网络连接是否正确')
+          that._showErrorModel('网络连接失败，请检查网络连接是否正确')
         },
       })
     },
@@ -205,16 +206,7 @@ Component({
      *[点击取消按钮]
      */
     _cancel() {
-      if (this.data.isFirstLogin) {
-        // 新增信息，点击取消保存空信息
-        this._saveUserInfo({
-          birthday: null,
-          examDate: null,
-          goal_university: "",
-          goal_major: "",
-          motto: "",
-        })
-      } else {
+      if (!this.data.isFirstLogin) {
         // 修改信息，点击取消直接隐藏对话框
         this.hideEdit()
         this.triggerEvent("cancel")
