@@ -168,6 +168,7 @@ Page({
         page: this.data.page
       },
       success: function(data) {
+        console.log(data)
         if (data.length == 0) {
           //没有数据
           thisClass.setData({
@@ -176,6 +177,7 @@ Page({
         } else {
           //有数据
           thisClass.setData({
+            hasMorePlan: true,
             planList: data,
             page: thisClass.data.page + 1
           })
@@ -196,8 +198,9 @@ Page({
   /**
    * [初始化数据]
    */
-  _initData() {
-    wx.showLoading({
+  _initData(hideTips) {
+    var showTips = !hideTips
+    showTips && wx.showLoading({
       title: '加载中',
     })
     model.getAfterPlan({
@@ -208,28 +211,35 @@ Page({
         if (data.length == 0) {
           //没有数据
           thisClass.setData({
+            loading: false,
+            loadingFail: false,
+            showView: false,
+            hasMorePlan: false,
             noPlan: true,
           })
         } else {
           //有数据
           thisClass.setData({
+            loading: false,
+            loadingFail: false,
             showView: true,
-            planList: data,
+            hasMorePlan: true,
             noPlan: false,
+            planList: data,
+            page: thisClass.data.page + 1
           })
         }
-        thisClass.setData({
-          loading: false,
-          page: thisClass.data.page + 1
-        })
-        wx.hideLoading()
+        showTips && wx.hideLoading()
       },
       fail: function() {
         thisClass.setData({
           loading: false,
           loadingFail: true,
+          showView: false,
+          hasMorePlan: false,
+          noPlan: false,
         })
-        wx.hideLoading()
+        showTips && wx.hideLoading()
       }
     })
   },

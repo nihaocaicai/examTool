@@ -19,60 +19,68 @@ Component({
      */
     formSubmit(e) {
       var formData = e.detail.value
-      //没有问题
+      // 操作前先检查填写的数据是否正确
+      var tips = ""
+      if (formData.plan_content == "") {
+        tips = "计划"
+      } else if (formData.plan_date == null) {
+        tips = "日期"
+      } else if (formData.plan_start_time == null) {
+        tips = "开始时间"
+      } else if (formData.plan_end_time == null) {
+        tips = "结束时间"
+      } else if (dateUtil.compareNow(formData.plan_date, formData.plan_start_time) == -1) {
+        wx.showModal({
+          title: '提示',
+          content: '开始时间不能早于或等于现在的时间哦！',
+          showCancel: false,
+          confirmColor: "#04838e",
+          confirmText: "知道了",
+        })
+        return
+      } else if (dateUtil.compareTime(this.data.plan_end_time, this.data.plan_start_time) != 1) {
+        wx.showModal({
+          title: '提示',
+          content: '结束时间不能早于或等于开始时间哦！',
+          showCancel: false,
+          confirmColor: "#04838e",
+          confirmText: "知道了",
+        })
+        return
+      }
+      if (tips != "") {
+        //存在问题
+        wx.showModal({
+          title: '提示',
+          content: '你忘了填写' + tips + "哦！",
+          showCancel: false,
+          confirmColor: "#04838e",
+          confirmText: "知道了",
+        })
+        return
+      }
+
       if (this.data.isModify) {
         // 修改计划
         var beforeData = this.data.beforeData
-        var flag = beforeData.plan_content != this.data.plan_content ||
-          beforeData.plan_date != this.data.plan_date ||
-          beforeData.plan_start_time != this.data.plan_start_time ||
-          beforeData.plan_end_time != this.data.plan_end_time ||
-          beforeData.plan_id != this.data.plan_id ||
-          beforeData.plan_if_finish != this.data.plan_if_finish ? 1 : 0 ||
-          beforeData.plan_if_repeat != this.data.plan_if_repeat
+
+        var flag = beforeData.plan_content != formData.plan_content ||
+          beforeData.plan_date != formData.plan_date ||
+          beforeData.plan_start_time != formData.plan_start_time ||
+          beforeData.plan_end_time != formData.plan_end_time ||
+          beforeData.plan_if_repeat != formData.plan_if_repeat
 
         if (flag) {
           formData.plan_id = this.data.plan_id
           formData.plan_if_finish = this.data.plan_if_finish
-          formData.plan_if_repeat = this.data.plan_if_repeat ? 1 : 0
+          formData.plan_if_repeat = (this.data.plan_if_repeat ? 1 : 0)
           this.triggerEvent("confirm_modify", formData)
         } else {
           this._cancel()
         }
       } else {
-        // 添加计划，检查各项内容是否填写正确
-        var tips = ""
-        if (formData.plan_content == "") {
-          tips = "计划"
-        } else if (formData.plan_date == null) {
-          tips = "日期"
-        } else if (formData.plan_start_time == null) {
-          tips = "开始时间"
-        } else if (formData.plan_end_time == null) {
-          tips = "结束时间"
-        } else if (dateUtil.isEarlyFromTime(this.data.plan_end_time, this.data.plan_start_time) != 1) {
-          wx.showModal({
-            title: '提示',
-            content: '结束时间不能早于或等于开始时间哦！',
-            showCancel: false,
-            confirmColor: "#04838e",
-            confirmText: "知道了",
-          })
-          return
-        }
-        if (tips != "") {
-          //存在问题
-          wx.showModal({
-            title: '提示',
-            content: '你忘了填写' + tips + "哦！",
-            showCancel: false,
-            confirmColor: "#04838e",
-            confirmText: "知道了",
-          })
-          return
-        }
         formData.plan_if_finish = 0
-        formData.plan_if_repeat = this.data.plan_if_repeat ? 1 : 0
+        formData.plan_if_repeat = (this.data.plan_if_repeat ? 1 : 0)
         this.triggerEvent("confirm_add", formData)
       }
     },

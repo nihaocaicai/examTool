@@ -83,20 +83,20 @@ class DateUtil {
   }
 
   /**
-   * 从现在时刻开始距离 time 的差值和 timeStap 比较
+   * 从现在时刻开始距离 time 的差值和 timeStamp 比较
    * 
    * @time 准确时间(Date 类型)
    * @timeStap 时间阈值, 单位为毫秒(1s = 1000ms)
    *  
    * @return -1: 小于; 0: 等于; 1:大于
    */
-  countDownTimeFromToday(time, timeStap) {
+  compareNowTimeStamp(time, timeStamp) {
     var n = new Date().getTime()
     var t = time.getTime()
 
-    if (t - n < timeStap) {
+    if (t - n < timeStamp) {
       return -1
-    } else if (t - n == timeStap) {
+    } else if (t - n == timeStamp) {
       return 0
     } else {
       return 1
@@ -104,12 +104,22 @@ class DateUtil {
   }
 
   /**
-   * 日期早于现在吗？
+   * [时刻与当前时刻进行比较]
    * 
-   * @date 结束日期, YYYY-MM-DD 形式
+   * 时刻 xxx 当前时刻 返回 y
+   *
+   * xxx y
+   *
+   * 早于: -1
+   *
+   * 等于: 0
+   *
+   * 晚于: 1
+   *
+   * @date 日期, YYYY-MM-DD 形式
    * @time 时间, HH:ss 形式
    */
-  isEarlyFromNow(date, time) {
+  compareNow(date, time) {
     var time1 = new Date(date + " " + time).getTime()
     var time2 = new Date().getTime()
     if (time1 < time2)
@@ -121,45 +131,63 @@ class DateUtil {
   }
 
   /**
-   * 日期 1 晚于日期 2 吗？
+   * [时间 1 与时间 2 比较]
    * 
-   * @date1 日期 1 的日期, YYYY-MM-DD 形式
-   * @time1 日期 1 的时间, HH:ss 形式
-   * @date2 日期 2 的日期, YYYY-MM-DD 形式
-   * @time2 日期 2 的时间, HH:ss 形式
-   */
-  isLateFromDate(date1, time1, date2, time2) {
-    return !this.isEarlyFromDate(date1, time1, date2, time2)
-  }
-
-  /**
-   * 日期 1 早于日期 2 吗？
+   * 时间 1 xxx 时间 2 返回 y
    * 
-   * @date1 日期 1 的日期, YYYY-MM-DD 形式
-   * @time1 日期 1 的时间, HH:ss 形式
-   * @date2 日期 2 的日期, YYYY-MM-DD 形式
-   * @time2 日期 2 的时间, HH:ss 形式
-   */
-  isEarlyFromDate(date1, time1, date2, time2) {
-    var time1 = new Date(date1 + " " + time1).getTime()
-    var time2 = new Date(date2 + " " + time2).getTime()
-    return time1 < time2
-  }
-
-  /**
-   * 时间 1 早于时间 2 吗？
+   * xxx y
    * 
+   * 早于: -1
+   *
+   * 等于: 0
+   *
+   * 晚于: 1
+   *
    * @time1 时间 1, HH:ss 形式
    * @time2 时间 2, HH:ss 形式
    */
-  isEarlyFromTime(time1, time2) {
+  compareTime(time1, time2) {
     var time1 = new Date(this.getFormatDate() + " " + time1).getTime()
     var time2 = new Date(this.getFormatDate() + " " + time2).getTime()
-    return time1 < time2
+    if (time1 < time2)
+      return -1
+    else if (time1 > time2)
+      return 1
+    else
+      return 0
   }
 
   /**
-   * 返回调用的时候后7天的日期或时间
+   * [日期 1 与日期 2 比较]
+   * 
+   * 日期 1 xxx 日期 2 返回 y
+   *
+   * xxx y
+   *
+   * 早于: -1
+   *
+   * 等于: 0
+   *
+   * 晚于: 1
+   * 
+   * @date1 日期 1 的日期, YYYY-MM-DD 形式
+   * @time1 日期 1 的时间, HH:ss 形式
+   * @date2 日期 2 的日期, YYYY-MM-DD 形式
+   * @time2 日期 2 的时间, HH:ss 形式
+   */
+  compareDateAndTime(date1, time1, date2, time2) {
+    var time1 = new Date(date1 + " " + time1).getTime()
+    var time2 = new Date(date2 + " " + time2).getTime()
+    if (time1 < time2)
+      return -1
+    else if (time1 > time2)
+      return 1
+    else
+      return 0
+  }
+
+  /**
+   * 返回调用时后7天的日期或时间
    * 
    * @type 0:YYYY-MM-DD HH:ss, 1:YYYY-MM-DD, 2:HH(向上取整，例如19:59取19), 3:时间戳,
    */

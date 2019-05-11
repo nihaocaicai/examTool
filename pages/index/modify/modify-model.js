@@ -12,7 +12,7 @@ class ModifyComponent {
     var r = new Request()
     r.setFailInfo(path, "getAfterPlan")
     r.request({
-      url: "/user/plan/all/after",
+      url: "/user/plans/all/after",
       data: params.data,
       success: params.success,
       fail: params.fail,

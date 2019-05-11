@@ -18,7 +18,7 @@ class IndexComponent {
    */
   getEverydayPlanFromServer(callbacks) {
     var r = new Request()
-    r.setFailInfo("index-model.js", "getEverydayPlanFromServer")
+    r.setFailInfo("/pages/index/index-model.js", "getEverydayPlanFromServer")
     r.request({
       url: '/user/plans/all/intraday',
       success: callbacks.success,
@@ -32,7 +32,7 @@ class IndexComponent {
    */
   batchModifyToServer(params) {
     var r = new Request()
-    r.setFailInfo("index-model.js", "batchModifyToServer")
+    r.setFailInfo("/pages/index/index-model.js", "batchModifyToServer")
     r.request({
       url: '/user/plans/batchmodify',
       method: "POST",

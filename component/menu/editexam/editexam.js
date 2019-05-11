@@ -68,7 +68,7 @@ Component({
       } else if (formData.arrange_time == "") {
         this.tips("请设置考研的时间")
         return
-      } else if (dateUtil.isEarlyFromNow(formData.arrange_date, formData.arrange_time)) {
+      } else if (dateUtil.compareNow(formData.arrange_date, formData.arrange_time) != 1) {
         this.tips("考研的时间不能早于现在的时间")
         return
       } else if (formData.arrange_if_prompt) {
@@ -79,10 +79,10 @@ Component({
         } else if (formData.arrange_if_prompt_time == "") {
           this.tips("请设置提醒时间")
           return
-        } else if (dateUtil.isEarlyFromNow(formData.arrange_if_prompt_date, formData.arrange_if_prompt_time)) {
+        } else if (dateUtil.compareNow(formData.arrange_if_prompt_date, formData.arrange_if_prompt_time) != 1) {
           this.tips("提醒时间不能早于现在的时间")
           return
-        } else if (dateUtil.isLateFromDate(formData.arrange_if_prompt_date, formData.arrange_if_prompt_time, formData.arrange_date, formData.arrange_time)) {
+        } else if (dateUtil.compareDateAndTime(formData.arrange_if_prompt_date, formData.arrange_if_prompt_time, formData.arrange_date, formData.arrange_time) != 1) {
           this.tips("提醒时间不能晚于考研的时间")
           return
         }
@@ -133,7 +133,7 @@ Component({
         var ifPrompt = this.data.arrange_if_prompt
         this.setData({
           flag: false,
-          arrange_if_prompt: dateUtil.countDownTimeFromToday(d, 604800000) == 1 ? false : ifPrompt,
+          arrange_if_prompt: dateUtil.compareNowTimeStamp(d, 604800000) == 1 ? false : ifPrompt,
           dateStart: dateUtil.getFormatDate(),
           timeStart: this.data.arrange_date == dateUtil.getFormatDate() ? dateUtil.getFormatTime() : "00:00",
           promptDateStart: dateUtil.getFormatTime(1) == 23 ? dateUtil.getNextDate() : dateUtil.getFormatDate(),
@@ -185,7 +185,7 @@ Component({
             timeStart: dateUtil.getFormatTime(),
           })
           //现在时刻晚于重设日期后的时间，时间要重设
-          if (this.data.arrange_time != "" && dateUtil.isLateFromDate(dateUtil.getFormatDate(), dateUtil.getFormatTime(), e.detail.value, this.data.arrange_time)) {
+          if (this.data.arrange_time != "" && dateUtil.compareDateAndTime(dateUtil.getFormatDate(), dateUtil.getFormatTime(), e.detail.value, this.data.arrange_time) == 1) {
             this.setData({
               arrange_time: dateUtil.getFormatTime(),
             })

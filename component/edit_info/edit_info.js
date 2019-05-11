@@ -57,7 +57,7 @@ Component({
       var notSetFlag = null
 
       //检查生日设置是否正确
-      if (formData.birthday != notSetFlag && parseInt(dateUtil.countDownTimeFromToday(formData.birthday)) >= 0) {
+      if (formData.birthday != notSetFlag && parseInt(dateUtil.countDownDateFromToday(formData.birthday)) >= 0) {
         wx.showModal({
           title: '提示',
           content: '生日不能设置为今天或未来的日期',
@@ -67,7 +67,7 @@ Component({
       }
 
       //检查考研日期是否设置正确
-      if (formData.examDate != notSetFlag && parseInt(dateUtil.countDownTimeFromToday(formData.examDate)) < 0) {
+      if (formData.examDate != notSetFlag && parseInt(dateUtil.countDownDateFromToday(formData.examDate)) < 0) {
         wx.showModal({
           title: '提示',
           content: '考研日期不能设置为过去的日期',

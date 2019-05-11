@@ -10,7 +10,7 @@ class PlanComponent {
   getBeforePlan(params) {
     var r = new Request()
     r.request({
-      url: "/user/plan/all/before",
+      url: "/user/plans/all/before",
       data: params.data,
       success: params.success,
       fail: params.fail,
