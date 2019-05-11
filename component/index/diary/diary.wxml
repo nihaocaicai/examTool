@@ -1,6 +1,5 @@
-<view hidden="{{flag}}" catchtouchmove="preventTouchMove">
+<view hidden="{{flag}}" catchtouchmove="preventTouchMove" class='dairy'>
   <view class='diary-container'>
-
     <view class="wx-diary-title">{{dialogTitle}}</view>
     <form bindsubmit="formSubmit">
       <view class='wx-diary-container'>

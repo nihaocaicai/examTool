@@ -1,21 +1,24 @@
-.data-container{
+.data-container {
   margin-top: 20rpx;
   margin-left: 40rpx;
   margin-right: 40rpx;
-  border-width: 1rpx;  
-  border-color: black;  
+  border-width: 1rpx;
+  border-color: black;
   border-style: dashed;
 }
-.wx-date{
+
+.wx-date {
   margin-top: 20rpx;
   margin-left: 25rpx;
   font-size: 48rpx;
   color: #d6d6d6;
 }
+
 /* 日期star */
-.date-container{
-  flex-direction:row;
-  display:flex;
+
+.date-container {
+  flex-direction: row;
+  display: flex;
   align-items: center;
   /* justify-content: center; */
   width: 100%;
@@ -24,49 +27,55 @@
   margin-bottom: 15rpx;
   margin-left: 15rpx;
 }
-.date-text{
+
+.date-text {
   font-size: 28rpx;
   width: 500rpx;
 }
+
 /* 日期end */
+
 /* 内容star */
-.content-container{
-  display:flex;
-  flex-direction:column;
+
+.content-container {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
   margin-top: 15rpx;
   margin-bottom: 24rpx;
   margin-left: 15rpx;
 }
-.content-text{
+
+.content-text {
   font-size: 28rpx;
 }
+
 /* 内容end */
 
 .order-item {
   position: relative;
 }
 
-.edit{  
-  width: 160rpx;  
+.edit {
+  width: 160rpx;
   height: 100%;
-  background-color:#e9e9e9; 
-  color: white; 
-  position: absolute;  
-  top: 0;  
-  right: -160rpx;  
-  display: flex;  
-  justify-content: center;  
-  align-items: center;  
+  background-color: #e9e9e9;
+  color: white;
+  position: absolute;
+  top: 0;
+  right: -160rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.modify-image{
+.modify-image {
   width: 85rpx;
   height: 85rpx;
 }
 
-.del-image{
+.del-image {
   width: 75rpx;
   height: 75rpx;
 }

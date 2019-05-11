@@ -36,6 +36,6 @@
       </view>
     </block>
   </view>
-
-  <diary id='diary' bind:modify_confirm="modify_confirm" bind:add_confirm="add_confirm" bind:hidden="hidden_dialog" />
+  <diary id='diary' bind:successEvent="_successEvent"
+  bind:hidden="hidden_dialog" />
 </view>
