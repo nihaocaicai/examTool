@@ -1,5 +1,5 @@
 import {
-  LoginComponent
+  Login
 } from "login-model.js"
 
 import {
@@ -11,7 +11,7 @@ import {
 } from "../../utils/debug.js"
 
 
-var model = new LoginComponent()
+var model = new Login()
 var debug = new Debug()
 var openDebug = true //开启调试功能
 

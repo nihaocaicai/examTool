@@ -1,12 +1,12 @@
 import {
-  SettingComponent
+  Setting
 } from "setting-model.js"
 
 import {
   Storage
 } from "../../../../utils/storage.js"
 
-var model = new SettingComponent()
+var model = new Setting()
 
 Page({
   onLoad: function() {

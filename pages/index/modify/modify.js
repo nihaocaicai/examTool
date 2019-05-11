@@ -1,8 +1,8 @@
 import {
-  ModifyComponent
+  Modify
 } from "modify-model.js"
 
-var model = new ModifyComponent()
+var model = new Modify()
 var thisClass = undefined
 
 Page({

@@ -1,8 +1,8 @@
 import {
-  PlanComponent
+  Plan
 } from "plan-model.js"
 
-var model = new PlanComponent()
+var model = new Plan()
 
 Page({
   data: {

@@ -3,7 +3,7 @@ import {
 } from "../../../../utils/server/request.js"
 
 
-class SettingComponent {
+class Setting {
   /**
    * [保存用户信息]
    */
@@ -35,5 +35,5 @@ class SettingComponent {
 }
 
 export {
-  SettingComponent
+  Setting
 }

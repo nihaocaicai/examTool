@@ -2,7 +2,7 @@ import {
   Request
 } from "../../../../utils/server/request.js"
 
-class PlanComponent {
+class Plan {
   /**
    * [获取用户全部考研计划]
    * 当天以前的，不包括当天
@@ -19,5 +19,5 @@ class PlanComponent {
 }
 
 export {
-  PlanComponent
+  Plan
 }

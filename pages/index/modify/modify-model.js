@@ -4,7 +4,7 @@ import {
 
 var path = "/pages/index/modify/modify-model"
 
-class ModifyComponent {
+class Modify {
   /**
    * [获取用户当天之后的（包括当天的）考研计划]
    */
@@ -70,5 +70,5 @@ class ModifyComponent {
 }
 
 export {
-  ModifyComponent
+  Modify
 }

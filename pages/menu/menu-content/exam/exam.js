@@ -1,8 +1,8 @@
 import {
-  ExamComponent
+  Exam
 } from "exam-model.js"
 
-var model = new ExamComponent()
+var model = new Exam()
 
 Page({
   data: {

@@ -7,11 +7,11 @@ import {
 } from "../../utils/storage.js"
 
 import {
-  IndexComponent
+  Index
 } from "index-model.js"
 
 var dateUtil = new DateUtil()
-var model = new IndexComponent()
+var model = new Index()
 var planModifyList = new Map()
 
 Page({

@@ -4,7 +4,7 @@ import {
 
 var thisClass = this
 
-class IndexComponent {
+class Index {
   constructor() {
     thisClass = this
   }
@@ -44,5 +44,5 @@ class IndexComponent {
 }
 
 export {
-  IndexComponent
+  Index
 }
