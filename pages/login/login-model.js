@@ -54,26 +54,6 @@ class Login {
       fail: callbacks.fail,
     })
   }
-
-  /**
-   * [保存信息]
-   * 保存 user_info 到服务器
-   */
-  saveUserInfo(params) {
-    var r = new Request()
-    r.failInfo = {
-      path: 'login-model.js',
-      functionName: "saveUserInfo"
-    }
-    r.request({
-      url: '/user/info/modify',
-      method: 'POST',
-      data: params.data,
-      success: params.success,
-      statusCodeFail: params.statusCodeFail,
-      fail: params.fail,
-    })
-  }
 }
 
 export {

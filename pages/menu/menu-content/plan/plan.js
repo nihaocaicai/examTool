@@ -1,96 +1,139 @@
-var app = getApp()
-var testData = require('../../../../data/testData.js') //测试数据
+import {
+  Plan
+} from "plan-model.js"
+
+var model = new Plan()
+var thisClass = null
 
 Page({
-  /**
-   * 页面的初始数据
-   */
   data: {
     color: ['#9DD3FA', '#1F6FB5', '#FCD692', '#FAFFEB', '#FFFFFF'], //左侧边条颜色，数目无限制
-    totalPlan: [],
-    hasMorePlan: true //true //
+    loading: true,
+    loadingFail: false,
+    showView: false,
+    hasMorePlan: true,
+    noPlan: false,
+    nowPage: 1,
+    maxItem: 10, // 加载一次显示多少条，要设置好，否则会影响点击加载更多按钮
   },
 
-  /* 加载更早的计划 */
-  loadMore: function() {
-    //如果还有计划就加载，没有就不加载
-    if (this.data.hasMorePlan) {
-      var that = this
-      wx.showLoading({
-        title: '玩命加载中',
-      })
-      //Todo 加载计划列表
-      setTimeout(function() {
-        var newPlans = testData.morePlan
-        var setPlan = that.data.totalPlan
-        for (var i in newPlans) {
-          setPlan.push(newPlans[i])
-        }
-        //如果没有更多计划了，就设置flag
-        if (true) {
-          that.setData({
-            hasMorePlan: false,
-          })
-        }
-        that.setData({
-          totalPlan: setPlan,
-        })
-        wx.hideLoading()
-      }, 500)
-    }
+  onLoad: function(options) {
+    thisClass = this
+    this._initData()
   },
+
+  onShareAppMessage: function() {},
 
   /**
-   * 生命周期函数--监听页面加载
+   * [初始化数据]
    */
-  onLoad: function(options) {
-    this.setData({
-      totalPlan: testData.plan
+  _initData() {
+    var that = thisClass
+    wx.showLoading({
+      title: '加载中',
+    })
+    model.getBeforePlan({
+      page: that.data.nowPage,
+      success: function(data) {
+        if (data.length == 0) {
+          //没数据
+          that.setData({
+            loading: false,
+            loadingFail: false,
+            showView: false,
+            hasMorePlan: false,
+            noPlan: true,
+          })
+        } else {
+          // 有数据
+          if (data.length == that.data.maxItem) {
+            //还有更多计划
+            that.setData({
+              hasMorePlan: true,
+            })
+          } else {
+            //没有更多计划
+            that.setData({
+              hasMorePlan: false,
+            })
+          }
+          that.setData({
+            loading: false,
+            loadingFail: false,
+            showView: true,
+            noPlan: false,
+            totalPlan: data,
+            nowPage: that.data.nowPage + 1,
+          })
+        }
+        wx.hideLoading()
+      },
+      fail: function() {
+        that.setData({
+          loading: false,
+          loadingFail: true,
+          showView: false,
+          hasMorePlan: false,
+          noPlan: false,
+        })
+        wx.hideLoading()
+      },
     })
   },
 
   /**
-   * 生命周期函数--监听页面初次渲染完成
+   * [加载更早的计划]
    */
-  onReady: function() {},
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function() {},
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function() {
-
+  loadMore: function() {
+    var that = thisClass
+    wx.showLoading({
+      title: '加载中',
+    })
+    model.getBeforePlan({
+      data: {
+        page: that.data.nowPage,
+      },
+      success: function(data) {
+        if (data.length == 0) {
+          //没数据
+          that.setData({
+            loading: false,
+            loadingFail: false,
+            showView: true,
+            hasMorePlan: false,
+            noPlan: false,
+          })
+        } else {
+          // 有数据
+          if (data.length == that.data.maxItem) {
+            //还有更多计划
+            that.setData({
+              hasMorePlan: true,
+            })
+          } else {
+            //没有更多计划
+            that.setData({
+              hasMorePlan: false,
+            })
+          }
+          that.setData({
+            loading: false,
+            loadingFail: false,
+            showView: true,
+            noPlan: false,
+            totalPlan: data,
+            nowPage: that.data.nowPage + 1,
+          })
+        }
+        wx.hideLoading()
+      },
+      fail: function() {
+        wx.hideLoading()
+        wx.showToast({
+          title: '加载失败',
+          image: '/images/fail.png',
+        })
+      },
+    })
   },
 })

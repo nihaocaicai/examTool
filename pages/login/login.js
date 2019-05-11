@@ -10,6 +10,7 @@ import {
   Debug
 } from "../../utils/debug.js"
 
+
 var model = new Login()
 var debug = new Debug()
 var openDebug = true //开启调试功能
@@ -18,7 +19,8 @@ Page({
   data: {
     loading: true, //是否要显示 加载中 页面
     needAuthorize: false, //是否需要显示 点击授权 按钮
-    needDelete: false, //需要删除小程序提示
+    needDeleteTips: false, //需要删除小程序提示
+    loginFailTips: false, //提示加载失败
   },
 
   onShow: function() {
@@ -36,7 +38,7 @@ Page({
       this.setData({
         needAuthorize: false,
         loading: false,
-        needDelete: true, //需要删除小程序提示
+        needDeleteTips: true, //需要删除小程序提示
       })
     } else {
       //检查微信授权
@@ -44,23 +46,24 @@ Page({
         success: res => {
           if (res.authSetting['scope.userInfo']) {
             // 用户已经授权
-            this._checkStorage()
+            that._checkStorage()
           } else {
             // 用户没有授权，需要用户授权
             if (wx.canIUse('button.open-type.getUserInfo')) {
               //微信新版本，需要点击授权按钮
-              this.setData({
+              that.setData({
                 needAuthorize: true,
                 loading: false,
               })
             } else {
               //微信旧版本，在没有 open-type=getUserInfo 版本的兼容处理
-              this._getUserInfo()
+              that._getUserInfo()
             }
           }
         },
-        fail: function() {
-          that._loginFail()
+        fail: function(res) {
+          openDebug && debug.printWxGeSettingError("login.js", "_login", res)
+          that._checkStorage(true)
         }
       })
     }
@@ -72,14 +75,20 @@ Page({
    * [检查缓存]
    * 检查缓存是否有相应的信息
    */
-  _checkStorage() {
+  _checkStorage(isGetSettingFail) {
+    // isGetSettingFail = true 表示现在离线，但是我不知道你有没有获取授权
     var that = this
     if (!(wx.getStorageSync('token'))) {
       /* 没有 token */
-      model.get_token({
-        success: that._checkStorage,
-        fail: that._loginFail,
-      })
+      if (isGetSettingFail) {
+        // 一定是没有授权/ token 信息丢失，无论如何都要获取
+        that._loginFail()
+      } else {
+        model.get_token({
+          success: that._checkStorage,
+          fail: that._loginFail,
+        })
+      }
     } else if (!(wx.getStorageSync('user_info') instanceof Object)) {
       /* 没有 user_info */
       model.get_user_info({
@@ -295,163 +304,36 @@ Page({
   },
 
   /**
-   * (*内部函数)
-   * [保存用户信息事件]
+   * [个人信息保存成功回调函数]
    */
-  _save(e) {
-    wx.showLoading({
-      title: '信息保存中',
-    })
-    var formData = e.detail
-    var wx_user_info = wx.getStorageSync("wx_user_info")
-    model.saveUserInfo({
-      data: {
-        user_name: wx_user_info['user_name'],
-        user_avatar: wx_user_info['user_avatar'],
-        user_gender: wx_user_info['user_gender'],
-        user_city: wx_user_info['user_city'],
-        user_brithday: formData.birthday,
-        user_target: formData.goal_university + "+" + formData.goal_major,
-        user_motto: formData.motto,
-        user_exam_date: formData.examDate,
-      },
-      success: function(data) {
-        var storage = new Storage()
-        storage.saveList({
-          saveList: [{
-              key: "user_info",
-              data: formData,
-            },
-            {
-              key: "hideOfflineTips",
-              data: false,
-            }
-          ],
-          success: function() {
-            that.edit.hideEdit();
-            wx.hideLoading()
-            that._toIndex()
-          },
-          fail: function() {
-            wx.hideLoading()
-          },
-          showRetry: true,
-          retry: function() {
-            wx.showLoading({
-              title: '信息保存中',
-            })
-          },
-          retryCancel: function() {
-            that.edit.hideEdit()
-            that._saveFail()
-          },
-          saveType: "保存信息",
-          path: '/pages/login/login',
-          functionName: '_save',
-        })
-      },
-      statusCodeFail: function() {
-        wx.hideLoading()
-        wx.showModal({
-          title: '提示',
-          content: '服务器出错，请稍后重试',
-          showCancel: false,
-        })
-      },
-      fail: function() {
-        wx.hideLoading()
-        wx.showModal({
-          title: '提示',
-          content: '网络连接失败，请检查网络连接是否正确',
-          showCancel: false,
-        })
-      },
-    })
+  save_success() {
+    this._firstGetToken()
+  },
+
+  /**
+   * [个人信息保存失败回调函数]
+   */
+  save_fail() {
+    this._saveFail()
   },
 
   /**
    * (*内部函数)
-   * [设置信息对话框点击取消按钮]
+   * [第一次登录，获取token]
    */
-  _cancel() {
+  _firstGetToken() {
     var that = this
-    wx.showLoading({
-      title: '信息保存中',
-    })
-    var wx_user_info = wx.getStorageSync("wx_user_info")
-    model.saveUserInfo({
-      data: {
-        user_name: wx_user_info['user_name'],
-        user_avatar: wx_user_info['user_avatar'],
-        user_gender: wx_user_info['user_gender'],
-        user_city: wx_user_info['user_city'],
-        user_brithday: null,
-        user_target: "",
-        user_motto: "",
-        user_exam_date: null,
-      },
-      success: function(data) {
-        var storage = new Storage()
-        storage.saveList({
-          saveList: [{
-              key: "user_info",
-              data: {
-                birthday: null,
-                examDate: null,
-                goal_university: "",
-                goal_major: "",
-                motto: "",
-              },
-            },
-            {
-              key: "hideOfflineTips",
-              data: false,
-            }, {
-              key: 'everyday_plan',
-              data: {
-                date: '2019-05-05',
-                data: []
-              },
-            }
-          ],
-          success: function() {
-            that.edit.hideEdit();
-            wx.hideLoading()
-            that._toIndex()
-          },
-          fail: function() {
-            wx.hideLoading()
-          },
-          showRetry: true,
-          retry: function() {
-            wx.showLoading({
-              title: '信息保存中',
-            })
-          },
-          retryCancel: function() {
-            that.edit.hideEdit()
-            that._saveFail()
-          },
-          saveType: "保存信息",
-          path: '/pages/login/login',
-          functionName: '_cancel',
-        })
-      },
-      statusCodeFail: function() {
+    /* 无论能否获取到 token, 都直接跳转到首页 */
+    model.get_token({
+      success: function() {
+        that.edit.hideEdit()
         wx.hideLoading()
-        wx.showModal({
-          title: '提示',
-          content: '服务器出错，请稍后重试',
-          showCancel: false,
-        })
+        that._toIndex()
       },
       fail: function() {
+        that.edit.hideEdit()
         wx.hideLoading()
-        wx.showModal({
-          title: '提示',
-          content: '网络连接失败，请检查网络连接是否正确',
-          showCancel: false,
-        })
+        that._toIndex()
       },
     })
   },
@@ -486,12 +368,21 @@ Page({
       title: '提示',
       content: '获取信息失败。请检查网络连接后重试',
       confirmColor: '#04838e',
+      cancelText: "算了",
       confirmText: '重试',
-      showCancel: false,
-      success: function() {
-        wx.reLaunch({
-          url: '/pages/login/login',
-        })
+      success: function(res) {
+        if (res.confirm) {
+          //重试
+          wx.reLaunch({
+            url: '/pages/login/login',
+          })
+        } else if (res.cancel) {
+          //取消
+          that.setData({
+            loading: false,
+            loginFailTips: true,
+          })
+        }
       }
     })
   },

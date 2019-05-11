@@ -53,5 +53,5 @@ var everyday_planList = {
 }
 
 module.exports = {
-  everyday_planList: everyday_planList
+  //everyday_planList: everyday_planList
 }

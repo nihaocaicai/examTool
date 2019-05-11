@@ -8,6 +8,7 @@ var local_plan_database = [
       plan_star_time: "8:00",
       plan_end_time: "9:00",
       //  是否每日重复
+
       plan_if_repeat: "true",
       //  是否打开微信未完成提示
       plan_if_prompt: "true",
@@ -124,5 +125,5 @@ var local_plan_database = [
 ]
 
 module.exports = {
-  planList: local_plan_database
+  // planList: local_plan_database
 }

@@ -23,7 +23,8 @@ class Request {
    * 
    * success: 检查成功回调函数，返回成功获取到的值(res.data); 
    * 
-   * statusCodeFail: 服务器返回代码错误信息回调函数，返回错误信息(obj = {statusCode, data}); 
+   * statusCodeFail: 服务器返回代码错误信息回调函数，返回错误信息(obj = {statusCode, data});
+   * 如果不设置statusCodeFail, 将默认调用 fail 
    * 
    * fail : 连接失败回调函数，返回错误信息(res); 
    * 
@@ -45,8 +46,11 @@ class Request {
           /* 服务器连接正常*/
           params.success && params.success(res.data)
         } else {
+          thisClass._debug(0, {
+            statusCode: res.statusCode,
+            data: JSON.stringify(res.data),
+          })
           /* 服务器处理错误 */
-          thisClass._debug(0, res)
           if (!noRefetch && code == '400' && res.data.error_code == '2001') {
             /* token 过期，需要重新获取 token */
             thisClass._refetch(params)
@@ -55,10 +59,13 @@ class Request {
             if (params.statusCodeFail)
               params.statusCodeFail({
                 statusCode: res.statusCode,
-                data: res.data,
+                data: JSON.stringify(res.data),
               })
-            else
-              params.fail && params.fail(res)
+            else {
+              var err = "服务器错误代码: " + res.statusCode + "\n"
+              err += "错误信息:\n" + JSON.stringify(res.data)
+              params.fail && params.fail(err)
+            }
           }
         }
       },
@@ -97,7 +104,7 @@ class Request {
         }
       if (type == 0) {
         // 服务器处理错误
-        thisClass.failInfo.code = res.statusCode
+        thisClass.failInfo.statusCode = res.statusCode
         thisClass.failInfo.errMsg = res.data
         debug.printServerStatusCodeFail(thisClass.failInfo)
       } else if (type == 1) {

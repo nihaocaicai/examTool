@@ -68,7 +68,7 @@ class Debug {
   printServerStatusCodeFail(obj) {
     if (obj) {
       obj.type = "服务器返回代码错误"
-      var t = "服务器错误代码:" + obj.statusCode + "\n"
+      var t = "服务器错误代码: " + obj.statusCode + "\n"
       obj.errMsg = obj.errMsg ? t + obj.errMsg : t
       this.printError(obj)
     }
@@ -111,6 +111,19 @@ class Debug {
   printWxGetUserInfoError(path, functionName, errMsg) {
     if (path && functionName && errMsg) {
       this.printErrors(path, functionName, "微信 wx.getUserInfo 错误", errMsg)
+    }
+  }
+
+  /**
+  * [微信 wx.getSetting 操作错误提示]
+  * 
+  * {path, functionName, errMsg}
+  * 
+  * (文件完整路径，函数名称，保存失败提示信息)
+  */
+  printWxGeSettingError(path, functionName, errMsg) {
+    if (path && functionName && errMsg) {
+      this.printErrors(path, functionName, "微信 wx.getSetting 错误", errMsg)
     }
   }
 

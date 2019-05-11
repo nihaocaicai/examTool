@@ -1,50 +1,174 @@
-// pages/menu/menu-content/setting/setting.js
 import {
   Setting
 } from "setting-model.js"
 
-var setting = new Setting()
+import {
+  Storage
+} from "../../../../utils/storage.js"
+
+var model = new Setting()
 
 Page({
   onLoad: function() {
-    this.setData({
-      showDeleteModal: false,
-      hideOfflineTips: wx.getStorageSync("hideOfflineTips")
-    })
-    setting.setPage(this)
-    setting.getUserData()
+    this._initData()
   },
 
   onReady: function() {
     this.edit = this.selectComponent("#edit") //获得diary组件
   },
 
-  //切换离线模式提醒按钮
-  offlineTipsChange: function(e) {
-    try {
-      wx.setStorageSync("hideOfflineTips", !e.detail.value)
-      this.setData({
-        hideOfflineTips: !e.detail.value
+  /* 信息设置对话框 */
+  /**
+   * [事件_显示设置信息]
+   */
+  showEdit() {
+    var info = wx.getStorageSync('user_info')
+    var wxInfo = wx.getStorageSync('wx_user_info')
+    this.edit.setData({
+      isFirstLogin: false, //不是在登录的时候显示对话框
+      nickName: wxInfo['user_name'],
+      birthday: info['birthday'],
+      examDate: info['examDate'],
+      goal_university: info['goal_university'],
+      goal_major: info['goal_major'],
+      motto: info['motto'],
+      beforeData: info, //修改前的数据，用于检查是否修改过
+    })
+    this.edit.showEdit()
+  },
+
+  /**
+   * [事件_保存成功]
+   */
+  modify_success(e) {
+    this.setData({
+      info: e.detail
+    })
+  },
+
+  /* 删除信息对话框 */
+  /**
+   * [事件_删除对话框改变答案框的值]
+   */
+  bindKeyInput(e) {
+    this.setData({
+      input: e.detail.value
+    })
+  },
+
+  /**
+   * [事件_删除对话框点击取消按钮]
+   */
+  cancelDelete() {
+    this.setData({
+      showDeleteModal: false
+    })
+  },
+
+  /**
+   * [事件_删除对话框点确认按钮]
+   */
+  confirmDelete(e) {
+    var that = this
+    if (this.data.result == this.data.input) {
+      //回答正确
+      wx.showLoading({
+        title: '清除数据中',
       })
-    } catch (error) {
-      console.log("设置是否提示离线信息对话框出错，错误信息:\n" + error)
+      model.deleteAccount({
+        success: function() {
+          var s = new Storage()
+          wx.clearStorage()
+          s.save({
+            key: 'logout',
+            data: true,
+            success: function() {
+              wx.hideLoading()
+              this.setData({
+                showDeleteModal: false
+              })
+              wx.showModal({
+                title: '提示',
+                content: '退出成功，请在微信中删除小程序完成退出操作',
+                showCancel: false,
+                confirmColor: '#04838e',
+                success: function(res) {
+                  wx.reLaunch({
+                    url: '/pages/login/login',
+                  })
+                },
+              })
+            },
+          })
+        },
+        fail: function() {
+          wx.hideLoading()
+          wx.showModal({
+            title: '提示',
+            content: '当前是离线模式，无法进行操作，请连接网络后重试',
+            showCancel: false,
+            confirmText: '知道了',
+            confirmColor: '#04838e',
+          })
+        },
+      })
+    } else {
+      //回答错误
+      wx.showToast({
+        title: '答案错误',
+        image: '/images/fail.png',
+        duration: 1200,
+      })
     }
   },
 
-  //什么是离线模式
+  /**
+   * [按钮_切换离线模式]
+   */
+  offlineTipsChange: function(e) {
+    var that = this
+    var s = new Storage()
+    s.save({
+      key: "hideOfflineTips",
+      data: !e.detail.value,
+      success: function() {
+        that.setData({
+          hideOfflineTips: !e.detail.value
+        })
+      },
+      showRetry: true,
+      saveType: "设置",
+      path: '/pages/menu/menu-content/setting/setting.js',
+      functionName: 'offlineTipsChange',
+      retryCancel: function() {
+        wx.showToast({
+          title: '设置失败',
+          image: "/images/fail.png",
+          duration: 1800,
+        })
+      },
+    })
+  },
+
+  /**
+   * [按钮_什么是离线模式]
+   */
   whatsOfflineMode: function() {
     wx.showModal({
       title: '什么是离线模式？',
       content: '当手机没有网络或者无法连接到服务器时，软件会进入离线模式。在离线模式下，你只能查看本地已有的计划、日记和信息，不能进行添加、删除和修改操作。',
       showCancel: false,
+      confirmText: '知道了',
       confirmColor: '#04838e'
     })
   },
 
-  /* 点击 退出登录 按钮 */
+  /**
+   * [按钮_点击退出登录]
+   */
   clickLogoutButton() {
-    var add1 = this.getRandom(1, 9);
-    var add2 = this.getRandom(0, 9 - add1);
+    var add1 = this._getRandom(1, 9);
+    var add2 = this._getRandom(0, 9 - add1);
     this.setData({
       showDeleteModal: true,
       add1: add1,
@@ -54,56 +178,29 @@ Page({
     })
   },
 
-  /* 在删除对话框点击 取消 按钮 */
-  cancelDelete() {
+  /**
+   * [初始化显示的数据]
+   */
+  _initData() {
+    var info = wx.getStorageSync('user_info')
+    var wxInfo = wx.getStorageSync('wx_user_info')
+    info.birthday = info.birthday == null ? "未设置" : info.birthday
+    info.examDate = info.examDate == null ? "未设置" : info.examDate
+    info.goal_university = info.goal_university == "" ? "未设置" : info.goal_university
+    info.goal_major = info.goal_major == "" ? "未设置" : info.goal_major
+    info.motto = info.motto == "" ? "未设置座右铭" : info.motto
     this.setData({
-      showDeleteModal: false
+      wxInfo: wxInfo,
+      info: info,
+      showDeleteModal: false,
+      hideOfflineTips: wx.getStorageSync("hideOfflineTips")
     })
   },
 
-  /* 在删除对话框点击 确定 按钮 */
-  confirmDelete(e) {
-    if (this.data.result == this.data.input) {
-      //回答正确
-      this.setData({
-        showDeleteModal: false
-      })
-      setting.confirmDelete(this.data.input)
-    } else {
-      //回答错误
-      wx.showToast({
-        title: '回答错误',
-        image: '/images/fail.png',
-        duration: 1200,
-      })
-    }
-  },
-
-  /* 输入答案框的值改变 */
-  bindKeyInput(e) {
-    this.setData({
-      input: e.detail.value
-    })
-  },
-
-  /* 考研小日志 diary 对话框 */
-  //显示对话框事件
-  showEdit() {
-    setting.showEdit()
-  },
-
-  //回调 取消事件
-  _error() {
-    setting.cancelEdit()
-  },
-
-  //回调 保存数据事件
-  _save(e) {
-    setting.confirmEdit(e.detail)
-  },
-
-  //生成随机数
-  getRandom(min, max) {
+  /**
+   * [生成随机数]
+   */
+  _getRandom(min, max) {
     return parseInt(Math.random() * (max - min + 1) + min, 10);
-  }
+  },
 })

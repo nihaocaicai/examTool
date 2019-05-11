@@ -1,11 +1,9 @@
-/* pages/menu/menu-content/plan/plan.wxss */
-
 page {
   height: 100%;
   font-family: 'PingFang SC',
                  'Helvetica Neue',
                  Helvetica,
-                 'Droid Sans Fallback',
+                 'Drosid Sans Fallback',
                  'Microsoft Yahei',
                  sans-serif;
 }
@@ -41,8 +39,29 @@ page {
   white-space: nowrap;
 }
 
-#tips {
+.tips {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  font-size: 32rpx;
+  color: #999;
+}
+
+.tips_more {
+  margin-top: 1vw;
+  margin-bottom: 1vw;
+  text-align: center;
+  font-size: 33rpx;
+}
+
+.button {
+  background: #04838e;
+  color: #fff;
+}
+
+button::after {
+  border: none;
 }

@@ -50,5 +50,5 @@ var local_exam_database = [{
 ]
 
 module.exports = {
-  examList: local_exam_database
+  //examList: local_exam_database
 }

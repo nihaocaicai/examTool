@@ -10,28 +10,37 @@
           <view class='data-container'>
             <!-- 时间-->
             <view class='date-container'>
-              <text class='date-text'>{{item.arrangement_time}}</text>
+              <text class='date-text'>{{item.arrange_date}} {{item.arrange_time}} </text>
             </view>
             <!-- 科目及地点 -->
             <view class='content-container'>
-              <text class='content-text' decode="{{true}}">{{item.arrangement_content}}</text>
-              <text class='content-text' decode="{{true}}">{{item.arrangement_place}}</text>
+              <text class='content-text' decode="{{true}}">{{item.arrange_content}}</text>
+              <text class='content-text' decode="{{true}}">{{item.arrange_place}}</text>
             </view>
           </view>
           <view class="editexam">
             <image class='modify-image' src='/images/index/diary.png' data-dayindex='{{dayIndex}}' data-index='{{index}}' bindtap="modItem" />
-            <image class='del-image' src='/images/index/modify/del.png' data-dayindex='{{dayIndex}} ' data-index='{{index}} ' bindtap="delItem" />
+            <image class='del-image' src='/images/index/modify/del.png' data-dayindex='{{dayIndex}}' data-index='{{index}}' bindtap="delItem" />
           </view>
         </view>
       </block>
     </view>
+
+    <view wx:if='{{hasMoreArrangements}}' class="tips_more" bindtap='loadMore'>点我加载更多安排</view>
+    <view wx:else class="tips_more">没有更多了</view>
   </view>
 
-  <view wx:if="{{!showView}}" style='margin-top: 8vw; height: 100%; width: 100%; display:flex; align-items:center; justify-content:center; text-align:center'>
-    <text decode='true' style='font-size:32rpx; color:#999'>
-          你还没有考研安排\n赶快下拉页面添加安排吧
-          </text>
+  <view wx:if="{{loadingFail}}" class='tips'>
+    <view style='margin-bottom:1vh'>
+      哎呀，服务器开小差了
+    </view>
+    <button class='button' bindtap='_initData'>再试一次</button>
   </view>
 
-  <editexam id='editexam' bind:modify_confirm="modify_confirm" bind:add_confirm="add_confirm" bind:hidden_dialog="hidden_dialog" />
+  <view wx:if="{{noArrangement}}" class='tips'>
+    <view style='margin-bottom:1vh'>你还没有考研安排</view>
+    <view>赶快下拉页面添加安排吧</view>
+  </view>
+
+  <editexam id='editexam' bind:add_success="_initData" bind:modify_success="_initData" />
 </view>

@@ -1,26 +1,46 @@
 import {
   Request
-} from "../../../../utils/server/request.js"
+} from "../../../utils/server/request.js"
 
+var path = "/component/index/diary/diary-model.js"
 var thisClass = this
 
-class Diary {
+class DiaryComponent {
   constructor() {
     thisClass = this
   }
 
-  setPage(page) {
-    thisClass.page = page
+  /**
+   * [向服务器上添加计划]
+   */
+  addDiary(callbacks,data) {
+    var r = new Request()
+    r.setFailInfo(path, "addDiary")
+    r.request({
+      url: "/user/diarys/add",
+      method: "POST",
+      data: data,
+      success: function (data) {
+        //不做处理，直接把data返回到index.js回去 data = data;
+        callbacks && callbacks(data);
+      },
+      fail: function(data) {
+        //不做处理，直接把data返回到index.js回去 data = data;
+        callbacks && callbacks(data);
+      },
+    })
   }
 
   /**
-   * [从服务器上获取今天的计划 everyday_planList]
-   */
-  getAllDiary(callbacks) {
+     * [向服务器上修改计划]
+     */
+  modifyDiary(callbacks, data) {
     var r = new Request()
-    r.setFailInfo("diary-model.js", "getAllDiary")
+    r.setFailInfo(path, "modifyDiary")
     r.request({
-      url: "/user/diarys/all",
+      url: "/user/diarys/modify",
+      method: "POST",
+      data: data,
       success: function (data) {
         //不做处理，直接把data返回到index.js回去 data = data;
         callbacks && callbacks(data);
@@ -32,23 +52,9 @@ class Diary {
     })
   }
 
-  deleteDiary(callbacks,diary_id) {
-    var r = new Request()
-    r.setFailInfo("diary-model.js", "deleteDiary")
-    r.request({
-      url: '/user/diarys/delete?diary_id=' + diary_id,
-      success: function (data) {
-        //不做处理，直接把data返回到index.js回去 data = data;
-        callbacks && callbacks(data);
-      },
-      fail: function (data) {
-        //不做处理，直接把data返回到index.js回去 data = data;
-        callbacks && callbacks(data);
-      },
-    })
-  }
+
 }
 
 export {
-  Diary
+  DiaryComponent
 }

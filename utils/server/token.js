@@ -53,7 +53,10 @@ class Token {
               })
             } else {
               /* 服务器处理错误 */
-              thisClass._debug(2, res)
+              thisClass._debug(2, {
+                statusCode: res.statusCode,
+                data: JSON.stringify(res.data)
+              })
               callBacks.fail && callBacks.fail({
                 statusCode: res.statusCode,
                 data: res.data

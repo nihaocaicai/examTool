@@ -1,22 +1,22 @@
-<view hidden="{{flag}}" catchtouchmove="preventTouchMove">
+<view hidden="{{flag}}" catchtouchmove="preventTouchMove" class='dairy'>
   <view class='diary-container'>
-    <view class="wx-diary-title">添加日记</view>
+    <view class="wx-diary-title">{{dialogTitle}}</view>
     <form bindsubmit="formSubmit">
       <view class='wx-diary-container'>
         <!-- 标题 -->
         <view class="wx-diary-headline">
           <text>标题：</text>
-          <input value='{{diaryTitle}}' name="diaryTitle" maxlength="14" type='text' placeholder="标题" />
+          <input value='{{diary_title}}' name="diary_title" maxlength="14" type='text' placeholder="标题" />
         </view>
         <!-- 内容 -->
         <view class="wx-diary-con">
-          <textarea value="{{diaryContent}}" name="diaryContent" maxlength="140" placeholder="说说你的想法吧..." minlength="{{diaryContentMin}}" maxlength="{{diaryContentMax}}" bindinput="inputs">
+          <textarea value="{{diary_content}}" name="diary_content" maxlength="140" placeholder="说说你的想法吧..." minlength="{{diaryContentMin}}" maxlength="{{diaryContentMax}}" bindinput="inputs">
             <text class="currentWordNumber">{{currentWordNumber|0}}/{{diaryContentMax}}</text>
           </textarea>
         </view>
         <!-- 位置 -->
         <view class="wx-diary-place">
-          <text decode="true" name="diaryLocation" bindtap='getLocation'>位置：{{diaryLocation == ""? "点击获取位置": diaryLocation}}</text>
+          <text decode="true" name="diary_write_place" bindtap='getLocation'>位置：{{diary_write_place == ""? "点击获取位置": diary_write_place}}</text>
         </view>
       </view>
       <!-- 按钮 -->
@@ -25,6 +25,7 @@
         <button form-type="submit">确认</button>
       </view>
     </form>
+
   </view>
 </view>
 <view class="mask" catchtouchmove="preventTouchMove" wx:if="{{!flag}}" />

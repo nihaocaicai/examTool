@@ -1,64 +1,101 @@
 /* pages/menu/menu-content/exam/exam.wxss */
-.data-container{
+
+.data-container {
   margin-top: 20rpx;
   margin-left: 40rpx;
   margin-right: 40rpx;
   padding: 30rpx;
-  border-width: 1rpx;  
-  border-color: black;  
+  border-width: 1rpx;
+  border-color: black;
   border-style: dashed;
 }
-.wx-date{
+
+.wx-date {
   margin-top: 20rpx;
   margin-left: 25rpx;
   font-size: 48rpx;
   color: #d6d6d6;
 }
+
 /* 日期star */
-.date-container{
-  flex-direction:row;
-  display:flex;
+
+.date-container {
+  flex-direction: row;
+  display: flex;
   align-items: center;
   margin-bottom: 10rpx;
 }
-.date-text{
+
+.date-text {
   font-size: 35rpx;
 }
+
 /* 日期end */
+
 /* 内容star */
-.content-container{
+
+.content-container {
   display: flex;
   align-content: center;
   justify-content: space-between;
 }
-.content-text{
+
+.content-text {
   font-size: 35rpx;
 }
+
 /* 内容end */
 
 .order-item {
   position: relative;
 }
 
-.editexam{  
-  width: 160rpx;  
+.editexam {
+  width: 160rpx;
   height: 100%;
-  background-color:#e9e9e9; 
-  color: white; 
-  position: absolute;  
-  top: 0;  
-  right: -160rpx;  
-  display: flex;  
-  justify-content: center;  
-  align-items: center;  
+  background-color: #e9e9e9;
+  color: white;
+  position: absolute;
+  top: 0;
+  right: -160rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.modify-image{
+.modify-image {
   width: 85rpx;
   height: 85rpx;
 }
 
-.del-image{
+.del-image {
   width: 75rpx;
   height: 75rpx;
+}
+
+.tips_more {
+  margin-top: 1vw;
+  margin-bottom: 1vw;
+  text-align: center;
+  font-size: 33rpx;
+}
+
+.tips {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 32rpx;
+  color: #999;
+}
+
+.button {
+  background: #04838e;
+  color: #fff;
+}
+
+button::after {
+  border: none;
 }

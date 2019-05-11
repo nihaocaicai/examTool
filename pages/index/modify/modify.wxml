@@ -1,33 +1,48 @@
-<view>
-  <view class='container'>
-    <!-- 一重循环，循环日期 -->
-    <block wx:key="item" wx:for-index="ind" wx:for="{{planList}}">
+<view wx:if="{{!loading}}">
+  <view wx:if='{{showView}}'>
+    <view class='container'>
+      <!-- 一重循环，循环日期 -->
+      <block wx:key="item" wx:for-index="dayindex" wx:for="{{planList}}">
         <text class='container-text'>{{item.date}}</text>
-      <!-- 二重循环，循环内容 -->
-      <block wx:key="item" wx:for="{{item.data}}">
-        <view data-ind='{{ind}}' data-index='{{index}}' class="order-item" bindtouchstart="drawStart" bindtouchmove="drawMove" bindtouchend="drawEnd" style="right:{{item.right}}rpx">
-          <view class='data-container'>
-            <!-- 日期和星标 -->
-            <view class='date-container'>
-              <text class='date-text'>{{item.plan_star_time}}--{{item.plan_end_time}}</text>
-              <image class='date-image' src='/images/index/star.png'></image>
+        <!-- 二重循环，循环内容 -->
+        <block wx:key="item" wx:for="{{item.data}}">
+          <view data-dayindex='{{dayindex}}' data-index='{{index}}' class="order-item" bindtouchstart="drawStart" bindtouchmove="drawMove" bindtouchend="drawEnd" style="right:{{item.right}}rpx">
+            <view class='data-container'>
+              <!-- 日期和星标 -->
+              <view class='date-container'>
+                <text class='date-text'>{{item.plan_start_time}} - {{item.plan_end_time}}</text>
+                <image data-dayindex='{{dayindex}}' data-index='{{index}}' data-plan_id="{{item.plan_id}}" bindtap="changeFinish" wx:if='{{item.plan_if_finish}}' class='date-image' src='/images/index/star.png' />
+                <image data-dayindex='{{dayindex}}' data-index='{{index}}' data-plan_id="{{item.plan_id}}" bindtap="changeFinish" wx:if='{{!item.plan_if_finish}}' class='date-image' src='/images/index/none-star.png' />
+              </view>
+              <!-- 内容 -->
+              <view class='content-container'>
+                <text class='content-text'>{{item.plan_content}}</text>
+              </view>
             </view>
-            <!-- 内容 -->
-            <view class='content-container'>
-              <text class='content-text'>{{item.plan_content}}</text>
+            <view class="edit">
+              <image class='modify-image' data-dayindex='{{dayindex}}' data-index='{{index}}' src='/images/index/diary.png' bindtap="modItem"></image>
+              <image class='del-image' data-dayindex='{{dayindex}}' data-index='{{index}}' src='/images/index/modify/del.png' bindtap="delItem"></image>
             </view>
           </view>
-          <view class="edit">
-            <image class='modify-image' src='/images/index/diary.png' bindtap="modItem"></image>
-            <image class='del-image' src='/images/index/modify/del.png' bindtap="delItem"></image>
-          </view>
-        </view>
+        </block>
       </block>
-    </block>
+    </view>
+
+    <view wx:if='{{hasMorePlan}}' class="tips_more" bindtap='loadMore'>点我加载更多计划</view>
+    <view wx:else class="tips_more">没有更多了</view>
   </view>
 
-  <edit id='edit' bind:error="_error" bind:success="_success">
-  </edit>
-  <modify id='modify' bind:error="_errormodify" bind:success="_successmodify">
-  </modify>
+  <view wx:if="{{loadingFail}}" class='tips'>
+    <view style='margin-bottom:1vh'>
+      哎呀，服务器开小差了
+    </view>
+    <button class='button' bindtap='_initData'>再试一次</button>
+  </view>
+
+  <view wx:if="{{noPlan}}" class='tips'>
+    <view style='margin-bottom:1vh'>你还没有考研计划</view>
+    <view>赶快下拉页面添加计划吧</view>
+  </view>
+
+  <editplan id='editplan' bind:add_success="_initData" bind:modify_success="_initData" />
 </view>

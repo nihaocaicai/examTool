@@ -12,6 +12,7 @@ import {
 
 var dateUtil = new DateUtil()
 var model = new Index()
+var planModifyList = new Map()
 
 Page({
   data: {
@@ -20,13 +21,15 @@ Page({
 
   onLoad: function() {
     wx.showLoading({
-      title: '加载计划中',
+      title: '拼命加载中',
     })
-    this._checkEverydayPlan() //检查计划是不是今天的
+    this._init() //检查计划是不是今天的
   },
 
-  onReady: function() {
-    this.diary = this.selectComponent("#diary") //获得diary组件
+  onHide: function() {
+    if (planModifyList.size != 0) {
+      this._modifyFinish() // 批量提交修改的计划
+    }
   },
 
   /**
@@ -34,19 +37,70 @@ Page({
    */
   clickStar: function(e) {
     var index = e.currentTarget.dataset.index
+    var plan_id = e.currentTarget.dataset.id
     var plans = this.data.everyday_planList
-    var flag = plans.data[index].plan_if_finish // 获取星标状态
-    plans.data[index].plan_if_finish = !flag //修改对应计划的星标状态
+    var flag = !(plans.data[index].plan_if_finish) // 获取星标状态
+    plans.data[index].plan_if_finish = flag //修改对应计划的星标状态
     this.setData({
       everyday_planList: plans
     })
+
+    //将修改过的记录添加到列表中
+    if (planModifyList.get(plan_id) != undefined) {
+      //有记录，移除
+      planModifyList.delete(plan_id)
+    } else {
+      //没有记录，添加
+      planModifyList.set(plan_id, flag ? 1 : 0)
+    }
   },
 
   /**
    * [批量提交星星]
    */
-  modifyFinish() {
+  _modifyFinish() {
+    var ids = new Array()
+    var values = new Array()
+    var that = this
+    planModifyList.forEach(function(value, id) {
+      ids.push(id)
+      values.push(value)
+    })
+    var data = {
+      plan_id: "[" + ids.toString() + "]",
+      plan_if_finish: "[" + values.toString() + "]",
+    }
+    model.batchModifyToServer({
+      data: data,
+      success: function() {
+        var s = new Storage()
+        s.save({
+          key: 'everyday_planList',
+          data: that.data.everyday_planList,
+          success: function() {
+            planModifyList = new Map()
+          },
+          fail: function() {
+            that._updatePlanFinishFail(data)
+          },
+        })
+      },
+      fail: function() {
+        that._updatePlanFinishFail(data)
+      },
+    })
+  },
 
+  /**
+   * [更新计划完成状态失败]
+   */
+  _updatePlanFinishFail(failIndexPlanFinish) {
+    var s = new Storage()
+    s.save({
+      key: 'failIndexPlanFinish',
+      data: failIndexPlanFinish,
+    })
+    // 保存失败就丢弃
   },
 
   /**
@@ -72,6 +126,8 @@ Page({
    * [显示对话框事件]
    */
   showDiary() {
+    if (!(this.diary))
+      this.diary = this.selectComponent("#diary") //获得diary组件
     this.diary.showDiary("新增日记", null);
   },
 
@@ -89,12 +145,12 @@ Page({
 
   /* 跳转到这个页面时执行的动作 */
   /**
-   * [检查每日计划是不是今天的]
+   * [初始化]
    *
-    检查 everyday_planList 的内容是不是今天的，不是今天的要清除
    */
-  _checkEverydayPlan() {
+  _init() {
     var that = this
+    //检查 everyday_planList 的内容是不是今天的，不是今天的要清除
     var everyday_planList = wx.getStorageSync("everyday_planList")
     if (everyday_planList == "" || everyday_planList.date != dateUtil.getFormatDate()) {
       //没有计划或者计划不是今天的，要重新建新的列表
@@ -105,64 +161,80 @@ Page({
           date: dateUtil.getFormatDate(),
           data: [],
         },
-        success: function() {
-          model.getEverydayPlanFromServer({
-            success: that._init,
-            fail: that._offline,
-          })
-        },
+        success: that._checkIfHasFailPlanFinish,
         fail: that._initFail,
       })
     } else {
-      model.getEverydayPlanFromServer({
-        success: that._init,
-        fail: that._offline,
+      that._checkIfHasFailPlanFinish()
+    }
+  },
+
+  /**
+   * 检查有没有没更新的计划完成状态
+   */
+  _checkIfHasFailPlanFinish() {
+    var that = this
+    // 获取信息之前先检查是不是存在上次没保存的星星
+    var data = wx.getStorageSync('failIndexPlanFinish')
+    if (data == "") {
+      that._getEverydayPlanFromServer()
+    } else {
+      //如果存在没保存的信息，先进行更新
+      //不管成不成功，都清除上次未保存的记录
+      model.batchModifyToServer({
+        data: data,
+        success: function() {
+          wx.removeStorageSync("failIndexPlanFinish")
+          that._getEverydayPlanFromServer()
+        },
+        fail: function() {
+          wx.removeStorageSync("failIndexPlanFinish")
+          that._getEverydayPlanFromServer()
+        },
       })
     }
+  },
+
+  /**
+   * [从服务器获取当天计划]
+   */
+  _getEverydayPlanFromServer() {
+    var that = this
+    model.getEverydayPlanFromServer({
+      success: function(data) {
+        //获取到数据
+        var s = new Storage()
+        if (JSON.stringify(data) == "[]") {
+          //今天没计划，自己本地生成新的列表
+          data = {
+            date: dateUtil.getFormatDate(),
+            data: [],
+          }
+        }
+        s.save({
+          key: 'everyday_planList',
+          data: data,
+          success: that._initData,
+          fail: that._initFail,
+          path: '/pages/index/index',
+          functionName: '_init',
+        })
+      },
+      fail: that._offline,
+    })
   },
 
   /** 
    * [离线模式]
    */
   _offline() {
-    wx.hideLoading()
-    this.setDate({
-      everyday_planList: wx.getStorageSync("everyday_planList"),
-      showPage: true,
-    })
+    this._initData()
     if (!wx.getStorageSync("hideOfflineTips"))
       wx.showToast({
         title: '当前为离线模式',
         image: "/images/login_fail.png",
         duration: 1800,
       })
-  },
-
-  /**
-   * [初始化]
-   */
-  _init(data) {
-    var that = this
-    if (data) {
-      //获取到数据
-      var s = new Storage()
-      s.save({
-        key: 'everyday_planList',
-        data: data,
-        success: function() {
-          that.setData({
-            everyday_planList: wx.getStorageSync("everyday_planList"),
-            showPage: true,
-          })
-          wx.hideLoading()
-        },
-        fail: that._initFail,
-        path: '/pages/index/index',
-        functionName: '_init',
-      })
-    } else {
-      wx.hideLoading()
-    }
   },
 
   /**
@@ -174,7 +246,7 @@ Page({
       title: '提示',
       content: '小程序初始化失败，点击下方按钮试一下',
       confirmColor: '#04838e',
-      confirmText: '重启小程序',
+      confirmText: '重新启动',
       showCancel: false,
       success: function() {
         wx.reLaunch({
@@ -183,4 +255,21 @@ Page({
       }
     })
   },
+
+  /**
+   * [初始化数据]
+   */
+  _initData() {
+    var info = wx.getStorageSync("user_info")
+    this.setData({
+      everyday_planList: wx.getStorageSync("everyday_planList"),
+      goal_university: info.goal_university == "" ? "未设置目标大学" : info.goal_university, //目标
+      goal_major: info.goal_major == "" ? "未设置目标专业" : info.goal_major, //目标
+      motto: info.motto == "" ? "未设置座右铭" : info.motto, //座右铭
+      countdown: (info.examDate == null || info.examDate == "") ? "无" : parseInt(dateUtil.countDownDateFromToday(info.examDate)), //倒计时天数
+      date: dateUtil.getIndexDate(), //今天的日期
+      showPage: true, //显示页面
+    })
+    wx.hideLoading()
+  }
 })

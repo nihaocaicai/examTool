@@ -37,33 +37,38 @@ class Storage {
    * functionName: 调用的函数名
    */
   save(params) {
+    //使用异步保存方式
     if (params) {
-      try {
-        wx.setStorageSync(params.key, params.data)
-        params.success && params.success()
-      } catch (e) {
-        thisClass._debug(0, {
-          key: params.key,
-          data: params.data,
-          path: params.path,
-          functionName: params.functionName,
-          errMsg: e
-        })
-        params.showRetry && thisClass._saveErrorDialog({
-          retry: thisClass.params.retry,
-          retrySave: function() {
-            thisClass.save(params)
-          },
-          retryCancel: params.retryCancel,
-          saveType: params.saveType,
-        })
-        if (params.fail)
-          params.fail({
+      wx.setStorage({
+        key: params.key,
+        data: params.data,
+        success: function() {
+          params.success && params.success()
+        },
+        fail: function(e) {
+          thisClass._debug(0, {
             key: params.key,
-            data: params.data,
-            errMsg: e,
+            data: params.data instanceof Object ? JSON.stringify(params.data) : params.data,
+            path: params.path,
+            functionName: params.functionName,
+            errMsg: e
           })
-      }
+          params.showRetry && thisClass._saveErrorDialog({
+            retry: thisClass.params.retry,
+            retrySave: function() {
+              thisClass.save(params)
+            },
+            retryCancel: params.retryCancel,
+            saveType: params.saveType,
+          })
+          if (params.fail)
+            params.fail({
+              key: params.key,
+              data: params.data,
+              errMsg: e,
+            })
+        },
+      })
     }
   }
 
@@ -94,6 +99,7 @@ class Storage {
       thisClass.params = params
       while (thisClass.params.saveList.length != 0) {
         try {
+          //使用同步保存方式
           wx.setStorageSync(thisClass.params.saveList[0].key, thisClass.params.saveList[0].data)
           thisClass.params.saveList.splice(0, 1)
         } catch (e) {

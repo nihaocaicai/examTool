@@ -2,56 +2,62 @@
   <view class='plan-container'>
     <!-- 标题 -->
     <view class="wx-plan-title">{{isModify ? "修改" : "添加"}}安排</view>
-    <form bindsubmit="formSubmit">
+    <form bindsubmit="formSubmit" report-submit="true">
       <!-- 内容地点 -->
       <view class="wx-plan-con">
         <!-- 内容 -->
         <view class="plan-content-container">
           <text>内容：</text>
-          <input name="arrangement_content" value='{{arrangement_content}}' placeholder="内容" />
+          <input name="arrange_content" value='{{arrange_content}}' placeholder="内容" />
         </view>
         <!-- 内容 -->
         <view class="plan-content-container">
           <text>地点：</text>
-          <input name="arrangement_place" value='{{arrangement_place}}' placeholder="地点" />
+          <input name="arrange_place" value='{{arrange_place}}' placeholder="地点" />
         </view>
         <!-- 开始时间 -->
         <!-- 开始日期选择 -->
         <view class="plan-content-container">
-          <picker name='arrangement_date' mode="date" value="{{arrangement_date}}" start="{{dateStart}}" bindchange="bindDateChange">
-            <text>日期: {{arrangement_date}}</text>
+          <picker name='arrange_date' mode="date" value="{{arrange_date}}" start="{{dateStart}}" bindchange="bindDateChange">
+            <text>日期: {{arrange_date}}</text>
           </picker>
         </view>
 
         <!-- 开始当天时间选择 -->
         <view class="plan-content-container">
-          <picker name='arrangement_time' mode="time" value="{{arrangement_time}}" start="{{timeStart}}" bindchange="bindTimeChange">
-            <text>时间: {{arrangement_time}}</text>
+          <picker name='arrange_time' mode="time" value="{{arrange_time}}" start="{{timeStart}}" bindchange="bindTimeChange">
+            <text>时间: {{arrange_time}}</text>
           </picker>
         </view>
         <!-- 是否开启微信提示 -->
         <view class="plan-content-container">
           <text>微信提示：</text>
-          <switch name='plan_if_prompt' checked="{{plan_if_prompt}}" color="#04838e" bindchange="switchChange" />
+          <switch name='arrange_if_prompt' disabled="{{disableSwitchChange}}" checked="{{arrange_if_prompt}}" color="#04838e" bindtap="switchTap" bindchange="switchChange" />
         </view>
         <!-- 微信提示时间选择 -->
-        <view>
-          <view class="plan-content-container" wx:if="{{plan_if_prompt}}">
-            <picker name='plan_if_prompt_date' mode="date" value="{{plan_if_prompt_date}}" start="{{promptDateStart}}" end="{{promptDateEnd}}" bindchange="bindPromptDateChange">
-              <text>提示日期: {{plan_if_prompt_date}}</text>
+        <view wx:if="{{arrange_if_prompt}}">
+          <view class="plan-content-container">
+            <picker name='arrange_if_prompt_date' mode="date" value="{{arrange_if_prompt_date}}" start="{{promptDateStart}}" end="{{promptDateEnd}}" bindchange="bindPromptDateChange">
+              <text>提示日期: {{arrange_if_prompt_date}}</text>
             </picker>
           </view>
-          <view class="plan-content-container" wx:if="{{plan_if_prompt}}">
-            <picker mode="multiSelector" range="{{promptTimeSelect}}" value="{{promptTimeSelectIndex}}" bindchange="bindPromptTimeChange">
-              <text>提示时间: {{plan_if_prompt_time}}</text>
+          <view class="plan-content-container">
+            <picker range="{{promptTimeSelect}}" value="{{promptTimeSelectIndex}}" bindchange="bindPromptTimeChange">
+              <text>提示时间: {{arrange_if_prompt_time}}</text>
             </picker>
           </view>
+          <view wx:if="{{isModify}}" style='margin-top: 20rpx; text-align:center; font-size: 28rpx; color: black;'>
+            {{limitTips}}
+          </view>
+        </view>
+        <view wx:if="{{!isModify}}" style='margin-top: 20rpx; text-align:center; font-size: 28rpx; color: black;'>
+          {{limitTips}}
         </view>
       </view>
 
       <!-- 按钮 -->
       <view class="wx-plan-btn">
-        <button bindtap='hidden_dialog'>取消</button>
+        <button bindtap='hideEdit'>取消</button>
         <button form-type="submit">确认</button>
       </view>
     </form>

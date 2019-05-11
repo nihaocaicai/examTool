@@ -2,7 +2,7 @@ import {
   Diary
 } from "diary-model.js"
 
-var diaryUtil = new Diary()
+var model = new Diary()
 
 Page({
   data: {
@@ -11,75 +11,80 @@ Page({
     isScroll: true,
     windowHeight: 0,
     lastScroll: [-1, -1],
-    //data: 要显示的数据，在 diaryUtil 中设置
   },
 
-  onLoad: function(options) {
+  onLoad: function() {
     var that = this
-    wx.getSystemInfo({
-      success: function(res) {
-        that.setData({
-          windowHeight: res.windowHeight
-        })
-      }
-    })
-    diaryUtil.setPage(that)
+    model.getAllDiary(((diaryData) => {
+      
+      // 获取数据文件数据
+      this.setData({
+        data: diaryData
+      });
+    }));
   },
 
   onReady: function() {
-    diaryUtil.getDataFromService()
+    
   },
 
   onShow: function() {
-    //Todo 刷新日记的显示，还没有实现
+    console.log(this.data)
+    console.log(this.data.data)
+  },
+// 组件方法start
+  //点击取消按钮
+  hidden_dialog: function () { },
+
+
+  //添加/修改成功后执行的操作
+  _successEvent(e) {
+    this.onLoad()
   },
 
+
+// 组件方法end
   //下拉页面操作
   onPullDownRefresh: function() {
     this.selectComponent("#diary").showDiary("新增日记", null)
     wx.stopPullDownRefresh()
   },
 
-  //点击取消按钮
-  hidden_dialog: function() {},
 
   //点击修改按钮
   modItem(e) {
-    var dayIndex = e.currentTarget.dataset.dayindex
-    var index = e.currentTarget.dataset.index
-    var item = this.data.data[dayIndex]['data'][index]
+    var item = {
+      diary_id : parseInt(e.currentTarget.dataset.diary_id),
+      title : e.currentTarget.dataset.title,
+      content : e.currentTarget.dataset.content,
+      date : e.currentTarget.dataset.date,
+      time : e.currentTarget.dataset.time,
+      place: e.currentTarget.dataset.place,
+    }
+    // console.log(item)
     this.selectComponent("#diary").showDiary("修改日记", item);
-    this.setData({
-      modifyIndex: [dayIndex, index]
-    })
-  },
-
-  //添加成功后执行的操作
-  add_confirm(e) {
-    diaryUtil.add_confirm(e)
-  },
-
-  //修改成功后执行的操作
-  modify_confirm(e) {
-    diaryUtil.modify_confirm(e)
   },
 
   //点击删除按钮
   delItem: function(e) {
-    var dayIndex = e.currentTarget.dataset.dayindex
-    var index = e.currentTarget.dataset.index
-    var item = this.data.data[dayIndex]['data'][index]
-    var itemID = item.diary_id
+    var that = this;
+    var diary_id = parseInt(e.currentTarget.dataset.diary_id);
+    var title = e.currentTarget.dataset.title;
     wx.showModal({
       title: '提示',
-      content: '你确定要删除该日记吗？\r\n标题：' + item.diary_title,
+      content: '你确定要删除该日记吗？\r\n标题：' + title,
       confirmColor: '#04838e',
       success: function(res) {
-        if (res.confirm) {
-          diaryUtil.del(dayIndex, index, itemID);
-        }
+        model.deleteDiary(((data) => {
+          wx.showToast({
+            title: '删除成功',
+          })
+        }),diary_id);
+
+        that.onLoad();
       }
     })
+
   },
 
   drawStart: function(e) {
@@ -186,4 +191,6 @@ Page({
       }
     }
   },
+
+
 })
