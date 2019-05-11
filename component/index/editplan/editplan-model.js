@@ -1,0 +1,7 @@
+class EditComponent {
+
+}
+
+export {
+  EditComponent
+}

@@ -1,5 +1,5 @@
 {
   "usingComponents": {
-    "edit": "/component/edit_info/edit_info"
+    "edit": "/component/editinfo/editinfo"
   }
 }
