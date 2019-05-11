@@ -16,6 +16,7 @@ Page({
   onLoad: function() {
     var that = this
     model.getAllDiary(((diaryData) => {
+      
       // 获取数据文件数据
       this.setData({
         data: diaryData
@@ -36,15 +37,11 @@ Page({
   hidden_dialog: function () { },
 
 
-  //添加成功后执行的操作
-  add_confirm(e) {
-    diaryUtil.add_confirm(e)
+  //添加/修改成功后执行的操作
+  _successEvent(e) {
+    this.onLoad()
   },
 
-  //修改成功后执行的操作
-  modify_confirm(e) {
-    diaryUtil.modify_confirm(e)
-  },
 
 // 组件方法end
   //下拉页面操作
@@ -70,9 +67,9 @@ Page({
 
   //点击删除按钮
   delItem: function(e) {
+    var that = this;
     var diary_id = parseInt(e.currentTarget.dataset.diary_id);
     var title = e.currentTarget.dataset.title;
-    console.log("diary_id" + diary_id);
     wx.showModal({
       title: '提示',
       content: '你确定要删除该日记吗？\r\n标题：' + title,
@@ -83,8 +80,11 @@ Page({
             title: '删除成功',
           })
         }),diary_id);
+
+        that.onLoad();
       }
     })
+
   },
 
   drawStart: function(e) {
@@ -191,4 +191,6 @@ Page({
       }
     }
   },
+
+
 })

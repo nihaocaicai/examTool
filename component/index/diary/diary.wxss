@@ -112,3 +112,8 @@
   z-index: 8000;
   opacity: 0.7;
 }
+
+/* .diary {
+  position: fixed;
+  bottom:0px;
+} */

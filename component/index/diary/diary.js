@@ -34,19 +34,13 @@ Component({
       if (this.data.item == null) {
         //新增日记
         if (rawData.diary_title == "") {
-          wx.showModal({
-            title: '提示',
-            content: '请填写标题',
-            showCancel: false,
-            confirmColor: "#04838e",
+          wx.showToast({
+            title: '请填写标题',
           })
           return
         } else if (rawData.diary_content == "") {
-          wx.showModal({
-            title: '提示',
-            content: '请填写内容',
-            showCancel: false,
-            confirmColor: "#04838e",
+          wx.showToast({
+            title: '请填写内容',
           })
           return
         }
@@ -59,19 +53,13 @@ Component({
         //   return
         // } else 
         if (rawData.diary_title == "") {
-          wx.showModal({
-            title: '提示',
-            content: '请填写标题',
-            showCancel: false,
-            confirmColor: "#04838e",
+          wx.showToast({
+            title: '请填写标题',
           })
           return
         } else if (rawData.diary_content == "") {
-          wx.showModal({
-            title: '提示',
-            content: '请填写内容',
-            showCancel: false,
-            confirmColor: "#04838e",
+          wx.showToast({
+            title: '请填写内容',
           })
           return
         }
@@ -147,6 +135,8 @@ Component({
           this.hideDiary()
         }
       }), rawData);
+
+      this._successEvent();
     },
 
     //修改日记
@@ -178,6 +168,8 @@ Component({
           this.hideDiary()
         }
       }), rawData);
+
+      this._successEvent();
     },
 
     //对话框显示时禁止下拉
@@ -254,6 +246,11 @@ Component({
     //   var beforeLocation = this.data.diaryLocation
     //   return !(beforeTitle == e.detail.value.diaryTitle && beforeContent == e.detail.value.diaryContent && beforeLocation == e.detail.value.diaryLocation)
     // },
+
+    _successEvent() {
+      //触发添加回调
+      this.triggerEvent("successEvent")
+    },
 
   }
 })
