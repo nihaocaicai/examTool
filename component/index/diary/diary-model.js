@@ -2,6 +2,7 @@ import {
   Request
 } from "../../../utils/server/request.js"
 
+var path = "/component/index/diary/diary-model.js"
 var thisClass = this
 
 class DiaryComponent {
@@ -14,7 +15,7 @@ class DiaryComponent {
    */
   addDiary(callbacks,data) {
     var r = new Request()
-    r.setFailInfo("diary-model.js", "addDiary")
+    r.setFailInfo(path, "addDiary")
     r.request({
       url: "/user/diarys/add",
       method: "POST",
@@ -35,7 +36,7 @@ class DiaryComponent {
      */
   modifyDiary(callbacks, data) {
     var r = new Request()
-    r.setFailInfo("diary-model.js", "modifyDiary")
+    r.setFailInfo(path, "modifyDiary")
     r.request({
       url: "/user/diarys/modify",
       method: "POST",

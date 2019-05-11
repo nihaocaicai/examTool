@@ -26,7 +26,7 @@
       </block>
     </view>
 
-    <view wx:if='{{hasMorePlan}}' class="tips_more" bindtap='loadMore'>点我加载更多计划</view>
+    <view wx:if='{{hasMoreArrangements}}' class="tips_more" bindtap='loadMore'>点我加载更多安排</view>
     <view wx:else class="tips_more">没有更多了</view>
   </view>
 
@@ -42,5 +42,5 @@
     <view>赶快下拉页面添加安排吧</view>
   </view>
 
-  <editexam id='editexam' bind:modify_confirm="modify_confirm" bind:add_confirm="add_confirm" bind:hidden_dialog="hidden_dialog" />
+  <editexam id='editexam' bind:add_success="_initData" bind:modify_success="_initData" />
 </view>

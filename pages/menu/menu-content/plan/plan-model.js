@@ -9,9 +9,12 @@ class Plan {
    */
   getBeforePlan(params) {
     var r = new Request()
+    r.setFailInfo("/pages/menu/menu-content/plan/plan-model.js", "getBeforePlan")
     r.request({
       url: "/user/plans/all/before",
-      data: params.data,
+      data: {
+        page: params.page
+      },
       success: params.success,
       fail: params.fail,
     })

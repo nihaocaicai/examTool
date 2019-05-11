@@ -304,152 +304,17 @@ Page({
   },
 
   /**
-   * (*内部函数)
-   * [保存用户信息事件]
+   * [个人信息保存成功回调函数]
    */
-  _save(e) {
-    var that = this
-    wx.showLoading({
-      title: '信息保存中',
-    })
-    var formData = e.detail
-    var wx_user_info = wx.getStorageSync("wx_user_info")
-    model.saveUserInfo({
-      data: {
-        user_name: wx_user_info['user_name'],
-        user_avatar: wx_user_info['user_avatar'],
-        user_gender: wx_user_info['user_gender'] == '男' ? 1 : 2,
-        user_city: wx_user_info['user_city'],
-        user_birthday: formData.birthday,
-        user_target: formData.goal_university + "+" + formData.goal_major,
-        user_motto: formData.motto,
-        user_exam_date: formData.examDate,
-      },
-      success: function(data) {
-        var storage = new Storage()
-        storage.saveList({
-          saveList: [{
-              key: "user_info",
-              data: formData,
-            },
-            {
-              key: "hideOfflineTips",
-              data: false,
-            }
-          ],
-          success: that._firstGetToken,
-          fail: function() {
-            wx.hideLoading()
-          },
-          showRetry: true,
-          retry: function() {
-            wx.showLoading({
-              title: '信息保存中',
-            })
-          },
-          retryCancel: function() {
-            that.edit.hideEdit()
-            that._saveFail()
-          },
-          saveType: "保存信息",
-          path: '/pages/login/login',
-          functionName: '_save',
-        })
-      },
-      statusCodeFail: function() {
-        wx.hideLoading()
-        wx.showModal({
-          title: '提示',
-          content: '服务器出错，请稍后重试',
-          showCancel: false,
-        })
-      },
-      fail: function() {
-        wx.hideLoading()
-        wx.showModal({
-          title: '提示',
-          content: '网络连接失败，请检查网络连接是否正确',
-          showCancel: false,
-        })
-      },
-    })
+  save_success() {
+    this._firstGetToken()
   },
 
   /**
-   * (*内部函数)
-   * [设置信息对话框点击取消按钮]
+   * [个人信息保存失败回调函数]
    */
-  _cancel() {
-    var that = this
-    wx.showLoading({
-      title: '加载中',
-    })
-    var wx_user_info = wx.getStorageSync("wx_user_info")
-    model.saveUserInfo({
-      data: {
-        user_name: wx_user_info['user_name'],
-        user_avatar: wx_user_info['user_avatar'],
-        user_gender: wx_user_info['user_gender'],
-        user_city: wx_user_info['user_city'],
-        user_birthday: null,
-        user_target: "",
-        user_motto: "",
-        user_exam_date: null,
-      },
-      success: function(data) {
-        var storage = new Storage()
-        storage.saveList({
-          saveList: [{
-              key: "user_info",
-              data: {
-                birthday: null,
-                examDate: null,
-                goal_university: "",
-                goal_major: "",
-                motto: "",
-              },
-            },
-            {
-              key: "hideOfflineTips",
-              data: false,
-            }
-          ],
-          success: that._firstGetToken,
-          fail: function() {
-            wx.hideLoading()
-          },
-          showRetry: true,
-          retry: function() {
-            wx.showLoading({
-              title: '信息保存中',
-            })
-          },
-          retryCancel: function() {
-            that.edit.hideEdit()
-            that._saveFail()
-          },
-          saveType: "保存信息",
-          path: '/pages/login/login',
-          functionName: '_cancel',
-        })
-      },
-      statusCodeFail: function() {
-        wx.hideLoading()
-        wx.showModal({
-          title: '提示',
-          content: '服务器出错，请稍后重试',
-          showCancel: false,
-        })
-      },
-      fail: function() {
-        wx.hideLoading()
-        wx.showModal({
-          title: '提示',
-          content: '网络连接失败，请检查网络连接是否正确',
-          showCancel: false,
-        })
-      },
-    })
+  save_fail() {
+    this._saveFail()
   },
 
   /**

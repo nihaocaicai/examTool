@@ -2,51 +2,21 @@ import {
   DateUtil
 } from "../../../utils/DateUtil.js"
 var dateUtil = new DateUtil()
-const defaultPromptTimeSelect = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15 ', '16', '17', '18', '19', '20', '21', '22', '23'] // 默认提醒时间选择器
-const defaultPromptTimeSelectIndex = [0, 0]
+
+var defaultPromptTimeSelect = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15 ', '16', '17', '18', '19', '20', '21', '22', '23'] // 默认提醒时间选择器
+var defaultPromptTimeSelectIndex = [0, 0]
 
 Component({
   options: {
     multipleSlots: true // 在组件定义时的选项中启用多slot支持
   },
 
-  /**
-   * 组件的属性列表
-   */
-  properties: {
-    title: { // 属性名
-      type: String, // 类型（必填），目前接受的类型包括：String, Number, Boolean, Object, Array, null（表示任意类型）
-      value: '标题' // 属性初始值（可选），如果未指定则会根据类型选择一个
-    },
-    // 弹窗内容
-    content: {
-      type: String,
-      value: '内容'
-    },
-    // 弹窗取消按钮文字
-    btn_no: {
-      type: String,
-      value: '取消'
-    },
-    // 弹窗确认按钮文字
-    btn_ok: {
-      type: String,
-      value: '保存'
-    }
-  },
-
-  /**
-   * 组件的初始数据
-   */
   data: {
     flag: true,
     arrange_if_prompt: false,
     limitTips: '由于微信限制，只能设置在未来 7 天内提示',
   },
 
-  /**
-   * 组件的方法列表
-   */
   methods: {
     formSubmit(e) {
       var formData = e.detail.value
@@ -57,33 +27,33 @@ Component({
 
       //检查数据是否填写
       if (formData.arrange_content == "") {
-        this.tips("请输入内容")
+        this._showTips("请输入内容")
         return
       } else if (formData.arrange_place == "") {
-        this.tips("请输入地点")
+        this._showTips("请输入地点")
         return
       } else if (formData.arrange_date == "") {
-        this.tips("请设置考研的日期")
+        this._showTips("请设置考研的日期")
         return
       } else if (formData.arrange_time == "") {
-        this.tips("请设置考研的时间")
+        this._showTips("请设置考研的时间")
         return
       } else if (dateUtil.compareNow(formData.arrange_date, formData.arrange_time) != 1) {
-        this.tips("考研的时间不能早于现在的时间")
+        this._showTips("考研的时间不能早于现在的时间")
         return
       } else if (formData.arrange_if_prompt) {
         //设置了提醒，需要检查提醒时间是否正确
         if (formData.arrange_if_prompt_date == "") {
-          this.tips("请设置提醒日期")
+          this._showTips("请设置提醒日期")
           return
         } else if (formData.arrange_if_prompt_time == "") {
-          this.tips("请设置提醒时间")
+          this._showTips("请设置提醒时间")
           return
         } else if (dateUtil.compareNow(formData.arrange_if_prompt_date, formData.arrange_if_prompt_time) != 1) {
-          this.tips("提醒时间不能早于现在的时间")
+          this._showTips("提醒时间不能早于现在的时间")
           return
         } else if (dateUtil.compareDateAndTime(formData.arrange_if_prompt_date, formData.arrange_if_prompt_time, formData.arrange_date, formData.arrange_time) != 1) {
-          this.tips("提醒时间不能晚于考研的时间")
+          this._showTips("提醒时间不能晚于考研的时间")
           return
         }
       }
@@ -105,27 +75,32 @@ Component({
         if (changeFlag) {
           //修改过
           formData.arrange_id = this.data.arrange_id
-          this.triggerEvent("modify_confirm", formData)
+          this._modifyArramgements(formData)
         } else {
           //没有修改过，等同于取消
-          this.hidden_dialog()
+          this.hideEdit()
         }
       } else {
         //添加计划
-        this.triggerEvent("add_confirm", formData)
+        this._addArramgements(formData)
       }
     },
 
-    //隐藏弹框
+    /**
+     * [隐藏对话框]
+     */
     hideEdit: function() {
       this.setData({
         flag: true,
         arrange_if_prompt: false,
         disableSwitchChange: false,
       })
+      this.triggerEvent("cancel")
     },
 
-    //展示弹框
+    /**
+     * [显示对话框]
+     */
     showEdit() {
       if (this.data.isModify) {
         //修改
@@ -169,13 +144,9 @@ Component({
       }
     },
 
-    //点击取消按钮
-    hidden_dialog() {
-      this.hideEdit()
-      this.triggerEvent("hidden_dialog")
-    },
-
-    //日期选择
+    /**
+     * [事件_日期选择后]
+     */
     bindDateChange(e) {
       if (this.data.arrange_date != e.detail.value) {
         //检查是不是今天的日期
@@ -208,7 +179,9 @@ Component({
       }
     },
 
-    //时间选择
+    /**
+     * [事件_时间选择后]
+     */
     bindTimeChange(e) {
       if (this.data.arrange_time != e.detail.value) {
         this.setData({
@@ -222,7 +195,81 @@ Component({
       }
     },
 
-    //检查日期
+    /**
+     * [事件_点击微信提醒按钮后] 
+     * 点击微信提醒按钮前检查是否设置考研的日期和时间
+     */
+    switchTap() {
+      if (!this.data.arrange_date || !this.data.arrange_time) {
+        wx.showModal({
+          title: '提示',
+          content: '请先设置考研的日期和时间后再试试',
+          showCancel: false,
+          confirmText: "好的",
+          confirmColor: "#04838e"
+        })
+      }
+    },
+
+    /**
+     * [事件_微信提醒按钮状态切换]
+     */
+    switchChange(e) {
+      this.setData({
+        arrange_if_prompt: e.detail.value
+      })
+      if (!e.detail.value) {
+        //不开启提醒，清除数据
+        this.setData({
+          arrange_if_prompt_date: "",
+          arrange_if_prompt_time: "",
+        })
+      }
+    },
+
+    /**
+     * [事件_微信提醒日期被改变]
+     */
+    bindPromptDateChange(e) {
+      if (this.data.arrange_if_prompt_date != e.detail.value) {
+        this.setData({
+          arrange_if_prompt_date: e.detail.value,
+          arrange_if_prompt_time: "",
+        })
+        this._changePromptTimeChangeSelect()
+      }
+    },
+
+    /**
+     * [事件_微信提醒时间被改变]
+     */
+    bindPromptTimeChange(e) {
+      var t = this.data.promptTimeSelect
+      var i = e.detail.value
+      this.setData({
+        promptTimeSelectIndex: i,
+        arrange_if_prompt_time: t[i] + ":00"
+      })
+    },
+
+    /**
+     * 显示提示对话框
+     */
+    _showTips(content) {
+      wx.showModal({
+        title: '提示',
+        content: content,
+        showCancel: false,
+        confirmColor: "#04838e",
+      })
+    },
+
+    //蒙层点击事件
+    preventTouchMove() {},
+
+    /**
+     * 检查日期
+     */
     _checkDate() {
       var date = this.data.arrange_date
       var time = this.data.arrange_time
@@ -240,48 +287,9 @@ Component({
       }
     },
 
-    //是否设置微信提醒
-    switchChange(e) {
-      this.setData({
-        arrange_if_prompt: e.detail.value
-      })
-      if (!e.detail.value) {
-        //不开启提醒，清除数据
-        this.setData({
-          arrange_if_prompt_date: "",
-          arrange_if_prompt_time: "",
-        })
-      }
-    },
-
     /**
-     * [点击微信提醒按钮] 
-     * 点击微信提醒按钮前检查是否设置考研的日期和时间
+     * 改变微信提醒时间选择范围
      */
-    tapSwitch() {
-      if (!this.data.arrange_date || !this.data.arrange_time) {
-        wx.showModal({
-          title: '提示',
-          content: '请先设置考研的日期和时间后再试试',
-          showCancel: false,
-          confirmText: "好的",
-          confirmColor: "#04838e"
-        })
-      }
-    },
-
-    //改变微信提醒日期
-    bindPromptDateChange(e) {
-      if (this.data.arrange_if_prompt_date != e.detail.value) {
-        this.setData({
-          arrange_if_prompt_date: e.detail.value,
-          arrange_if_prompt_time: "",
-        })
-        this._changePromptTimeChangeSelect()
-      }
-    },
-
-    //改变微信提醒时间选择范围
     _changePromptTimeChangeSelect(type) {
       var date = this.data.arrange_if_prompt_date
       var promptTimeSelect = [].concat(defaultPromptTimeSelect) //数组是引用，不是赋值，需要进行复制操作
@@ -296,27 +304,77 @@ Component({
       })
     },
 
-    //改变微信提醒时间
-    bindPromptTimeChange(e) {
-      var t = this.data.promptTimeSelect
-      var i = e.detail.value
-      this.setData({
-        promptTimeSelectIndex: i,
-        arrange_if_prompt_time: t[i] + ":00"
+    /**
+     * [添加安排]
+     * 
+     * 回调函数
+     * 
+     * add_success: 添加成功
+     */
+    _addArramgements(formData) {
+      var that = this
+      wx.showLoading({
+        title: '添加中',
+      })
+      model.addArramgements({
+        data: formData,
+        success: function() {
+          wx.hideLoading()
+          that.editexam.hideEdit()
+          that.triggerEvent("add_success")
+        },
+        statusCodeFail: function() {
+          wx.hideLoading()
+          that._errorServer()
+        },
+        fail: function() {
+          wx.hideLoading()
+          that._showTips("添加失败，请检查网络连接是否正常")
+        }
       })
     },
 
-    //蒙层点击事件
-    preventTouchMove() {},
+    /**
+     * [修改安排]
+     *
+     * 回调函数
+     *
+     * modify_success: 修改成功
+     */
+    _modifyArramgements(formData) {
+      var that = this
+      wx.showLoading({
+        title: '修改中',
+      })
+      model.modifyArrangements({
+        data: formData,
+        success: function() {
+          wx.hideLoading()
+          that.editexam.hideEdit()
+          that.triggerEvent("modify_success")
+        },
+        statusCodeFail: function() {
+          wx.hideLoading()
+          that._errorServer()
+        },
+        fail: function() {
+          wx.hideLoading()
+          that._showTips("修改失败，请检查网络连接是否正常")
+        }
+      })
+    },
 
-    //显示提示对话框
-    tips(content) {
+    /**
+     * [服务器错误提示]
+     */
+    _errorServer() {
       wx.showModal({
         title: '提示',
-        content: content,
+        content: '服务器出错，请稍后重试',
         showCancel: false,
+        confirmText: '好的',
         confirmColor: "#04838e",
       })
-    }
+    },
   }
 })

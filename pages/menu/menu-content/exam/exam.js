@@ -3,15 +3,23 @@ import {
 } from "exam-model.js"
 
 var model = new Exam()
+var thisClass = null
 
 Page({
   data: {
     delBtnWidth: 160,
     lastScroll: [-1, -1],
-    loading: false, //true,
+    loading: true,
+    loadingFail: false,
+    showView: false,
+    hasMoreArrangements: false,
+    noArrangement: true,
+    nowPage: 1,
+    maxItem: 10, // 加载一次显示多少条，要设置好，否则会影响点击加载更多按钮
   },
 
   onReady: function() {
+    thisClass = this
     this._initData()
   },
 
@@ -63,46 +71,10 @@ Page({
   },
 
   /**
-   * [事件_添加对话框_确定]
-   */
-  add_confirm: function(e) {
-    var that = this
-    var formData = e.detail
-    model.addArramgements({
-      data: formData,
-      success: function() {
-        //添加成功
-        //重新从服务器拉取信息
-        model.getAllArrangements({
-          success: function(data) {
-            that.setData({
-              examList: data,
-            })
-            wx.hideLoading()
-            that.editexam.hideEdit()
-            wx.showToast({
-              title: '添加成功',
-              duration: 1800,
-            })
-          },
-        })
-      },
-      statusCodeFail: function() {
-        wx.hideLoading()
-        that._errorServer()
-      },
-      fail: function() {
-        wx.hideLoading()
-        that._isOffline("添加")
-      }
-    })
-  },
-
-  /**
    * [事件_点击删除]
    */
   delItem: function(e) {
-    var that = this
+    var that = thisClass
     var index = e.currentTarget.dataset //index: {dayindex: "0", index: "0"}
     wx.showModal({
       title: '提示',
@@ -115,38 +87,30 @@ Page({
             title: '删除中',
           })
           model.deleteArrangements({
-            id: that.data.examList[index.dayindex]['data'][index.index].arrange_id,
+            arrange_id: that.data.examList[index.dayindex]['data'][index.index].arrange_id,
             success: function() {
-              var newList = that.data.examList
-              newList[index.dayindex].data.splice(index.index, 1) //删除指定项目
-              if (newList[index.dayindex].data.length == 0) {
-                //如果删除项目后该日期的数组长度为，移除该日期
-                newList.splice(index.dayindex, 1)
-              }
-              that.setData({
-                examList: newList,
-                lastScroll: [-1, -1], //重设上一个滑出的项
-              })
-              if (newList.length == 0) {
-                //没有数据了
-                that.setData({
-                  showView: false,
-                  noArrangement: true,
-                })
-              }
               wx.hideLoading()
-              wx.showToast({
-                title: '删除成功',
-                duration: 1800,
-              })
+              that._initData(false)
             },
             statusCodeFail: function() {
               wx.hideLoading()
-              that._errorServer()
+              wx.showModal({
+                title: '提示',
+                content: '服务器出错，请稍后重试',
+                showCancel: false,
+                confirmText: '好的',
+                confirmColor: "#04838e",
+              })
             },
             fail: function() {
               wx.hideLoading()
-              that._isOffline("删除")
+              wx.showModal({
+                title: '提示',
+                content: '删除失败，请检查网络连接是否正常',
+                showCancel: false,
+                confirmText: '知道了',
+                confirmColor: "#04838e",
+              })
             }
           })
         }
@@ -155,106 +119,47 @@ Page({
   },
 
   /**
-   * [事件_修改对话框_确定]
-   */
-  modify_confirm: function(e) {
-    var formData = e.detail //修改后的数据
-    var that = this
-    wx.showLoading({
-      title: '修改中',
-    })
-    model.modifyArrangements({
-      data: formData,
-      success: function() {
-        //先收缩上一个被划出的项目
-        that.data.examList[that.data.lastScroll[0]]['data'][that.data.lastScroll[1]].right = 0
-        that.setData({
-          examList: that.data.examList
-        })
-
-        //服务器修改成功，写入临时变量
-        var index = that.data.modifyIndex
-        var newList = that.data.examList
-        if (formData.arrange_date == newList[index.dayindex]['data'][index.index].arrange_date) {
-          //时间没变，直接修改
-          newList[index.dayindex]['data'][index.index] = formData
-          newList[index.dayindex]['data'] = that._sort(1, newList[index.dayindex]['data']) // 排序 newList[index.dayindex]['data']
-        } else {
-          //考研时间变了，需要移动时间
-          //从列表中删除原来的项
-          newList[index.dayindex]['data'].splice(index.index, 1)
-          if (newList[index.dayindex]['data'].length == 0) {
-            //删除后当天日期不存在内容了，要把这一天的项目一同删掉
-            newList.splice(index.dayindex, 1)
-          }
-          var dayindex = -1
-          for (var i in newList) {
-            if (formData.arrange_date == newList[i].date) {
-              //如果修改后的时间在列表里面有，就结束循环
-              dayindex = i
-              break
-            }
-          }
-          if (dayindex == -1) {
-            //不存在日期，需要重新建一个新的
-            newList.push({
-              date: formData.arrange_date,
-              data: [formData],
-            })
-            newList = that._sort(0, newList) //排序 newList
-          } else {
-            //存在日期，直接往里面添加
-            newList[dayindex]['data'].push(formData)
-            newList[dayindex]['data'] = that._sort(1, newList[dayindex]['data']) //排序  newList[dayindex]['data']
-          }
-        }
-        that.setData({
-          examList: newList,
-          modifyIndex: {}, //修改完成，清空下标
-        })
-        wx.hideLoading()
-        that.editexam.hideEdit()
-        wx.showToast({
-          title: '修改成功',
-          duration: 1800,
-        })
-      },
-      statusCodeFail: function() {
-        wx.hideLoading()
-        that._errorServer()
-      },
-      fail: function() {
-        wx.hideLoading()
-        that._isOffline("修改")
-      }
-    })
-  },
-
-  /**
-   * [事件_对话框_取消]
-   */
-  hidden_dialog: function() {
-    //暂时不需要实现
-  },
-
-  /**
    * [初始化数据]
    */
   _initData() {
-    var that = this
+    var that = thisClass
     wx.showLoading({
-      title: '拼命加载中',
+      title: '加载中',
     })
     model.getAllArrangements({
+      page: 1,
       success: function(data) {
-        // 加载成功
-        that.setData({
-          examList: data,
-          showView: data.length != 0,
-          noArrangement: data.length == 0,
-          loading: false,
-          loadingFail: false,
-        })
+        if (data.length == 0) {
+          // 没有安排
+          that.setData({
+            loading: false,
+            loadingFail: false,
+            showView: false,
+            hasMoreArrangements: false,
+            noArrangement: true,
+          })
+        } else {
+          // 有计划
+          if (data.length == that.data.maxItem) {
+            //还有更多安排
+            that.setData({
+              hasMoreArrangements: true,
+            })
+          } else {
+            //没有更多安排
+            that.setData({
+              hasMoreArrangements: false,
+            })
+          }
+          that.setData({
+            loading: false,
+            loadingFail: false,
+            showView: true,
+            noArrangement: false,
+            examList: data,
+            nowPage: that.data.nowPage + 1
+          })
+        }
         wx.hideLoading()
       },
       fail: function() {
@@ -262,6 +167,10 @@ Page({
         that.setData({
           loading: false,
           loadingFail: true,
+          showView: false,
+          hasMoreArrangements: false,
+          noArrangement: false,
+          examList: [],
         })
         wx.hideLoading()
       },
@@ -269,66 +178,58 @@ Page({
   },
 
   /**
-   * [服务器错误提示]
+   * [加载更多]
    */
-  _errorServer() {
-    wx.showModal({
-      title: '提示',
-      content: '服务器出错，请稍后重试',
-      showCancel: false,
-      confirmText: '好的',
-      confirmColor: "#04838e",
+  loadMore() {
+    var that = thisClass
+    wx.showLoading({
+      title: '加载中',
     })
-  },
-
-  /**
-   * [离线错误提示]
-   * type: 操作类型
-   */
-  _isOffline(type) {
-    wx.showModal({
-      title: '提示',
-      content: type + '失败，请检查网络连接是否正常',
-      showCancel: false,
-      confirmText: '知道了',
-      confirmColor: "#04838e",
+    model.getAllArrangements({
+      page: that.data.nowPage,
+      success: function(data) {
+        if (data.length == 0) {
+          // 没有更多安排了
+          that.setData({
+            loading: false,
+            loadingFail: false,
+            showView: true,
+            hasMoreArrangements: false,
+            noArrangement: false,
+          })
+        } else {
+          // 有计划
+          if (data.length == that.data.maxItem) {
+            //还有更多安排
+            that.setData({
+              hasMoreArrangements: true,
+            })
+          } else {
+            //没有更多安排
+            that.setData({
+              hasMoreArrangements: false,
+            })
+          }
+          that.setData({
+            loading: false,
+            loadingFail: false,
+            showView: true,
+            noArrangement: false,
+            examList: data,
+            nowPage: that.data.nowPage + 1
+          })
+        }
+        wx.hideLoading()
+      },
+      fail: function() {
+        // 加载失败
+        wx.hideLoading()
+        wx.showToast({
+          title: '加载失败',
+          image: "/images/fail.png",
+        })
+      },
     })
-  },
-
-  /**
-   * [按时间排序安排]
-   * 
-   * type = 1: 排序 exam_arrangement
-   * 
-   * type = 2: 排序某一天日期的数据
-   * 
-   * index = {dayindex, index} 修改的日期下标和数据下标
-   *
-   */
-  _sort(type, list, index) {
-    if (type == 0) {
-      list.sort(function(a, b) {
-        var a1 = new Date(a.date).getTime()
-        var b1 = new Date(b.date).getTime()
-        if (a1 < b1)
-          return -1
-        else if (a1 > b1)
-          return 1
-        return 0
-      })
-      return list
-    } else if (type == 1) {
-      list.sort(function(a, b) {
-        var a1 = new Date(a.arrange_date + " " + a.arrange_time).getTime()
-        var b1 = new Date(b.arrange_date + " " + b.arrange_time).getTime()
-        if (a1 < b1)
-          return -1
-        else if (a1 > b1)
-          return 1
-        return 0
-      })
-      return list
-    }
   },
 
   /* 滑动组件*/

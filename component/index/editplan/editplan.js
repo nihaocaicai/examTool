@@ -1,7 +1,13 @@
 import {
   DateUtil
 } from "../../../utils/DateUtil.js"
+
+import {
+  EditPlanComponent
+} from "editplan-model.js"
+
 var dateUtil = new DateUtil()
+var model = new EditPlanComponent()
 
 Component({
   options: {
@@ -74,14 +80,14 @@ Component({
           formData.plan_id = this.data.plan_id
           formData.plan_if_finish = this.data.plan_if_finish
           formData.plan_if_repeat = (this.data.plan_if_repeat ? 1 : 0)
-          this.triggerEvent("confirm_modify", formData)
+          this.addPlan(formData)
         } else {
           this._cancel()
         }
       } else {
         formData.plan_if_finish = 0
         formData.plan_if_repeat = (this.data.plan_if_repeat ? 1 : 0)
-        this.triggerEvent("confirm_add", formData)
+        this.modifyPlan(formData)
       }
     },
 
@@ -107,9 +113,7 @@ Component({
      * [事件_点击取消按钮]
      */
     _cancel() {
-      this.setData({
-        flag: true
-      })
+      this.hideEdit()
       this.triggerEvent("cancel")
     },
 
@@ -149,7 +153,71 @@ Component({
       })
     },
 
-    //蒙层点击事件
+    /**
+     * [添加计划]
+     * 
+     * 回调函数:
+     * 
+     * add_success: 添加成功
+     * 
+     * add_fail: 添加失败
+     */
+    addPlan(formData) {
+      var that = this
+      wx.showLoading({
+        title: '添加中',
+      })
+      model.addPlan({
+        data: formData,
+        success: function() {
+          wx.hideLoading()
+          that.hideEdit()
+          that.triggerEvent("add_success")
+        },
+        fail: function() {
+          wx.hideLoading()
+          wx.showToast({
+            title: '添加失败',
+            image: '/images/fail.png',
+            duration: 1800,
+          })
+          that.triggerEvent("add_fail")
+        }
+      })
+    },
+
+    /**
+     * [修改计划]
+     * 
+     * 回调函数:
+     * 
+     * modify_success: 添加成功
+     * 
+     * modify_fail: 添加失败
+     */
+    modifyPlan: function(formData) {
+      wx.showLoading({
+        title: '修改中',
+      })
+      model.addPlan({
+        data: formData,
+        success: function() {
+          wx.hideLoading()
+          thisClass.editPlan.hideEdit()
+          that.triggerEvent("modify_success")
+        },
+        fail: function() {
+          wx.hideLoading()
+          wx.showToast({
+            title: '修改失败',
+            image: '/images/fail.png',
+            duration: 1800,
+          })
+          that.triggerEvent("modify_fail")
+        }
+      })
+    },
+
     preventTouchMove() {},
   }
 })

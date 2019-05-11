@@ -43,5 +43,5 @@
     <view>赶快下拉页面添加计划吧</view>
   </view>
 
-  <editplan id='editplan' bind:confirm_add="confirmAdd" bind:confirm_modify="confirmModify" />
+  <editplan id='editplan' bind:add_success="_initData" bind:modify_success="_initData" />
 </view>

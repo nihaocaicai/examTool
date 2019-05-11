@@ -32,7 +32,7 @@
         <!-- 是否开启微信提示 -->
         <view class="plan-content-container">
           <text>微信提示：</text>
-          <switch name='arrange_if_prompt' bindtap="tapSwitch" disabled="{{disableSwitchChange}}" checked="{{arrange_if_prompt}}" color="#04838e" bindchange="switchChange" />
+          <switch name='arrange_if_prompt' disabled="{{disableSwitchChange}}" checked="{{arrange_if_prompt}}" color="#04838e" bindtap="switchTap" bindchange="switchChange" />
         </view>
         <!-- 微信提示时间选择 -->
         <view wx:if="{{arrange_if_prompt}}">
@@ -57,7 +57,7 @@
 
       <!-- 按钮 -->
       <view class="wx-plan-btn">
-        <button bindtap='hidden_dialog'>取消</button>
+        <button bindtap='hideEdit'>取消</button>
         <button form-type="submit">确认</button>
       </view>
     </form>

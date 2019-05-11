@@ -12,8 +12,8 @@
   <view class='text-container'>
     <text>昵称：{{wxInfo.user_name}}</text>
     <text>性别：{{wxInfo.user_gender}}</text>
-    <text>生日：{{info.birthday == null ? "未设置": info.birthday}}</text>
-    <text>考研日期：{{info.examDate == null ? "未设置": info.examDate}}</text>
+    <text>生日：{{info.birthday == "" || info.birthday == null? "未设置": info.birthday}}</text>
+    <text>考研日期：{{info.examDate == "" || info.examDate == null ? "未设置": info.examDate}}</text>
     <text>目标大学：{{info.goal_university == "" ? "未设置": info.goal_university}}</text>
     <text>目标专业：{{info.goal_major == "" ? "未设置": info.goal_major}}</text>
     <text>座右铭：{{info.motto  == "" ? "未设置座右铭": info.motto}}</text>
@@ -31,7 +31,7 @@
   </view>
   <!-- 退出登录end -->
 
-  <edit id='edit' bind:error="_error" bind:save="_save" />
+  <edit id='edit' bind:modify_success="modify_success" />
 
   <modal id="modal" hidden="{{!showDeleteModal}}" title="提示" confirm-text="退出" cancel-text="取消" bindcancel="cancelDelete" bindconfirm="confirmDelete">
     <view style='text-align:center'>退出登录后，所有信息都会被删除</view>

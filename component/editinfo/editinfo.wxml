@@ -13,7 +13,7 @@
           <picker name="birthday" mode="date" value="{{birthday}}" bindchange="bindBirthdayChange">
             <view class="picker">
               生日：
-              <text decode="true" style='color:#04838e'>{{birthday == null ? "点击选择日期" : birthday}}</text>
+              <text decode="true" style='color:#04838e'>{{birthday == "" || birthday == null ? "点击选择日期" : birthday}}</text>
             </view>
           </picker>
         </view>
@@ -22,7 +22,7 @@
           <picker name="examDate" mode="date" value="{{examDate}}" bindchange="bindDateChange">
             <view class="picker">
               考研日期：
-              <text decode="true" style='color:#04838e'>{{examDate == null ? "点击选择日期" : examDate}}</text>
+              <text decode="true" style='color:#04838e'>{{examDate == "" || examDate == null ? "点击选择日期" : examDate}}</text>
             </view>
           </picker>
         </view>
@@ -42,7 +42,7 @@
       </view>
       <!-- 按钮 -->
       <view class="wx-setting-btn">
-        <button wx:if="{{!isLogin}}" bindtap='_error'>取消</button>
+        <button wx:if="{{!isLogin}}" bindtap='_cancel'>取消</button>
         <button form-type="submit">确定</button>
       </view>
     </form>

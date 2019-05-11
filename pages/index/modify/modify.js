@@ -10,7 +10,8 @@ Page({
     delBtnWidth: 160, // 设置滑动删除、编辑的宽度
     loading: true,
     hasMorePlan: true,
-    page: 1,
+    nowPage: 1,
+    maxItem: 10, // 加载一次显示多少条，要设置好，否则会影响点击加载更多按钮
   },
 
   onLoad: function(options) {
@@ -105,108 +106,15 @@ Page({
   },
 
   /**
-   * [回调_确认添加]
-   */
-  confirmAdd: function(e) {
-    var formData = e.detail
-    wx.showLoading({
-      title: '添加中',
-    })
-    model.addPlan({
-      data: formData,
-      success: function() {
-        wx.hideLoading()
-        thisClass.editPlan.hideEdit()
-        thisClass._initData()
-      },
-      fail: function() {
-        wx.hideLoading()
-        wx.showToast({
-          title: '添加失败',
-          image: '/images/fail.png',
-          duration: 1800,
-        })
-      }
-    })
-  },
-
-  /**
-   * [回调_确认修改]
-   */
-  confirmModify: function(e) {
-    var formData = e.detail
-    wx.showLoading({
-      title: '修改中',
-    })
-    model.addPlan({
-      data: formData,
-      success: function() {
-        wx.hideLoading()
-        thisClass.editPlan.hideEdit()
-        thisClass._initData()
-      },
-      fail: function() {
-        wx.hideLoading()
-        wx.showToast({
-          title: '修改失败',
-          image: '/images/fail.png',
-          duration: 1800,
-        })
-      }
-    })
-  },
-
-  /**
-   * [加载更多]
-   */
-  loadMore: function() {
-    wx.showLoading({
-      title: '加载中',
-    })
-    model.getAfterPlan({
-      data: {
-        page: this.data.page
-      },
-      success: function(data) {
-        console.log(data)
-        if (data.length == 0) {
-          //没有数据
-          thisClass.setData({
-            hasMorePlan: false,
-          })
-        } else {
-          //有数据
-          thisClass.setData({
-            hasMorePlan: true,
-            planList: data,
-            page: thisClass.data.page + 1
-          })
-        }
-        wx.hideLoading()
-      },
-      fail: function() {
-        wx.hideLoading()
-        wx.showToast({
-          title: '加载失败',
-          image: "/pages/fail.png",
-          duration: 1800,
-        })
-      }
-    })
-  },
-
-  /**
    * [初始化数据]
    */
-  _initData(hideTips) {
-    var showTips = !hideTips
-    showTips && wx.showLoading({
+  _initData() {
+    var that = thisClass
+    wx.showLoading({
       title: '加载中',
     })
     model.getAfterPlan({
-      data: {
-        page: 1,
-      },
+      page: that.data.nowPage,
       success: function(data) {
         if (data.length == 0) {
           //没有数据
@@ -218,18 +126,28 @@ Page({
             noPlan: true,
           })
         } else {
-          //有数据
+          // 有数据
+          if (data.length == that.data.maxItem) {
+            //还有更多计划
+            that.setData({
+              hasMorePlan: true,
+            })
+          } else {
+            //没有更多计划
+            that.setData({
+              hasMorePlan: false,
+            })
+          }
           thisClass.setData({
             loading: false,
             loadingFail: false,
             showView: true,
-            hasMorePlan: true,
             noPlan: false,
             planList: data,
             page: thisClass.data.page + 1
           })
         }
-        showTips && wx.hideLoading()
+        wx.hideLoading()
       },
       fail: function() {
         thisClass.setData({
@@ -239,7 +157,55 @@ Page({
           hasMorePlan: false,
           noPlan: false,
         })
-        showTips && wx.hideLoading()
+        wx.hideLoading()
+      }
+    })
+  },
+
+  /**
+   * [加载更多]
+   */
+  loadMore: function() {
+    var that = thisClass
+    wx.showLoading({
+      title: '加载中',
+    })
+    model.getAfterPlan({
+      page: that.data.nowPage,
+      success: function(data) {
+        console.log(data)
+        if (data.length == 0) {
+          //没有数据
+          that.setData({
+            hasMorePlan: false,
+          })
+        } else {
+          //有数据
+          if (data.length == that.data.maxItem) {
+            //还有更多计划
+            that.setData({
+              hasMorePlan: true,
+            })
+          } else {
+            //没有更多计划
+            that.setData({
+              hasMorePlan: false,
+            })
+          }
+          that.setData({
+            planList: data,
+            page: that.data.nowPage + 1
+          })
+        }
+        wx.hideLoading()
+      },
+      fail: function() {
+        wx.hideLoading()
+        wx.showToast({
+          title: '加载失败',
+          image: "/pages/fail.png",
+          duration: 1800,
+        })
       }
     })
   },

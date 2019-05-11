@@ -28,10 +28,11 @@ Page({
 
   onShow: function() {
     // 调试用
-
+    /*
     wx.redirectTo({
       url: '/pages/index/modify/modify',
     })
+    */
   },
 
   onHide: function() {

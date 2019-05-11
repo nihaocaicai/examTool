@@ -22,87 +22,27 @@ Page({
    * [事件_显示设置信息]
    */
   showEdit() {
-    if (!this.isShow) {
-      this.isShow = true
-      var info = wx.getStorageSync('user_info')
-      var wxInfo = wx.getStorageSync('wx_user_info')
-      this.edit.setData({
-        isFirstLogin: false, //不是在登录的时候显示对话框
-        nickName: wxInfo['user_name'],
-        birthday: info['birthday'],
-        examDate: info['examDate'],
-        goal_university: info['goal_university'],
-        goal_major: info['goal_major'],
-        motto: info['motto'],
-        beforeData: info, //修改前的数据，用于检查是否修改过
-      })
-      this.edit.showEdit();
-    }
-  },
-
-  /**
-   * [事件_设置信息取消按钮]
-   */
-  _error() {
-    this.isShow = false
-    this.edit.hideEdit();
-  },
-
-  /**
-   * [事件_设置信息保存按钮]
-   */
-  _save(e) {
-    var that = this
-    var formData = e.detail
-    var wx_user_info = wx.getStorageSync("wx_user_info")
-
-    wx.showLoading({
-      title: '保存信息中',
+    var info = wx.getStorageSync('user_info')
+    var wxInfo = wx.getStorageSync('wx_user_info')
+    this.edit.setData({
+      isFirstLogin: false, //不是在登录的时候显示对话框
+      nickName: wxInfo['user_name'],
+      birthday: info['birthday'],
+      examDate: info['examDate'],
+      goal_university: info['goal_university'],
+      goal_major: info['goal_major'],
+      motto: info['motto'],
+      beforeData: info, //修改前的数据，用于检查是否修改过
     })
-    model.saveUserInfo({
-      data: {
-        token: wx_user_info['token'],
-        user_name: wx_user_info['user_name'],
-        user_avatar: wx_user_info['user_avatar'],
-        user_gender: wx_user_info['user_gender'],
-        user_city: wx_user_info['user_city'],
-        user_brithday: formData.birthday,
-        user_target: formData.goal_university + "+" + formData.goal_major,
-        user_motto: formData.motto,
-        user_exam_date: formData.examDate,
-      },
-      success: function() {
-        var s = new Storage()
-        s.save({
-          key: 'user_info',
-          data: formData,
-          success: function() {
-            that.setData({
-              info: formData,
-            })
-            that.edit.hideEdit()
-            that.isShow = false
-            wx.hideLoading()
-            wx.showToast({
-              title: '保存成功',
-              icon: 'success',
-              duration: 1500,
-            })
-          },
-          fail: function() {
-            wx.hideLoading()
-            that._errorSave('保存信息')
-          },
-        })
-      },
-      statusCodeFail: function() {
-        wx.hideLoading()
-        that._errorServer()
-      },
-      fail: function() {
-        wx.hideLoading()
-        that._errorConnect()
-      },
+    this.edit.showEdit()
+  },
+
+  /**
+   * [事件_保存成功]
+   */
+  modify_success(e) {
+    this.setData({
+      info: e.detail
     })
   },
 
@@ -138,6 +78,7 @@ Page({
       model.deleteAccount({
         success: function() {
           var s = new Storage()
+          wx.clearStorage()
           s.save({
             key: 'logout',
             data: true,
@@ -158,16 +99,17 @@ Page({
                 },
               })
             },
-            fail: function() {
-              //如果没办法删除，可能是没有存储空间设置标签，清除存储空间后重试
-              wx.hideLoading()
-              that._errorSave('退出')
-            },
           })
         },
         fail: function() {
           wx.hideLoading()
-          that._errorConnect()
+          wx.showModal({
+            title: '提示',
+            content: '当前是离线模式，无法进行操作，请连接网络后重试',
+            showCancel: false,
+            confirmText: '知道了',
+            confirmColor: '#04838e',
+          })
         },
       })
     } else {
@@ -252,47 +194,6 @@ Page({
       info: info,
       showDeleteModal: false,
       hideOfflineTips: wx.getStorageSync("hideOfflineTips")
-    })
-  },
-
-  /**
-   * [服务器返回错误代码]
-   */
-  _errorServer() {
-    wx.showModal({
-      title: '提示',
-      content: '服务器出错，请稍后重试',
-      showCancel: false,
-      confirmText: '知道了',
-      confirmColor: '#04838e',
-    })
-  },
-
-  /**
-   * [服务器连接失败]
-   */
-  _errorConnect() {
-    wx.showModal({
-      title: '提示',
-      content: '当前是离线模式，无法进行操作，请连接网络后重试',
-      showCancel: false,
-      confirmText: '知道了',
-      confirmColor: '#04838e',
-    })
-  },
-
-  /**
-   * [数据保存失败]
-   * 
-   * @type XX 出错
-   */
-  _errorSave(type) {
-    wx.showModal({
-      title: '提示',
-      content: '失败，可能是存储空间不足，请尝试清理一下手机后再保存',
-      showCancel: false,
-      confirmText: '好的',
-      confirmColor: '#04838e',
     })
   },
 

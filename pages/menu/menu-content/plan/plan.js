@@ -3,19 +3,22 @@ import {
 } from "plan-model.js"
 
 var model = new Plan()
+var thisClass = null
 
 Page({
   data: {
     color: ['#9DD3FA', '#1F6FB5', '#FCD692', '#FAFFEB', '#FFFFFF'], //左侧边条颜色，数目无限制
-    hasMorePlan: true,
     loading: true,
-    showView: false,
     loadingFail: false,
+    showView: false,
+    hasMorePlan: true,
     noPlan: false,
-    nowPage: 1, //当前页码
+    nowPage: 1,
+    maxItem: 10, // 加载一次显示多少条，要设置好，否则会影响点击加载更多按钮
   },
 
   onLoad: function(options) {
+    thisClass = this
     this._initData()
   },
 
@@ -25,26 +28,40 @@ Page({
    * [初始化数据]
    */
   _initData() {
-    var that = this
+    var that = thisClass
     wx.showLoading({
-      title: '玩命加载中',
+      title: '加载中',
     })
     model.getBeforePlan({
-      data: {
-        page: that.data.nowPage,
-      },
+      page: that.data.nowPage,
       success: function(data) {
         if (data.length == 0) {
           //没数据
           that.setData({
             loading: false,
-            noPlan: true,
+            loadingFail: false,
+            showView: false,
+            hasMorePlan: false,
+            noPlan: false,
           })
         } else {
           // 有数据
+          if (data.length == that.data.maxItem) {
+            //还有更多计划
+            that.setData({
+              hasMorePlan: true,
+            })
+          } else {
+            //没有更多计划
+            that.setData({
+              hasMorePlan: false,
+            })
+          }
           that.setData({
             loading: false,
+            loadingFail: false,
             showView: true,
+            noPlan: false,
             totalPlan: data,
             nowPage: that.data.nowPage + 1,
           })
@@ -55,6 +72,9 @@ Page({
         that.setData({
           loading: false,
           loadingFail: true,
+          showView: false,
+          hasMorePlan: false,
+          noPlan: false,
         })
         wx.hideLoading()
       },
@@ -65,26 +85,44 @@ Page({
    * [加载更早的计划]
    */
   loadMore: function() {
-    var that = this
+    var that = thisClass
     wx.showLoading({
-      title: '玩命加载中',
+      title: '加载中',
     })
     model.getBeforePlan({
       data: {
         page: that.data.nowPage,
       },
       success: function(data) {
-        //这是还有更多的情况
-        that.setData({
-          loading: false,
-          showView: true,
-          totalPlan: data,
-          nowPage: that.data.nowPage + 1,
-        })
-        if (false) {
-          //如果没有更多了
+        if (data.length == 0) {
+          //没数据
           that.setData({
+            loading: false,
+            loadingFail: false,
+            showView: true,
             hasMorePlan: false,
+            noPlan: false,
+          })
+        } else {
+          // 有数据
+          if (data.length == that.data.maxItem) {
+            //还有更多计划
+            that.setData({
+              hasMorePlan: true,
+            })
+          } else {
+            //没有更多计划
+            that.setData({
+              hasMorePlan: false,
+            })
+          }
+          that.setData({
+            loading: false,
+            loadingFail: false,
+            showView: true,
+            noPlan: false,
+            totalPlan: data,
+            nowPage: that.data.nowPage + 1,
           })
         }
         wx.hideLoading()
