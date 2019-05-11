@@ -26,15 +26,6 @@ Page({
     this._init() //检查计划是不是今天的
   },
 
-  onShow: function() {
-    // 调试用
-    /*
-    wx.redirectTo({
-      url: '/pages/index/modify/modify',
-    })
-    */
-  },
-
   onHide: function() {
     if (planModifyList.size != 0) {
       this._modifyFinish() // 批量提交修改的计划
@@ -48,8 +39,11 @@ Page({
     var index = e.currentTarget.dataset.index
     var plan_id = e.currentTarget.dataset.id
     var plans = this.data.everyday_planList
-    var flag = plans.data[index].plan_if_finish // 获取星标状态
-    plans.data[index].plan_if_finish = !flag //修改对应计划的星标状态
+    var flag = !(plans.data[index].plan_if_finish) // 获取星标状态
+    plans.data[index].plan_if_finish = flag //修改对应计划的星标状态
+    this.setData({
+      everyday_planList: plans
+    })
 
     //将修改过的记录添加到列表中
     if (planModifyList.get(plan_id) != undefined) {
@@ -57,11 +51,8 @@ Page({
       planModifyList.delete(plan_id)
     } else {
       //没有记录，添加
-      planModifyList.set(plan_id, !flag ? 1 : 0)
+      planModifyList.set(plan_id, flag ? 1 : 0)
     }
-    this.setData({
-      everyday_planList: plans
-    })
   },
 
   /**
@@ -88,7 +79,6 @@ Page({
           data: that.data.everyday_planList,
           success: function() {
             planModifyList = new Map()
-            console.log('计划已同步')
           },
           fail: function() {
             that._updatePlanFinishFail(data)
@@ -104,13 +94,12 @@ Page({
   /**
    * [更新计划完成状态失败]
    */
-  _updatePlanFinishFail(failPlanFinish) {
+  _updatePlanFinishFail(failIndexPlanFinish) {
     var s = new Storage()
     s.save({
-      key: 'failPlanFinish',
-      data: failPlanFinish,
+      key: 'failIndexPlanFinish',
+      data: failIndexPlanFinish,
     })
-    console.log('计划同步失败')
     // 保存失败就丢弃
   },
 
@@ -186,7 +175,7 @@ Page({
   _checkIfHasFailPlanFinish() {
     var that = this
     // 获取信息之前先检查是不是存在上次没保存的星星
-    var data = wx.getStorageSync('failPlanFinish')
+    var data = wx.getStorageSync('failIndexPlanFinish')
     if (data == "") {
       that._getEverydayPlanFromServer()
     } else {
@@ -195,13 +184,11 @@ Page({
       model.batchModifyToServer({
         data: data,
         success: function() {
-          console.log('再次保存失败')
-          wx.removeStorageSync("failPlanFinish")
+          wx.removeStorageSync("failIndexPlanFinish")
           that._getEverydayPlanFromServer()
         },
         fail: function() {
-          console.log('再次保存失败')
-          wx.removeStorageSync("failPlanFinish")
+          wx.removeStorageSync("failIndexPlanFinish")
           that._getEverydayPlanFromServer()
         },
       })
