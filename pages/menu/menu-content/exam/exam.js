@@ -26,10 +26,10 @@ Page({
   /* 事件响应 */
   /**
    * [事件_下拉页面]
-   * 添加计划
+   * 添加安排
    */
   onPullDownRefresh: function() {
-    if (this.data.showView) {
+    if (!this.data.loading) {
       if (!this.editexam)
         this.editexam = this.selectComponent("#editexam") //获得edit组件
 
