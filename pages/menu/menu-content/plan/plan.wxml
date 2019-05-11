@@ -14,8 +14,8 @@
               <view slot="content">
                 <view wx:for="{{plans.plan}}" wx:for-item="detail" wx:key='{{index}}'>
                   <view class='detail'>
-                    <view class='time'>{{detail.plan_start_time}} - {{detail.plan_end_time}}</view>
-                    <view class='content'>{{detail.plan_content}}</view>
+                    <view class='time'>{{detail.time}}</view>
+                    <view class='content'>{{detail.content}}</view>
                   </view>
                 </view>
               </view>

@@ -33,9 +33,10 @@ Page({
   },
 
   onShow: function(){
+    /*
     wx.redirectTo({
       url: '../menu/menu-content/setting/setting',
-    })
+    })*/
   },
 
   /**
@@ -210,7 +211,7 @@ Page({
       success: function(data) {
         //获取到数据
         var s = new Storage()
-        if (JSON.stringify(data) == "[]") {
+        if (JSON.stringify(data) == "\"\"") {
           //今天没计划，自己本地生成新的列表
           data = {
             date: dateUtil.getFormatDate(),
@@ -267,8 +268,9 @@ Page({
    */
   _initData() {
     var info = wx.getStorageSync("user_info")
+    var everyday_planList = wx.getStorageSync("everyday_planList")
     this.setData({
-      everyday_planList: wx.getStorageSync("everyday_planList"),
+      everyday_planList: everyday_planList,
       goal_university: info.goal_university == "" ? "未设置目标大学" : info.goal_university, //目标
       goal_major: info.goal_major == "" ? "未设置目标专业" : info.goal_major, //目标
       motto: info.motto == "" ? "未设置座右铭" : info.motto, //座右铭
