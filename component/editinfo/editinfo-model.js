@@ -7,6 +7,7 @@ class EditInfoComponent {
    * [保存用户信息]
    */
   saveUserInfo(params) {
+    // console.log(params)
     var r = new Request()
     r.setFailInfo('/component/editinfo/editinfo-model.js', "saveUserInfo")
     r.request({

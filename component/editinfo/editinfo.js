@@ -145,7 +145,7 @@ Component({
         data: {
           user_name: wx_user_info['user_name'],
           user_avatar: wx_user_info['user_avatar'],
-          user_gender: wx_user_info['user_gender'],
+          user_gender: wx_user_info['user_gender'] == '男' ? 1 : 2,
           user_city: wx_user_info['user_city'],
           user_birthday: formData.birthday,
           user_target: formData.goal_university + "+" + formData.goal_major,
