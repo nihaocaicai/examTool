@@ -12,10 +12,10 @@
   margin: 0 auto;
   overflow: hidden;
   border-radius: 50%;
-  width: 200rpx;
-  height: 200rpx;
+  width: 180rpx;
+  height: 180rpx;
   margin-left: 200rpx;
-  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
   /*边框白色 border: 2px solid #fff;*/
 }
 
@@ -34,10 +34,13 @@
   flex-direction: column;
   display: flex;
   margin: 60rpx;
+  border: 1rpx dashed;
+  padding: 20rpx
 }
 
 .text-container text {
-  margin: 10rpx;
+  font-size: 28rpx;
+  margin: 18rpx;
 }
 
 /* 信息end */

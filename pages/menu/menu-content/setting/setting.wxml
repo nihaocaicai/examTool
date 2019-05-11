@@ -27,7 +27,7 @@
 
   <!-- 退出登录star -->
   <view class='button-container'>
-    <button bindtap='clickLogoutButton'>退出登录</button>
+    <button bindtap='clickLogoutButton'>注销登录</button>
   </view>
   <!-- 退出登录end -->
 

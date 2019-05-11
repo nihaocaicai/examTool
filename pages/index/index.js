@@ -32,6 +32,12 @@ Page({
     }
   },
 
+  onShow: function(){
+    wx.redirectTo({
+      url: '../menu/menu-content/setting/setting',
+    })
+  },
+
   /**
    * [星标按钮点击事件]
    */
