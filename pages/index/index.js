@@ -34,7 +34,7 @@ Page({
 
   // onShow: function(){
   //   wx.redirectTo({
-  //     url: '/pages/menu/menu',
+  //     url: '/pages/menu/menu-content/diary/diary',
   //   })
   // },
 

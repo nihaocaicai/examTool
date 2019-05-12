@@ -13,29 +13,20 @@
 
           <!-- 日期 -->
           <view class='date-container'>
-            <text decode='true' class='date-text'>{{item.diary_write_time}}&nbsp;{{item.diary_write_place == ""?"未设置地址":item.diary_write_place}}</text>
+            <text decode='true'>{{item.diary_write_time}}
+            </text>
+            <image src='/images/menu/diary/place.png'></image>
+            <text decode='true'>{{item.diary_write_place == ""?"未设置地址":item.diary_write_place}}</text>
           </view>
         </view>
 
         <view class="edit">
-          <image data-diary_id='{{item.diary_id}}'
-          data-title='{{item.diary_title}}'
-          data-content='{{item.diary_content}}'
-          data-date='{{item.diary_write_date}}'
-          data-time='{{item.diary_write_time}}'
-          data-place='{{item.diary_write_place}}'
-          class='modify-image'
-          src='/images/index/diary.png'
-          bindtap="modItem" />
-          <image data-diary_id='{{item.diary_id}}'
-          data-title='{{item.diary_title}}'
-          class='del-image'
-          src='/images/index/modify/del.png'
-          bindtap="delItem" />
+          <image data-diary_id='{{item.diary_id}}' data-title='{{item.diary_title}}' data-content='{{item.diary_content}}' data-date='{{item.diary_write_date}}' data-time='{{item.diary_write_time}}' data-place='{{item.diary_write_place}}' class='modify-image' src='/images/index/diary.png'
+            bindtap="modItem" />
+          <image data-diary_id='{{item.diary_id}}' data-title='{{item.diary_title}}' class='del-image' src='/images/index/modify/del.png' bindtap="delItem" />
         </view>
       </view>
     </block>
   </view>
-  <diary id='diary' bind:successEvent="_successEvent"
-  bind:hidden="hidden_dialog" />
+  <diary id='diary' bind:successEvent="_successEvent" bind:hidden="hidden_dialog" />
 </view>
