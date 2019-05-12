@@ -24,5 +24,6 @@
     </view>
 
   </view>
-  <edit id='edit' bind:save_success="save_success" bind:save_fail="save_fail"/>
+  <edit id='edit' bind:save_success="save_success" bind:save_fail="save_fail"
+bind:cancel="_cancel"/>
 </view>

@@ -1,7 +1,7 @@
 <view hidden="{{flag}}" catchtouchmove="preventTouchMove">
   <view class='setting-container'>
     <!-- 标题 -->
-    <view class="wx-setting-title">{{isFirstLogin ? "设置" : "修改"}}信息</view>
+    <view class="wx-setting-title">设置信息</view>
     <form bindsubmit="formSubmit">
       <!-- 内容 -->
       <view class="wx-setting-con">
@@ -41,7 +41,7 @@
       </view>
       <!-- 按钮 -->
       <view class="wx-setting-btn">
-        <button wx:if="{{!isFirstLogin}}" bindtap='_cancel'>取消</button>
+        <button bindtap='_cancel'>取消</button>
         <button form-type="submit">确定</button>
       </view>
     </form>
