@@ -16,7 +16,7 @@
   <!-- 每日计划star -->
   <view class='bottom-container'>
     <view class='edit-container'>
-      <image class='diary-image' src='/images/index/diary.png' bindtap="showDiary" />
+      <image class='diary-image' src='/images/index/diarys.png' bindtap="showDiary" />
       <view class='edit-text'>{{date}}</view>
       <image class='modify-image' src='/images/index/modify.png' bindtap="goToModify" />
     </view>

@@ -1,12 +1,17 @@
 <view>
   <view class='image-container'>
-    <image class='head-image' src='/images/menu/head.png'></image>
+    <image class='head-image' src='/images/logo.png'></image>
   </view>
   
   <view class='text-container'>
-    <text>email：888888@qq.com</text>
+    <text>email：2364784478@qq.com</text>
     <text>GitHub：github.com/nihaocaicai</text>
-    <text>QQ：888888</text>
-    <text>微信：888888</text>
+    <text>QQ：2364784478</text>
+    <text>微信：15802090624</text>
+  </view>
+
+  <view class='text-container'>
+    <text>制作团队：大佬别打我嘤嘤嘤群</text>
+    <text>团队成员：</text>
   </view>
 </view>
