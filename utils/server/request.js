@@ -56,12 +56,13 @@ class Request {
             thisClass._refetch(params)
           } else {
             /* 其他情况一律调用错误回调函数 */
-            if (params.statusCodeFail)
+            if (params.statusCodeFail) {
               params.statusCodeFail({
                 statusCode: res.statusCode,
+                error_code: res.data.error_code,
                 data: JSON.stringify(res.data),
               })
-            else {
+            } else {
               var err = "服务器错误代码: " + res.statusCode + "\n"
               err += "错误信息:\n" + JSON.stringify(res.data)
               params.fail && params.fail(err)

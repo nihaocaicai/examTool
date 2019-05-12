@@ -79,26 +79,12 @@ Page({
         success: function() {
           var s = new Storage()
           wx.clearStorage()
-          s.save({
-            key: 'logout',
-            data: true,
-            success: function() {
-              wx.hideLoading()
-              this.setData({
-                showDeleteModal: false
-              })
-              wx.showModal({
-                title: '提示',
-                content: '退出成功，请在微信中删除小程序完成退出操作',
-                showCancel: false,
-                confirmColor: '#04838e',
-                success: function(res) {
-                  wx.reLaunch({
-                    url: '/pages/login/login',
-                  })
-                },
-              })
-            },
+          wx.hideLoading()
+          that.setData({
+            showDeleteModal: false
+          })
+          wx.reLaunch({
+            url: '/pages/login/login',
           })
         },
         fail: function() {

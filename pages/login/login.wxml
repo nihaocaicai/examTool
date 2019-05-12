@@ -19,12 +19,6 @@
       <image style='margin-top:5px; width:32px; height:32px' src='/images/login/loading.gif' />
     </view>
 
-    <view wx:elif="{{needDeleteTips}}" style='text-align:center'>
-      <view>你已退出登录</view>
-      <view>如想重新使用</view>
-      <view>请在微信中删除本小程序后重新进入</view>
-    </view>
-
     <view wx:elif="{{loginFailTips}}" style='text-align:center'>
       <view>加载失败</view>
     </view>

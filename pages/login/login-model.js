@@ -35,6 +35,9 @@ class Login {
       success: function(data) {
         callbacks.success(data)
       },
+      statusCodeFail: function(res) {
+        callbacks.statusCodeFail(res.error_code)
+      },
       fail: callbacks.fail
     })
   }
