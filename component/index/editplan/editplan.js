@@ -80,14 +80,14 @@ Component({
           formData.plan_id = this.data.plan_id
           formData.plan_if_finish = this.data.plan_if_finish
           formData.plan_if_repeat = (this.data.plan_if_repeat ? 1 : 0)
-          this.addPlan(formData)
+          this.modifyPlan(formData)
         } else {
           this._cancel()
         }
       } else {
         formData.plan_if_finish = 0
         formData.plan_if_repeat = (this.data.plan_if_repeat ? 1 : 0)
-        this.modifyPlan(formData)
+        this.addPlan(formData)
       }
     },
 
@@ -196,6 +196,8 @@ Component({
      * modify_fail: 添加失败
      */
     modifyPlan: function(formData) {
+      var that = this
+      console.log(formData)
       wx.showLoading({
         title: '修改中',
       })

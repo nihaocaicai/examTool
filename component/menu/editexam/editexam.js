@@ -1,7 +1,13 @@
 import {
   DateUtil
 } from "../../../utils/DateUtil.js"
+
+import {
+  EditExamComponent
+} from "editexam-model.js"
+
 var dateUtil = new DateUtil()
+var model = new EditExamComponent()
 
 var defaultPromptTimeSelect = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15 ', '16', '17', '18', '19', '20', '21', '22', '23'] // 默认提醒时间选择器
 var defaultPromptTimeSelectIndex = [0, 0]
@@ -52,7 +58,7 @@ Component({
         } else if (dateUtil.compareNow(formData.arrange_if_prompt_date, formData.arrange_if_prompt_time) != 1) {
           this._showTips("提醒时间不能早于现在的时间")
           return
-        } else if (dateUtil.compareDateAndTime(formData.arrange_if_prompt_date, formData.arrange_if_prompt_time, formData.arrange_date, formData.arrange_time) != 1) {
+        } else if (dateUtil.compareDateAndTime(formData.arrange_if_prompt_date, formData.arrange_if_prompt_time, formData.arrange_date, formData.arrange_time) != -1) {
           this._showTips("提醒时间不能晚于考研的时间")
           return
         }

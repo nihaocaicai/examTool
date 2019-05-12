@@ -26,7 +26,6 @@ Page({
   },
 
   onUnload: function() {
-    console.log(planModifyList)
     if (planModifyList.size != 0) {
       this._modifyFinish() // 批量提交修改的计划
     }
@@ -212,7 +211,6 @@ Page({
     model.getAfterPlan({
       page: that.data.nowPage,
       success: function(data) {
-        console.log(data)
         if (data.length == 0) {
           //没有数据
           that.setData({
@@ -307,11 +305,9 @@ Page({
   // 滑动组件start
   drawStart: function(e) {
     var touch = e.touches[0];
-    // console.log(touch);
     // 最初状态，设置right的值为0，不显示滑块编辑，删除
     for (var index in this.data.planList) {
       var items = this.data.planList[index].data
-      // console.log(items)
       for (var ind in items) {
         var item = items[ind]
         item.right = 0
@@ -331,7 +327,6 @@ Page({
     var items = this.data.planList[dayindex].data
     // 获得当前滑块日期下对应的时间模块
     var item = items[e.currentTarget.dataset.index]
-    // console.log(item.right)
     // 设置right的值
     var disX = this.data.startX - touch.clientX
     if (disX >= 20) {
@@ -343,7 +338,6 @@ Page({
         isScroll: false,
         planList: this.data.planList
       })
-      // console.log(this.data.planList)
     } else {
       item.right = 0
       this.setData({
