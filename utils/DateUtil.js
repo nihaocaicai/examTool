@@ -91,8 +91,8 @@ class DateUtil {
    * @return -1: 小于; 0: 等于; 1:大于
    */
   compareNowTimeStamp(time, timeStamp) {
-    var n = new Date().getTime()
     var t = time.getTime()
+    var n = new Date().getTime()
 
     if (t - n < timeStamp) {
       return -1

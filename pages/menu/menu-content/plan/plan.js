@@ -46,7 +46,13 @@ Page({
           })
         } else {
           // 有数据
-          if (data.length == that.data.maxItem) {
+          var length = 0
+          for (var i in data) {
+            for (var j in data[i].data) {
+              length += data[i].data[j].plan.length
+            }
+          }
+          if (length == that.data.maxItem * that.data.nowPage) {
             //还有更多计划
             that.setData({
               hasMorePlan: true,
@@ -90,9 +96,7 @@ Page({
       title: '加载中',
     })
     model.getBeforePlan({
-      data: {
-        page: that.data.nowPage,
-      },
+      page: that.data.nowPage,
       success: function(data) {
         if (data.length == 0) {
           //没数据
@@ -105,7 +109,14 @@ Page({
           })
         } else {
           // 有数据
-          if (data.length == that.data.maxItem) {
+          var length = 0
+          for (var i in data) {
+            for (var j in data[i].data) {
+              length += data[i].data[j].plan.length
+            }
+          }
+          console.log(length)
+          if (length == that.data.maxItem * that.data.nowPage) {
             //还有更多计划
             that.setData({
               hasMorePlan: true,

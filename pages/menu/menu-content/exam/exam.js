@@ -54,7 +54,7 @@ Page({
 
     if (!this.editexam)
       this.editexam = this.selectComponent("#editexam") //获得edit组件
-
+    console.log(data)
     this.editexam.setData({
       isModify: true,
       beforeData: data, //原始信息，用于判断是否修改过信息
@@ -63,9 +63,9 @@ Page({
       arrange_place: data.arrange_place,
       arrange_date: data.arrange_date,
       arrange_time: data.arrange_time,
-      arrange_if_prompt: data.arrange_if_prompt == 0 ? false : true,
-      arrange_if_prompt_date: data.arrange_if_prompt ? data.arrange_if_prompt_date : "",
-      arrange_if_prompt_time: data.arrange_if_prompt ? data.arrange_if_prompt_time : "",
+      arrange_if_prompt: data.arrange_if_prompt == 1,
+      arrange_if_prompt_date: data.arrange_if_prompt == 1 ? data.arrange_if_prompt_date : "",
+      arrange_if_prompt_time: data.arrange_if_prompt == 1 ? data.arrange_if_prompt_time : "",
     })
     this.editexam.showEdit()
   },
@@ -139,8 +139,12 @@ Page({
             noArrangement: true,
           })
         } else {
-          // 有计划
-          if (data.length == that.data.maxItem) {
+          // 有安排
+          var length = 0
+          for (var i in data) {
+            length += data[i].data.length
+          }
+          if (length == that.data.maxItem * that.data.nowPage) {
             //还有更多安排
             that.setData({
               hasMoreArrangements: true,
@@ -198,8 +202,12 @@ Page({
             noArrangement: false,
           })
         } else {
-          // 有计划
-          if (data.length == that.data.maxItem) {
+          // 有安排
+          var length = 0
+          for (var i in data) {
+            length += data[i].data.length
+          }
+          if (length == that.data.maxItem * that.data.nowPage) {
             //还有更多安排
             that.setData({
               hasMoreArrangements: true,

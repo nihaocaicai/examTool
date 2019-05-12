@@ -114,7 +114,7 @@ Component({
         var ifPrompt = this.data.arrange_if_prompt
         this.setData({
           flag: false,
-          arrange_if_prompt: dateUtil.compareNowTimeStamp(d, 604800000) == 1 ? false : ifPrompt,
+          //arrange_if_prompt: dateUtil.compareNowTimeStamp(d, 604800000) == 1 ? false : ifPrompt,
           dateStart: dateUtil.getFormatDate(),
           timeStart: this.data.arrange_date == dateUtil.getFormatDate() ? dateUtil.getFormatTime() : "00:00",
           promptDateStart: dateUtil.getFormatTime(1) == 23 ? dateUtil.getNextDate() : dateUtil.getFormatDate(),
@@ -326,7 +326,7 @@ Component({
         data: formData,
         success: function() {
           wx.hideLoading()
-          that.editexam.hideEdit()
+          that.hideEdit()
           that.triggerEvent("add_success")
         },
         statusCodeFail: function() {
@@ -356,7 +356,7 @@ Component({
         data: formData,
         success: function() {
           wx.hideLoading()
-          that.editexam.hideEdit()
+          that.hideEdit()
           that.triggerEvent("modify_success")
         },
         statusCodeFail: function() {

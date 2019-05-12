@@ -33,7 +33,7 @@
   </view>
   <!-- 退出登录end -->
 
-  <edit id='edit' bind:modify_success="modify_success" />
+  <edit id='edit' bind:save_success="save_success" />
 
   <modal id="modal"class='modal' hidden="{{!showDeleteModal}}" title="提示" confirm-text="退出" cancel-text="取消" bindcancel="cancelDelete" bindconfirm="confirmDelete">
     <view>1、退出登录后，所有信息都会被删除</view>

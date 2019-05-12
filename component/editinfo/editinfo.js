@@ -68,7 +68,7 @@ Component({
           }]
         })
         that.hideEdit()
-        that.triggerEvent("save_success")
+        that.triggerEvent("save_success", formData)
       }, {
         user_name: wx_user_info['user_name'],
         user_avatar: wx_user_info['user_avatar'],

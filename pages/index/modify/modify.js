@@ -165,7 +165,11 @@ Page({
           })
         } else {
           // 有数据
-          if (data.length == that.data.maxItem) {
+          var length = 0
+          for (var i in data) {
+            length += data[i].data.length
+          }
+          if (length == that.data.maxItem * that.data.nowPage) {
             //还有更多计划
             that.setData({
               hasMorePlan: true,
@@ -182,7 +186,7 @@ Page({
             showView: true,
             noPlan: false,
             planList: data,
-            page: thisClass.data.page + 1
+            nowPage: that.data.nowPage + 1
           })
         }
         wx.hideLoading()
@@ -218,7 +222,11 @@ Page({
           })
         } else {
           //有数据
-          if (data.length == that.data.maxItem) {
+          var length = 0
+          for (var i in data) {
+            length += data[i].data.length
+          }
+          if (length == that.data.maxItem * that.data.nowPage) {
             //还有更多计划
             that.setData({
               hasMorePlan: true,
@@ -231,7 +239,7 @@ Page({
           }
           that.setData({
             planList: data,
-            page: that.data.nowPage + 1
+            nowPage: that.data.nowPage + 1
           })
         }
         wx.hideLoading()

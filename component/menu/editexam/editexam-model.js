@@ -9,7 +9,6 @@ class EditExamComponent {
    * [添加考研安排]
    */
   addArramgements(params) {
-    console.log(params.data)
     var r = new Request()
     r.setFailInfo(path, "addArramgements")
     r.request({

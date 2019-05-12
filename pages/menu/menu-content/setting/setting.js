@@ -40,7 +40,7 @@ Page({
   /**
    * [事件_保存成功]
    */
-  modify_success(e) {
+  save_success(e) {
     this.setData({
       info: e.detail
     })
