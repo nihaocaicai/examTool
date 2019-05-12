@@ -2,7 +2,7 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 85%;
+  width: 90%;
   max-width: 800rpx;
   border: 1rpx solid #ccc;
   border-radius: 10rpx;
@@ -18,13 +18,16 @@
   padding-top: 20rpx;
   padding-bottom: 20rpx;
   text-align: center;
-  font-size: 40rpx;
-  border-bottom: 1rpx solid black;
+  font-size: 36rpx;
+  border-bottom: 1rpx solid #ccc;
 }
 
 .wx-setting-con {
-  margin: 25rpx 10rpx;
-  padding: 10rpx;
+  margin-top: 16rpx;
+  margin-bottom:16rpx;
+  margin-left: 32rpx;
+  margin-right:32rpx;
+  padding: 12rpx;
 }
 
 .setting-content-container {
@@ -39,41 +42,20 @@
 }
 
 .setting-content-container input {
-  font-size: 34rpx;
+  font-size: 28rpx;
+  color:#04838e;
 }
 
 .setting-content-container picker {
   width: 100%;
-  font-size: 34rpx;
+  font-size: 28rpx;
+}
+.setting-content-container picker text{
+ color:#04838e;
 }
 
 .setting-content-container text {
-  font-size: 34rpx;
-}
-
-/*座右铭*/
-
-.motto {
-  height: 100%;
-  flex-direction: row;
-  align-items: center;
-}
-
-.mottoedit {
-  flex-direction: column;
-  align-items: center;
-  font-size: 34rpx;
-  margin-bottom: 15rpx;
-}
-
-.wx-motto-con {
-  height: 50rpx;
-  width: 96%;
-  font-size: 30rpx;
-  border-width: 1rpx;
-  border-color: black;
-  border-style: dashed;
-  padding: 10rpx;
+  font-size: 28rpx;
 }
 
 /* 按钮 */

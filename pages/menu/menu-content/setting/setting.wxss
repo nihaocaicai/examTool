@@ -35,12 +35,27 @@
   display: flex;
   margin: 60rpx;
   border: 1rpx dashed;
-  padding: 20rpx
+  border-radius: 20rpx;
+  padding: 25rpx;
 }
 
 .text-container text {
   font-size: 28rpx;
   margin: 18rpx;
+}
+.switch-view{
+  display: flex;
+  align-items: center;
+}
+
+.switch-view view{
+  display: flex;
+  align-items: center;
+  margin-left: 60rpx;
+}
+
+.switch-view view switch{
+  margin-right:4rpx; 
 }
 
 /* 信息end */
@@ -55,6 +70,22 @@
 .button-container button {
   background: #04838e;
   color: white;
+  border-radius: 50rpx;
 }
 
+.modal view{
+  margin: 15rpx;
+}
+
+.modal-view{
+  font-size:50rpx;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+.modal-view input{
+  width:50rpx;
+}
 /* 退出登录end */

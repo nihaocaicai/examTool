@@ -17,10 +17,12 @@
     <text>目标大学：{{info.goal_university == "" ? "未设置": info.goal_university}}</text>
     <text>目标专业：{{info.goal_major == "" ? "未设置": info.goal_major}}</text>
     <text>座右铭：{{info.motto  == "" ? "未设置座右铭": info.motto}}</text>
-    <view style='display: flex; align-items: center;'>
+    <view class='switch-view'>
       <text>离线模式时提示</text>
-      <switch checked="{{!hideOfflineTips}}" bindchange='offlineTipsChange' color='#04838e' />
-      <image bindtap='whatsOfflineMode' style="width:50rpx" src='/images/menu/question.png' mode="widthFix"/>
+      <view>
+        <switch checked="{{!hideOfflineTips}}" bindchange='offlineTipsChange' color='#04838e' />
+        <image bindtap='whatsOfflineMode' style="width:50rpx" src='/images/menu/question.png' mode="widthFix" />
+      </view>
     </view>
   </view>
   <!-- 信息end -->
@@ -33,14 +35,13 @@
 
   <edit id='edit' bind:modify_success="modify_success" />
 
-  <modal id="modal" hidden="{{!showDeleteModal}}" title="提示" confirm-text="退出" cancel-text="取消" bindcancel="cancelDelete" bindconfirm="confirmDelete">
-    <view style='text-align:center'>退出登录后，所有信息都会被删除</view>
-    <view style='text-align:center'>请填入正确答案以完成操作</view>
-    <view style='margin-top:20rpx' />
+  <modal id="modal"class='modal' hidden="{{!showDeleteModal}}" title="提示" confirm-text="退出" cancel-text="取消" bindcancel="cancelDelete" bindconfirm="confirmDelete">
+    <view>1、退出登录后，所有信息都会被删除</view>
+    <view>2、请填入正确答案以完成操作</view>
 
-    <view style='font-size:50rpx; display:flex; justify-content:center; align-items:center'>
+    <view class='modal-view'>
       <text decode='true'>{{add1}} + {{add2}} = &nbsp;</text>
-      <input value='{{value}}' style='width:50rpx' bindinput="bindKeyInput" type='text' placeholder="?" maxlength='1' focus="{{true}}" />
+      <input value='{{value}}' bindinput="bindKeyInput" type='text' placeholder="?" maxlength='1' focus="{{true}}" />
     </view>
   </modal>
 

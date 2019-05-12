@@ -32,11 +32,11 @@ Page({
     }
   },
 
-  onShow: function(){
-    wx.redirectTo({
-      url: '../menu/menu-content/setting/setting',
-    })
-  },
+  // onShow: function(){
+  //   wx.redirectTo({
+  //     url: '/pages/menu/menu',
+  //   })
+  // },
 
   /**
    * [星标按钮点击事件]

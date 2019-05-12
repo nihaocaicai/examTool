@@ -1,21 +1,21 @@
 <!-- 顶部信息框 -->
-<view id='infomation'>
+<view class='infomation'>
   <!-- 头像 -->
-  <view id='picture_out'>
-    <image id='picture' src='{{avatarUrl}}' />
+  <view class='picture_out'>
+    <image class='picture' src='{{avatarUrl}}' />
   </view>
 
-  <view id='tips'>
-    <view id='nickName'>
+  <view class='tips'>
+    <view class='nickName'>
       {{nickName}}
     </view>
-    <view id='motto'>
+    <view class='motto'>
       <text decode='{{true}}'>{{motto}}</text>
     </view>
   </view>
 </view>
 
-<view id='menu'>
+<view class='menu'>
   <view class='wave' /> 
   <view class='line' bindtap='clickPlan'>
     <view class='pic'>
@@ -26,7 +26,7 @@
       <image class='go' mode='aspectFit' src="/images/menu/go.png"/>
     </view>
   </view>
-  <view class='wave' />
+
   <view class='line' bindtap='clickDiary'>
     <view class='pic'>
       <image class='icon' mode='aspectFit' src="/images/menu/diary.png"/>
@@ -36,7 +36,7 @@
       <image class='go' mode='aspectFit' src="/images/menu/go.png"/>
     </view>
   </view>
-  <view class='wave' />
+
   <view class='line' bindtap='clickExam'>
     <view class='pic'>
       <image class='icon' mode='aspectFit' src="/images/menu/arrange.png"/>
@@ -46,7 +46,7 @@
       <image class='go' mode='aspectFit' src="/images/menu/go.png"/>
     </view>
   </view>
-  <view class='wave' />
+
   <view class='line' bindtap='clickSetting'>
     <view class='pic'>
       <image class='icon' mode='aspectFit' src="/images/menu/setting.png"/>
@@ -56,10 +56,9 @@
       <image class='go' mode='aspectFit' src="/images/menu/go.png"/>
     </view>
   </view>
-  <view class='wave' />
 </view>
 
-<view id="bottom">
+<view class="bottom">
   <text bindtap='clickFeedback'>错误反馈</text>
   <text decode='{{true}}'> &nbsp; |  &nbsp; </text>
   <text bindtap='clickContact'>联系我们</text>

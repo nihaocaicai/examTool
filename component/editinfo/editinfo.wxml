@@ -13,7 +13,7 @@
           <picker name="birthday" mode="date" value="{{birthday}}" bindchange="bindBirthdayChange">
             <view class="picker">
               生日：
-              <text decode="true" style='color:#04838e'>{{birthday == "" || birthday == null ? "点击选择日期" : birthday}}</text>
+              <text decode="true">{{birthday == "" || birthday == null ? "点击选择日期" : birthday}}</text>
             </view>
           </picker>
         </view>
@@ -22,7 +22,7 @@
           <picker name="examDate" mode="date" value="{{examDate}}" bindchange="bindDateChange">
             <view class="picker">
               考研日期：
-              <text decode="true" style='color:#04838e'>{{examDate == "" || examDate == null ? "点击选择日期" : examDate}}</text>
+              <text decode="true">{{examDate == "" || examDate == null ? "点击选择日期" : examDate}}</text>
             </view>
           </picker>
         </view>
@@ -34,10 +34,9 @@
           <text decode="{{true}}">目标专业:  &nbsp;&nbsp; </text>
           <input name="goal_major" maxlength="16" placeholder='你心仪的专业' value="{{goal_major}}" />
         </view>
-        <view class="motto">
-          <view class="mottoedit">座右铭:</view>
-          <input name="motto" class="wx-motto-con" maxlength="16" placeholder='激励你的名言' value="{{motto}}" />
-          <view wx:if="{{isFirstLogin}}" style="color: #999; text-align:center; font-size: 30rpx">没有想好可以稍后设置哦～</view>
+        <view class="setting-content-container">
+          <text decode="{{true}}">座右铭:  &nbsp;&nbsp; </text>
+          <input name="motto" maxlength="16" placeholder='激励你的名言' value="{{motto}}" />
         </view>
       </view>
       <!-- 按钮 -->

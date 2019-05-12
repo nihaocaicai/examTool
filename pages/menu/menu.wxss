@@ -1,110 +1,87 @@
-page {
-  margin: 0 auto;
-  font-family: 'PingFang SC',
-                 'Helvetica Neue',
-                 Helvetica,
-                 'Droid Sans Fallback',
-                 'Microsoft Yahei',
-                 sans-serif;
-}
-
-#infomation {
-  margin: 20px;
-  height: 180rpx;
+.infomation {
+  margin-top: 62rpx;
+  margin-bottom: 100rpx;
+  margin-left:60rpx; 
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  height: 120rpx;
 }
 
-#infomation #picture_out {
-  display: block;
-  width: 290rpx;
-  height: 180rpx;
+.picture_out {
+  margin-right: 32rpx;
 }
 
-#infomation #picture_out #picture {
-  margin: 0 auto;
-  overflow: hidden;
-  width: 180rpx;
-  height: 180rpx;
+.picture {
+  width: 160rpx;
+  height: 160rpx;
   border-radius: 50%;
-  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1);
   /*边框白色 border: 2px solid #fff;*/
 }
 
-#infomation #tips {
-  overflow: hidden;
+.tips {
   width: 100%;
   height: 180rpx;
+  margin-top:24rpx; 
 }
 
-#infomation #tips #nickName {
-  display: table-cell;
-  vertical-align: bottom;
-  height: 70rpx;
-  word-wrap: break-word;
-  font-weight: bold;
+.nickName {
+  margin-bottom: 8rpx; 
+  font-size: 42rpx;
+  color: rgb(85, 85, 85);
 }
 
-#infomation #tips #motto {
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  height: 110rpx;
+.motto {
   font-size: 32rpx;
-  word-wrap: break-word;
+  color: rgb(85, 85, 85);
 }
 
-#menu {
-  margin-top: 120rpx;
-  margin-left: 5vw;
-  margin-right: 5vw;
-  height: auto; 
+.menu {
+  margin-left: 48rpx;
+  margin-right: 48rpx;
+  padding-left: 32rpx;
   justify-content: center;
   text-align:left;
+  height: 520rpx;
+  border: rgb(85, 85, 85) solid 1rpx;
+  border-radius: 25rpx;
 }
 
-#menu .wave {
-  width: 93%;
-  margin-left: 80rpx;
-  height: 0.3em;
-  border-bottom: 1rpx #a5a5a5 solid; 
-  align-items: center;
-}
-#menu .line{
+.line{
   display: flex;
   flex-direction: column;
-  margin-top: 5rpx;
-  margin-bottom: 5rpx;
-  height: 100rpx;
+  justify-content: center;
+  margin-right:24rpx; 
+  height: 110rpx;
+  border-bottom: rgb(85, 85, 85) dashed 1rpx;
 }
-#menu .pic{
-  margin-top: 30rpx;
-  height: 30rpx;
+.pic{
+  height: 32rpx;
 }
-#menu .icon{
+.icon{
   margin-left: 5rpx;
-  width: 60rpx;
-  height: 60rpx;
-}
-#menu .item {
+  width: 46rpx;
   height: 100rpx;
-  margin-left: 85rpx;
-  margin-top: -30rpx;
-  font-size: 43rpx; 
 }
-#menu .pic2{
-  height: 10rpx;
+.item {
+  height: 100rpx;
+  margin-left: 72rpx;
+  font-size: 32rpx; 
+  color: rgb(114, 114, 114);
 }
-#menu .go{
-  margin-left: 645rpx;
-  margin-top: -150rpx;
-  padding-bottom: 40rpx;
-  width: 40rpx;
-  height: 40rpx;
+.pic2{
+  display: flex;
+  margin-left: 560rpx;
+  margin-top: -88rpx; 
+}
+.go{
+  width: 28rpx;
+  height: 28rpx;
 }
 
 
-#bottom {
+.bottom {
   font-size: 28rpx;
   color: #999;
   position: fixed;
