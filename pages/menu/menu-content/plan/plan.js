@@ -33,7 +33,7 @@ Page({
       title: '加载中',
     })
     model.getBeforePlan({
-      page: that.data.nowPage,
+      page: 1,
       success: function(data) {
         if (data.length == 0) {
           //没数据
@@ -49,10 +49,10 @@ Page({
           var length = 0
           for (var i in data) {
             for (var j in data[i].data) {
-              length += data[i].data[j].plan.length
+              length += data[i].data[j]['plan'].length
             }
           }
-          if (length == that.data.maxItem * that.data.nowPage) {
+          if (length == that.data.maxItem) {
             //还有更多计划
             that.setData({
               hasMorePlan: true,
@@ -69,7 +69,7 @@ Page({
             showView: true,
             noPlan: false,
             totalPlan: data,
-            nowPage: that.data.nowPage + 1,
+            nowPage: 2,
           })
         }
         wx.hideLoading()
@@ -112,10 +112,9 @@ Page({
           var length = 0
           for (var i in data) {
             for (var j in data[i].data) {
-              length += data[i].data[j].plan.length
+              length += data[i].data[j]['plan'].length
             }
           }
-          console.log(length)
           if (length == that.data.maxItem * that.data.nowPage) {
             //还有更多计划
             that.setData({

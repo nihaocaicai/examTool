@@ -152,7 +152,7 @@ Page({
       title: '加载中',
     })
     model.getAfterPlan({
-      page: that.data.nowPage,
+      page: 1,
       success: function(data) {
         if (data.length == 0) {
           //没有数据
@@ -169,7 +169,7 @@ Page({
           for (var i in data) {
             length += data[i].data.length
           }
-          if (length == that.data.maxItem * that.data.nowPage) {
+          if (length == that.data.maxItem) {
             //还有更多计划
             that.setData({
               hasMorePlan: true,
@@ -186,7 +186,7 @@ Page({
             showView: true,
             noPlan: false,
             planList: data,
-            nowPage: that.data.nowPage + 1
+            nowPage: 2
           })
         }
         wx.hideLoading()

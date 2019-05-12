@@ -32,13 +32,6 @@ Page({
     }
   },
 
-  // onShow: function(){
-  //   wx.redirectTo({
-  //     url: '/pages/menu/menu-other/contact/contact',
-  //   })
-  // },
-
-
   /**
    * [星标按钮点击事件]
    */

@@ -197,7 +197,6 @@ Component({
      */
     modifyPlan: function(formData) {
       var that = this
-      console.log(formData)
       wx.showLoading({
         title: '修改中',
       })
@@ -205,7 +204,7 @@ Component({
         data: formData,
         success: function() {
           wx.hideLoading()
-          thisClass.editPlan.hideEdit()
+          that.hideEdit()
           that.triggerEvent("modify_success")
         },
         fail: function() {

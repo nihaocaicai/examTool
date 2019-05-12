@@ -54,7 +54,6 @@ Page({
 
     if (!this.editexam)
       this.editexam = this.selectComponent("#editexam") //获得edit组件
-    console.log(data)
     this.editexam.setData({
       isModify: true,
       beforeData: data, //原始信息，用于判断是否修改过信息
@@ -90,7 +89,7 @@ Page({
             arrange_id: that.data.examList[index.dayindex]['data'][index.index].arrange_id,
             success: function() {
               wx.hideLoading()
-              that._initData(false)
+              that._initData()
             },
             statusCodeFail: function() {
               wx.hideLoading()
@@ -144,7 +143,7 @@ Page({
           for (var i in data) {
             length += data[i].data.length
           }
-          if (length == that.data.maxItem * that.data.nowPage) {
+          if (length == that.data.maxItem) {
             //还有更多安排
             that.setData({
               hasMoreArrangements: true,
@@ -161,7 +160,7 @@ Page({
             showView: true,
             noArrangement: false,
             examList: data,
-            nowPage: that.data.nowPage + 1
+            nowPage: 2,
           })
         }
         wx.hideLoading()

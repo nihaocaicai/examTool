@@ -129,7 +129,7 @@ Component({
         } else {
           wx.showToast({
             title: '添加失败',
-            icon: 'fail',
+            image: '/images/fail.png',
             duration: 800
           })
           this.hideDiary()
@@ -173,14 +173,14 @@ Component({
     },
 
     //对话框显示时禁止下拉
-    preventTouchMove: function () { },
+    preventTouchMove: function() {},
 
     //获取当前位置
     getLocation() {
       var that = this
       wx.chooseLocation({
         type: 'wgs84',
-        success: function (res) {
+        success: function(res) {
           if (res.name != "")
             that.setData({
               diary_write_place: res.name
@@ -214,7 +214,7 @@ Component({
     },
 
     //textarea字数限制
-    inputs: function (e) {
+    inputs: function(e) {
       // 获取输入框的内容
       var value = e.detail.value;
       // 获取输入框内容的长度
@@ -254,5 +254,3 @@ Component({
 
   }
 })
-
-   
