@@ -19,7 +19,6 @@ Page({
   data: {
     loading: true, //是否要显示 加载中 页面
     needAuthorize: false, //是否需要显示 点击授权 按钮
-    needDeleteTips: false, //需要删除小程序提示
     loginFailTips: false, //提示加载失败
   },
 
@@ -33,39 +32,37 @@ Page({
    */
   _login() {
     var that = this
-    if (wx.getStorageSync('logout')) {
-      /* 执行过登出操作，提示需要删除小程序后再添加 */
+    //检查微信授权
+    wx.getSetting({
+      success: res => {
+        if (res.authSetting['scope.userInfo']) {
+          // 用户已经授权
+          that._checkStorage()
+        } else {
+          // 用户没有授权，需要用户授权
+          that._needAuthorize()
+        }
+      },
+      fail: function(res) {
+        openDebug && debug.printWxGeSettingError("login.js", "_login", res)
+        that._checkStorage(true)
+      }
+    })
+  },
+
+  /**
+   * [需要用户授权]
+   */
+  _needAuthorize() {
+    if (wx.canIUse('button.open-type.getUserInfo')) {
+      //微信新版本，需要点击授权按钮
       this.setData({
-        needAuthorize: false,
+        needAuthorize: true,
         loading: false,
-        needDeleteTips: true, //需要删除小程序提示
       })
     } else {
-      //检查微信授权
-      wx.getSetting({
-        success: res => {
-          if (res.authSetting['scope.userInfo']) {
-            // 用户已经授权
-            that._checkStorage()
-          } else {
-            // 用户没有授权，需要用户授权
-            if (wx.canIUse('button.open-type.getUserInfo')) {
-              //微信新版本，需要点击授权按钮
-              that.setData({
-                needAuthorize: true,
-                loading: false,
-              })
-            } else {
-              //微信旧版本，在没有 open-type=getUserInfo 版本的兼容处理
-              that._getUserInfo()
-            }
-          }
-        },
-        fail: function(res) {
-          openDebug && debug.printWxGeSettingError("login.js", "_login", res)
-          that._checkStorage(true)
-        }
-      })
+      //微信旧版本，在没有 open-type=getUserInfo 版本的兼容处理
+      this._getUserInfo()
     }
   },
 
@@ -81,7 +78,7 @@ Page({
     if (!(wx.getStorageSync('token'))) {
       /* 没有 token */
       if (isGetSettingFail) {
-        // 一定是没有授权/ token 信息丢失，无论如何都要获取
+        // 一定是没有授权 token 信息丢失，无论如何都要获取
         that._loginFail()
       } else {
         model.get_token({
@@ -111,6 +108,14 @@ Page({
             path: '/pages/login/login',
             functionName: '_checkStorage'
           })
+        },
+        statusCodeFail: function(error_code) {
+          if (error_code == '3000') {
+            // 不存在该用户 需要重新授权
+            that._needAuthorize()
+          } else {
+            that._loginFail()
+          }
         },
         fail: that._loginFail,
       })
