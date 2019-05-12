@@ -49,6 +49,7 @@
 .c_text {
   font-size: 24rpx;
   margin-bottom: 4rpx;
+  color: #999;
 }
 
 /* 倒计时部分end */
@@ -84,15 +85,18 @@
 .diary-image {
   width: 80rpx;
   height: 80rpx;
+  margin-left:20rpx; 
 }
 
 .edit-text {
-  font-size: 32rpx;
+  font-size: 28rpx;
+  margin-left:-120rpx;
 }
 
 .modify-image {
   width: 80rpx;
-  height: 80rpx;
+  height: 100rpx;
+  margin-right:20rpx; 
 }
 
 /* edit部分end */

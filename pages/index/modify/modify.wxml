@@ -12,7 +12,7 @@
               <view class='date-container'>
                 <text class='date-text'>{{item.plan_start_time}} - {{item.plan_end_time}}</text>
                 <image data-dayindex='{{dayindex}}' data-index='{{index}}' data-plan_id="{{item.plan_id}}" bindtap="changeFinish" wx:if='{{item.plan_if_finish}}' class='date-image' src='/images/index/star.png' />
-                <image data-dayindex='{{dayindex}}' data-index='{{index}}' data-plan_id="{{item.plan_id}}" bindtap="changeFinish" wx:if='{{!item.plan_if_finish}}' class='date-image' src='/images/index/none-star.png' />
+                <image data-dayindex='{{dayindex}}' data-index='{{index}}' data-plan_id="{{item.plan_id}}" bindtap="changeFinish" wx:if='{{!item.plan_if_finish}}' class='date-image' src='/images/index/star.png' />
               </view>
               <!-- 内容 -->
               <view class='content-container'>
