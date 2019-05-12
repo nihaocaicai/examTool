@@ -13,8 +13,7 @@
 
           <!-- 日期 -->
           <view class='date-container'>
-            <text decode='true'>{{item.diary_write_time}}
-            </text>
+            <text decode='true'>{{item.diary_write_time}}</text>
             <image src='/images/menu/diary/place.png'></image>
             <text decode='true'>{{item.diary_write_place == ""?"未设置地址":item.diary_write_place}}</text>
           </view>

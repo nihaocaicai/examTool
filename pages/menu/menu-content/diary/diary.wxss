@@ -1,17 +1,35 @@
 .data-container {
   margin-top: 20rpx;
-  margin-left: 40rpx;
+  margin-left: 56rpx;
   margin-right: 40rpx;
-  border-width: 1rpx;
-  border-color: black;
-  border-style: dashed;
+  border-top-width: 1rpx;
+  border-top-color: black;
+  border-top-style: dashed;
 }
 
 .wx-date {
   margin-top: 20rpx;
   margin-left: 25rpx;
-  font-size: 48rpx;
+  font-size: 52rpx;
   color: #d6d6d6;
+}
+
+.content-container {
+  /* margin-top: -24rpx; */
+}
+
+.content-title {
+  font-size: 48rpx;
+  color: #6e6e6e;
+}
+
+.content-text { 
+  font-size: 24rpx;
+  color: #6e6e6e;
+  /* 字太多自动换行 */
+  word-wrap: break-word;
+  margin-left: 12rpx;
+  margin-right: 12rpx;
 }
 
 /* 日期star */
@@ -26,16 +44,19 @@
   margin-top: 24rpx;
   margin-bottom: 15rpx;
   margin-left: 15rpx;
+  padding: 5rpx;
 }
 
 .date-container text {
   font-size: 28rpx;
-  width: 500rpx;
+  color: #b6b6b6;
 }
 
-.date-container image{
-  width: 80rpx;
+.date-container image {
+  width: 60rpx;
   height: 80rpx;
+  margin-top: -8rpx;
+  margin-left: 12rpx;
 }
 
 /* 日期end */
