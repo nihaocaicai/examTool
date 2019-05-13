@@ -16,7 +16,7 @@ Page({
     maxItem: 10, // 加载一次显示多少条，要设置好，否则会影响点击加载更多按钮
   },
 
-  onLoad: function () {
+  onShow: function () {
     this._initData();
   },
   /**
@@ -84,7 +84,7 @@ Page({
    * [加载更多]
    */
   loadMore: function () {
-    var that = thisClass
+    var that = this
     wx.showLoading({
       title: '加载中',
     })
@@ -139,9 +139,8 @@ Page({
 
   //添加/修改成功后执行的操作
   _successEvent(e) {
-    this.onLoad()
+    this.onShow()
   },
-
 
 // 组件方法end
   //下拉页面操作
@@ -181,7 +180,7 @@ Page({
           })
         }),diary_id);
 
-        that.onLoad();
+        that.onShow();
       }
     })
 

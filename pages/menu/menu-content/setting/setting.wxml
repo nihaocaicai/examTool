@@ -17,10 +17,19 @@
     <text>目标大学：{{info.goal_university}}</text>
     <text>目标专业：{{info.goal_major}}</text>
     <text>座右铭：{{info.motto}}</text>
+    <!-- 判断当前是否处于离线状态 -->
     <view class='switch-view'>
       <text>当前是否处于离线状态：{{hideOfflineTips}}</text>
       <view>
         <image bindtap='whatsOfflineMode' style="width:50rpx" src='/images/menu/question.png' mode="widthFix" />
+      </view>
+    </view>
+    <!-- 设置是否隐藏首页计划前面的时间 -->
+    <view class='switch-view'>
+      <text>是否隐藏首页每日计划时间：</text>
+      <view>
+        <switch bindchange="switchChange" wx:if="{{plan_if_open_time==false}}"/>
+        <switch checked bindchange="switchChange" wx:else/>
       </view>
     </view>
   </view>

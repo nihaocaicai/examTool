@@ -9,14 +9,27 @@
         <view data-dayIndex='{{dayIndex}}' data-index='{{index}}' class="order-item" bindtouchstart="drawStart" bindtouchmove="drawMove" bindtouchend="drawEnd" style="right:{{item.right}}rpx">
           <view class='data-container'>
             <!-- 时间-->
-            <view class='date-container'>
-              <text class='date-text'>{{item.arrange_date}} {{item.arrange_time}} </text>
-            </view>
-            <!-- 科目及地点 -->
             <view class='content-container'>
-              <text class='content-text' decode="{{true}}">{{item.arrange_content}}</text>
-              <text class='content-text' decode="{{true}}">{{item.arrange_place}}</text>
+              <text class='content-text'>时间：<text>{{item.arrange_time}} </text>
+              </text>
             </view>
+            <!-- 内容 -->
+            <view class='content-container'>
+              <text class='content-text' decode="{{true}}">内容：<text>{{item.arrange_content}}</text></text>
+            </view>
+            <!-- 地点 -->
+            <view class='content-container'>
+              <text class='content-text' decode="{{true}}">地点：<text>{{item.arrange_place}}</text></text>
+            </view>
+            <!-- 是否微信提醒 -->
+            <view class='content-container'>
+              <text class='content-text' decode="{{true}}">是否打开微信提示：<text>{{item.arrange_if_prompt==1?"是":"否"}}</text></text>
+            </view>
+            <!-- 微信提示时间 -->
+            <view class='content-container' wx:if="{{item.arrange_if_prompt==1}}">
+              <text class='content-text' decode="{{true}}">提示时间：<text>{{item.arrange_if_prompt_date}} {{item.arrange_if_prompt_time}}</text></text>
+            </view>
+
           </view>
           <view class="editexam">
             <image class='modify-image' src='/images/index/diary.png' data-dayindex='{{dayIndex}}' data-index='{{index}}' bindtap="modItem" />

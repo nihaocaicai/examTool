@@ -47,9 +47,8 @@ Page({
   },
 
   _cancel() {
-    wx.showModal({
-      title: '提示',
-      content: '设置取消',
+    wx.showToast({
+      title: '设置取消',
     })
   },
 
@@ -183,6 +182,16 @@ Page({
       showDeleteModal: false,
       hideOfflineTips: if_has_network
     })
+    if (!wx.getStorageSync('plan_if_open_time')) {
+      this.setData({
+        plan_if_open_time: false,
+      })
+    }else{
+      var plan_if_open_time = wx.getStorageSync("plan_if_open_time")
+      this.setData({
+        plan_if_open_time: plan_if_open_time,
+      })
+    }
   },
 
   /**
@@ -190,5 +199,10 @@ Page({
    */
   _getRandom(min, max) {
     return parseInt(Math.random() * (max - min + 1) + min, 10);
+  },
+
+  // 设置是否隐藏首页每日计划缓存
+  switchChange(e) {
+    wx.setStorageSync("plan_if_open_time", e.detail.value)
   },
 })

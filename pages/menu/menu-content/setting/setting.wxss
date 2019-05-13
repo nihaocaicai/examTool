@@ -55,7 +55,9 @@
 }
 
 .switch-view view switch{
-  margin-right:4rpx; 
+  margin-left: -32rpx;
+  width: 40rpx;
+  height: 40rpx;
 }
 
 /* 信息end */

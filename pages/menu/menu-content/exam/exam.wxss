@@ -38,10 +38,15 @@
   display: flex;
   align-content: center;
   justify-content: space-between;
+  margin-bottom: 8rpx;
 }
 
 .content-text {
-  font-size: 35rpx;
+  font-size: 28rpx;
+}
+
+.content-text text{
+  color: #6e6e6e;
 }
 
 /* 内容end */
@@ -74,10 +79,11 @@
 }
 
 .tips_more {
-  margin-top: 1vw;
-  margin-bottom: 1vw;
+  margin-top: 2vw;
+  margin-bottom: 2vw;
   text-align: center;
-  font-size: 33rpx;
+  font-size: 36rpx;
+  color: #d6d6d6;
 }
 
 .tips {

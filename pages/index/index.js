@@ -20,7 +20,9 @@ Page({
   },
 
   onLoad: function() {
-    
+    // wx.redirectTo({
+    //   url: '../../pages/menu/menu-content/setting/setting',
+    // })
   },
 
   onShow:function(){
@@ -44,6 +46,15 @@ Page({
     var plan_id = e.currentTarget.dataset.id
     var plans = this.data.everyday_planList
     var flag = !(plans.data[index].plan_if_finish) // 获取星标状态
+    if (flag){
+      wx.showToast({
+        title: '任务完成了！',
+      })
+    }else{
+      wx.showToast({
+        title: '额，任务没完成！',
+      })
+    }
     plans.data[index].plan_if_finish = flag //修改对应计划的星标状态
     this.setData({
       everyday_planList: plans
@@ -286,6 +297,16 @@ Page({
       date: dateUtil.getIndexDate(), //今天的日期
       showPage: true, //显示页面
     })
+    if (!wx.getStorageSync('plan_if_open_time')) {
+      this.setData({
+        plan_if_open_time: false,
+      })
+    } else {
+      var plan_if_open_time = wx.getStorageSync("plan_if_open_time")
+      this.setData({
+        plan_if_open_time: plan_if_open_time,
+      })
+    }
     wx.hideLoading()
   }
 })

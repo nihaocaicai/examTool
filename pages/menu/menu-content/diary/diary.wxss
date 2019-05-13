@@ -19,8 +19,9 @@
 }
 
 .content-title {
-  font-size: 48rpx;
+  font-size: 42rpx;
   color: #6e6e6e;
+  margin-bottom:12rpx; 
 }
 
 .content-text { 
