@@ -262,12 +262,23 @@ Page({
   _initData() {
     var info = wx.getStorageSync("user_info")
     var everyday_planList = wx.getStorageSync("everyday_planList")
+    if (!wx.getStorageSync("user_info")){
+      this.setData({
+        goal_university: "未设置目标大学",
+        goal_major: "未设置目标专业",
+        motto: "未设置座右铭" ,
+        countdown: "无",
+      })
+    }else{
+      this.setData({
+        goal_university: info.goal_university == "" ? "未设置目标大学" : info.goal_university, //目标
+        goal_major: info.goal_major == "" ? "未设置目标专业" : info.goal_major, //目标
+        motto: info.motto == "" ? "未设置座右铭" : info.motto, //座右铭
+        countdown: (info.examDate == null || info.examDate == "") ? "无" : parseInt(dateUtil.countDownDateFromToday(info.examDate)), //倒计时天数
+      })
+    }
     this.setData({
       everyday_planList: everyday_planList,
-      goal_university: info.goal_university == "" ? "未设置目标大学" : info.goal_university, //目标
-      goal_major: info.goal_major == "" ? "未设置目标专业" : info.goal_major, //目标
-      motto: info.motto == "" ? "未设置座右铭" : info.motto, //座右铭
-      countdown: (info.examDate == null || info.examDate == "") ? "无" : parseInt(dateUtil.countDownDateFromToday(info.examDate)), //倒计时天数
       date: dateUtil.getIndexDate(), //今天的日期
       showPage: true, //显示页面
     })

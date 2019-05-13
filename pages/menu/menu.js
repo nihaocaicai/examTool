@@ -46,12 +46,24 @@ Page({
   onShow: function() {
     var wxInfo = wx.getStorageSync("wx_user_info")
     var info = wx.getStorageSync("user_info")
-
-    if (wxInfo != "" && info != "") {
+    if (!wx.getStorageSync("user_info")){
+      this.setData({
+        motto: "未设置座右铭",
+      })
+    }else{
       this.setData({
         motto: info.motto == "" ? "未设置座右铭" : info.motto,
+      })
+    }
+    if (wxInfo != "") {
+      this.setData({
         nickName: wxInfo.user_name,
         avatarUrl: wxInfo.user_avatar,
+      })
+    } else{
+      this.setData({
+        nickName: "昵称",
+        avatarUrl: "",
       })
     }
   },

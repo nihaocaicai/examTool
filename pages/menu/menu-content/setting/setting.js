@@ -99,7 +99,7 @@ Page({
           wx.hideLoading()
           wx.showModal({
             title: '提示',
-            content: '当前是离线模式，无法进行操作，请连接网络后重试',
+            content: '当前无法进行操作，请连接网络后重试',
             showCancel: false,
             confirmText: '知道了',
             confirmColor: '#04838e',
