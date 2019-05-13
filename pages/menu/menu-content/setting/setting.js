@@ -25,24 +25,32 @@ Page({
     var info = wx.getStorageSync('user_info')
     var wxInfo = wx.getStorageSync('wx_user_info')
     this.edit.setData({
-      isFirstLogin: false, //不是在登录的时候显示对话框
       nickName: wxInfo['user_name'],
       birthday: info['birthday'],
       examDate: info['examDate'],
       goal_university: info['goal_university'],
       goal_major: info['goal_major'],
       motto: info['motto'],
-      beforeData: info, //修改前的数据，用于检查是否修改过
     })
     this.edit.showEdit()
   },
 
-  /**
-   * [事件_保存成功]
-   */
-  save_success(e) {
-    this.setData({
-      info: e.detail
+  _cancel() {
+    wx.showModal({
+      title: '提示',
+      content: '设置取消',
+    })
+  },
+
+  save_success() {
+    wx.showToast({
+      title: '设置成功',
+    })
+    this.onLoad()
+  },
+  save_fail() {
+    wx.showToast({
+      title: '设置失败',
     })
   },
 

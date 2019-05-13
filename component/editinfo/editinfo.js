@@ -56,19 +56,23 @@ Component({
     _saveUserInfo(formData) {
       var that = this
       var wx_user_info = wx.getStorageSync("wx_user_info")
-      // wx.showLoading({
-      //   title: '信息保存中',
-      // })
+      wx.showLoading({
+        title: '信息保存中',
+      })
       model.saveUserInfo((data) => {
-        var storage = new Storage()
-        storage.saveList({
-          saveList: [{
-            key: "user_info",
-            data: formData,
-          }]
-        })
-        that.hideEdit()
-        that.triggerEvent("save_success", formData)
+        if(data.error_code=="0"){
+          var storage = new Storage()
+          storage.saveList({
+            saveList: [{
+              key: "user_info",
+              data: formData,
+            }]
+          })
+          that.hideEdit()
+          that.triggerEvent("save_success")
+        }else{
+          that.triggerEvent("save_fail")
+        } 
       }, {
         user_name: wx_user_info['user_name'],
         user_avatar: wx_user_info['user_avatar'],
@@ -77,7 +81,7 @@ Component({
         user_birthday: formData.birthday == null ? '1900-01-01' : formData.birthday,
         user_target: formData.goal_university + "+" + formData.goal_major,
         user_motto: formData.motto,
-        user_exam_date: formData.examDate == null ? '1900-01-01' : formData.examDate,
+        user_exam_date: formData.examDate == null ? '2019-12-22' : formData.examDate,
       })
     },
 

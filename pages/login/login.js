@@ -22,6 +22,23 @@ Page({
   },
 
   onLoad: function() {
+    var that=this
+    // 判断当前有没有网络，有的话设置不为离线
+    wx.getNetworkType({
+      success(res) {
+        console.log(res.networkType)
+        if (res.networkType != "none") {
+          // 设置不为离线模式
+          that._setHideOfflineTips(true)
+        }else{
+          // 设置为离线模式
+          that._setHideOfflineTips(false)
+        }
+      },
+      fail(res){
+        // console.log(res)
+      }
+    })
     this._login()
   },
 
@@ -30,7 +47,6 @@ Page({
    * [加载小程序]
    */
   _login() {
-    var that = this
     this._checkStorage();
   },
 
@@ -57,7 +73,6 @@ Page({
   _clickAuthorize: function(e) {
     var that = this
     var rawUserInfo = e.detail
-    console.log(rawUserInfo)
     if (rawUserInfo.userInfo) {
       //用户按了授权按钮
       this.setData({
@@ -119,6 +134,13 @@ Page({
       url: '../index/index',
     })
   },
+  _loginFail(){
+    this.setData({
+      loading: false, //显示 加载中 页面
+      needAuthorize: false, //不显示 点击授权 按钮
+      loginFailTips: true, //提示登录失败
+    })
+  },
 
   _cancel(){
     wx.showModal({
@@ -129,13 +151,32 @@ Page({
   },
   save_success(){
     wx.showToast({
-      title: '登录成功',
+      title: '基本信息设置成功',
     })
     this._toIndex()
   },
   save_fail() {
     wx.showToast({
-      title: '登录失败',
+      title: '基本信息设置失败',
+    })
+  },
+  _saveFail(){
+    wx.showToast({
+      title: '缓存失败',
+    })
+  },
+
+  _setHideOfflineTips(data){
+    var that = this
+    var storage = new Storage()
+    storage.save({
+      key: 'hideOfflineTips',
+      data: data,
+      success: function () {
+        return
+      },
+      showRretry: true,
+      retryCancel: this._saveFail
     })
   }
 })

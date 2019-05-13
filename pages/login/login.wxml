@@ -20,7 +20,7 @@
     </view>
 
     <view wx:elif="{{loginFailTips}}" style='text-align:center'>
-      <view>加载失败</view>
+      <view>登录失败</view>
     </view>
 
   </view>
