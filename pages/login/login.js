@@ -91,6 +91,14 @@ Page({
         content: '必须授权登录才能使用考研小神器哦～',
         showCancel: false,
       })
+      // 显示需要登录的界面
+      this.setData({
+        loading: false, //显示 加载中 页面
+        needAuthorize: ture, //不显示 点击授权 按钮
+        loginFailTips: false, //提示登录失败
+      })
+      // 直接跳转首页，只能看里面是怎么样的，不能使用
+      // this._toIndex();
     }
   },
 

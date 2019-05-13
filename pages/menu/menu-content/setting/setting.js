@@ -116,33 +116,33 @@ Page({
     }
   },
 
-  /**
-   * [按钮_切换离线模式]
-   */
-  offlineTipsChange: function(e) {
-    var that = this
-    var s = new Storage()
-    s.save({
-      key: "hideOfflineTips",
-      data: !e.detail.value,
-      success: function() {
-        that.setData({
-          hideOfflineTips: !e.detail.value
-        })
-      },
-      showRetry: true,
-      saveType: "设置",
-      path: '/pages/menu/menu-content/setting/setting.js',
-      functionName: 'offlineTipsChange',
-      retryCancel: function() {
-        wx.showToast({
-          title: '设置失败',
-          image: "/images/fail.png",
-          duration: 1800,
-        })
-      },
-    })
-  },
+  // /**
+  //  * [按钮_切换离线模式]
+  //  */
+  // offlineTipsChange: function(e) {
+  //   var that = this
+  //   var s = new Storage()
+  //   s.save({
+  //     key: "hideOfflineTips",
+  //     data: !e.detail.value,
+  //     success: function() {
+  //       that.setData({
+  //         hideOfflineTips: !e.detail.value
+  //       })
+  //     },
+  //     showRetry: true,
+  //     saveType: "设置",
+  //     path: '/pages/menu/menu-content/setting/setting.js',
+  //     functionName: 'offlineTipsChange',
+  //     retryCancel: function() {
+  //       wx.showToast({
+  //         title: '设置失败',
+  //         image: "/images/fail.png",
+  //         duration: 1800,
+  //       })
+  //     },
+  //   })
+  // },
 
   /**
    * [按钮_什么是离线模式]

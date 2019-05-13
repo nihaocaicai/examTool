@@ -21,6 +21,7 @@
 
     <view wx:elif="{{loginFailTips}}" style='text-align:center'>
       <view>登录失败</view>
+      <view>请检查网络是否可以使用</view>
     </view>
 
   </view>
