@@ -8,30 +8,130 @@ Page({
   data: {
     loading: true,
     delBtnWidth: 160,
+    lastScroll: [-1, -1],
     isScroll: true,
     windowHeight: 0,
-    lastScroll: [-1, -1],
+    hasMoreDiary: true,
+    nowPage: 1,
+    maxItem: 10, // 加载一次显示多少条，要设置好，否则会影响点击加载更多按钮
   },
 
-  onLoad: function() {
+  onLoad: function () {
+    this._initData();
+  },
+  /**
+ * [初始化数据]
+ */
+  _initData() {
     var that = this
-    model.getAllDiary(((diaryData) => {
-      
-      // 获取数据文件数据
-      this.setData({
-        data: diaryData
-      });
-    }));
+    wx.showLoading({
+      title: '加载中',
+    })
+    model.getAllDiary({
+      page: 1,
+      success: function (data) {
+        if (data.length == 0) {
+          //没有数据
+          that.setData({
+            loading: false,
+            loadingFail: false,
+            showView: false,
+            hasMoreDiary: false,
+            noDiary: true,
+          })
+        } else {
+          // 有数据
+          var length = 0
+          for (var i in data) {
+            length += data[i].data.length
+          }
+          if (length == that.data.maxItem) {
+            //还有更多计划
+            that.setData({
+              hasMoreDiary: true,
+            })
+          } else {
+            //没有更多计划
+            that.setData({
+              hasMoreDiary: false,
+            })
+          }
+          that.setData({
+            loading: false,
+            loadingFail: false,
+            showView: true,
+            noDiary: false,
+            data:data,
+            nowPage: 2
+          })
+        }
+        wx.hideLoading()
+      },
+      fail: function () {
+        that.setData({
+          loading: false,
+          loadingFail: true,
+          showView: false,
+          hasMorePlan: false,
+          noDiary: false,
+        })
+        wx.hideLoading()
+      }
+    })
   },
 
-  onReady: function() {
-    
+  /**
+   * [加载更多]
+   */
+  loadMore: function () {
+    var that = thisClass
+    wx.showLoading({
+      title: '加载中',
+    })
+    model.getAllDiary({
+      page: that.data.nowPage,
+      success: function (data) {
+        if (data.length == 0) {
+          //没有数据
+          that.setData({
+            hasMoreDiary: false,
+          })
+        } else {
+          //有数据
+          var length = 0
+          for (var i in data) {
+            length += data[i].data.length
+          }
+          if (length == that.data.maxItem * that.data.nowPage) {
+            //还有更多计划
+            that.setData({
+              hasMoreDiary: true,
+            })
+          } else {
+            //没有更多计划
+            that.setData({
+              hasMoreDiary: false,
+            })
+          }
+          that.setData({
+            data: data,
+            nowPage: that.data.nowPage + 1
+          })
+        }
+        wx.hideLoading()
+      },
+      fail: function () {
+        wx.hideLoading()
+        wx.showToast({
+          title: '加载失败',
+          image: "/pages/fail.png",
+          duration: 1800,
+        })
+      }
+    })
   },
 
-  onShow: function() {
-    console.log(this.data)
-    console.log(this.data.data)
-  },
+
 // 组件方法start
   //点击取消按钮
   hidden_dialog: function () { },
@@ -46,7 +146,7 @@ Page({
 // 组件方法end
   //下拉页面操作
   onPullDownRefresh: function() {
-    this.selectComponent("#diary").showDiary("新增日记", null)
+    this.selectComponent("#diary").showDiary("新增日记",null)
     wx.stopPullDownRefresh()
   },
 

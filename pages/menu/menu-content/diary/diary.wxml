@@ -1,31 +1,49 @@
 <view>
-  <view style='margin-top:20rpx; margin-bottom:20rpx' wx:for="{{data}}" wx:key="day" wx:for-item="day" wx:for-index="dayIndex">
-    <text class="wx-date">{{day.date}}</text>
-    <block wx:key="item" wx:for="{{day.data}}">
-      <view data-dayindex='{{dayIndex}}' data-index='{{index}}' class="order-item" bindtouchstart="drawStart" bindtouchmove="drawMove" bindtouchend="drawEnd" style="right:{{item.right}}rpx">
+  <view wx:if='{{showView}}'>
+    <view style='margin-top:20rpx; margin-bottom:20rpx' wx:for="{{data}}" wx:key="day" wx:for-item="day" wx:for-index="dayIndex">
+      <text class="wx-date">{{day.date}}</text>
+      <block wx:key="item" wx:for="{{day.data}}">
+        <view data-dayindex='{{dayIndex}}' data-index='{{index}}' class="order-item" bindtouchstart="drawStart" bindtouchmove="drawMove" bindtouchend="drawEnd" style="right:{{item.right}}rpx">
 
-        <view class='data-container'>
-          <!-- 内容 -->
-          <view class='content-container'>
-            <text class='content-title'>{{item.diary_title}}</text>
-            <text class='content-text'>{{item.diary_content}}</text>
+          <view class='data-container'>
+            <!-- 内容 -->
+            <view class='content-container'>
+              <text class='content-title'>{{item.diary_title}}</text>
+              <text class='content-text'>{{item.diary_content}}</text>
+            </view>
+
+            <!-- 日期 -->
+            <view class='date-container'>
+              <text decode='true'>{{item.diary_write_time}}</text>
+              <image src='/images/menu/diary/place.png'></image>
+              <text decode='true'>{{item.diary_write_place == ""?"未设置地址":item.diary_write_place}}</text>
+            </view>
           </view>
 
-          <!-- 日期 -->
-          <view class='date-container'>
-            <text decode='true'>{{item.diary_write_time}}</text>
-            <image src='/images/menu/diary/place.png'></image>
-            <text decode='true'>{{item.diary_write_place == ""?"未设置地址":item.diary_write_place}}</text>
+          <view class="edit">
+            <image data-diary_id='{{item.diary_id}}' data-title='{{item.diary_title}}' data-content='{{item.diary_content}}' data-date='{{item.diary_write_date}}' data-time='{{item.diary_write_time}}' data-place='{{item.diary_write_place}}' class='modify-image' src='/images/index/diary.png'
+              bindtap="modItem" />
+            <image data-diary_id='{{item.diary_id}}' data-title='{{item.diary_title}}' class='del-image' src='/images/index/modify/del.png' bindtap="delItem" />
           </view>
         </view>
+      </block>
+    </view>
 
-        <view class="edit">
-          <image data-diary_id='{{item.diary_id}}' data-title='{{item.diary_title}}' data-content='{{item.diary_content}}' data-date='{{item.diary_write_date}}' data-time='{{item.diary_write_time}}' data-place='{{item.diary_write_place}}' class='modify-image' src='/images/index/diary.png'
-            bindtap="modItem" />
-          <image data-diary_id='{{item.diary_id}}' data-title='{{item.diary_title}}' class='del-image' src='/images/index/modify/del.png' bindtap="delItem" />
-        </view>
-      </view>
-    </block>
+    <view wx:if='{{hasMoreDiary}}' class="tips_more" bindtap='loadMore'>点我加载更多计划</view>
+    <view wx:else class="tips_more">没有更多了</view>
   </view>
+
+  <view wx:if="{{loadingFail}}" class='tips'>
+    <view style='margin-bottom:1vh'>
+      哎呀，服务器开小差了
+    </view>
+    <button class='button' bindtap='_initData'>再试一次</button>
+  </view>
+
+  <view wx:if="{{noDiary}}" class='tips'>
+    <view style='margin-bottom:1vh'>你还没有考研日记</view>
+    <view>赶快下拉页面添加日记吧</view>
+  </view>
+
   <diary id='diary' bind:successEvent="_successEvent" bind:hidden="hidden_dialog" />
 </view>

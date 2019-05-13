@@ -16,19 +16,16 @@ class Diary {
   /**
    * [从服务器上获取今天的计划 everyday_planList]
    */
-  getAllDiary(callbacks) {
+  getAllDiary(params) {
     var r = new Request()
     r.setFailInfo("diary-model.js", "getAllDiary")
     r.request({
       url: "/user/diarys/all",
-      success: function (data) {
-        //不做处理，直接把data返回到index.js回去 data = data;
-        callbacks && callbacks(data);
+      data: {
+        page: params.page
       },
-      fail: function (data) {
-        //不做处理，直接把data返回到index.js回去 data = data;
-        callbacks && callbacks(data);
-      },
+      success: params.success,
+      fail: params.fail,
     })
   }
 

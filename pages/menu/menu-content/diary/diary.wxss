@@ -105,3 +105,21 @@
   width: 75rpx;
   height: 75rpx;
 }
+
+.tips {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 32rpx;
+  color: #999;
+}
+
+.tips_more {
+  margin-top: 1vw;
+  margin-bottom: 1vw;
+  text-align: center;
+  font-size: 33rpx;
+}

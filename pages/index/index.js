@@ -20,6 +20,10 @@ Page({
   },
 
   onLoad: function() {
+    
+  },
+
+  onShow:function(){
     wx.showLoading({
       title: '拼命加载中',
     })
