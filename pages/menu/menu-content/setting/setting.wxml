@@ -12,15 +12,14 @@
   <view class='text-container'>
     <text>昵称：{{wxInfo.user_name}}</text>
     <text>性别：{{wxInfo.user_gender}}</text>
-    <text>生日：{{info.birthday == "" || info.birthday == null? "未设置": info.birthday}}</text>
-    <text>考研日期：{{info.examDate == "" || info.examDate == null ? "未设置": info.examDate}}</text>
-    <text>目标大学：{{info.goal_university == "" ? "未设置": info.goal_university}}</text>
-    <text>目标专业：{{info.goal_major == "" ? "未设置": info.goal_major}}</text>
-    <text>座右铭：{{info.motto  == "" ? "未设置座右铭": info.motto}}</text>
+    <text>生日：{{info.birthday}}</text>
+    <text>考研日期：{{info.examDate}}</text>
+    <text>目标大学：{{info.goal_university}}</text>
+    <text>目标专业：{{info.goal_major}}</text>
+    <text>座右铭：{{info.motto}}</text>
     <view class='switch-view'>
-      <text>离线模式时提示</text>
+      <text>当前是否处于离线状态：{{hideOfflineTips}}</text>
       <view>
-        <switch checked="{{!hideOfflineTips}}" bindchange='offlineTipsChange' color='#04838e' />
         <image bindtap='whatsOfflineMode' style="width:50rpx" src='/images/menu/question.png' mode="widthFix" />
       </view>
     </view>

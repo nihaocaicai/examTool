@@ -26,7 +26,7 @@ Page({
     // 判断当前有没有网络，有的话设置不为离线
     wx.getNetworkType({
       success(res) {
-        console.log(res.networkType)
+        // console.log(res.networkType)
         if (res.networkType != "none") {
           // 设置不为离线模式
           that._setHideOfflineTips(true)

@@ -24,14 +24,25 @@ Page({
   showEdit() {
     var info = wx.getStorageSync('user_info')
     var wxInfo = wx.getStorageSync('wx_user_info')
-    this.edit.setData({
-      nickName: wxInfo['user_name'],
-      birthday: info['birthday'],
-      examDate: info['examDate'],
-      goal_university: info['goal_university'],
-      goal_major: info['goal_major'],
-      motto: info['motto'],
-    })
+    if (!wx.getStorageSync('user_info')){
+      this.edit.setData({
+        nickName: wxInfo['user_name'],
+        birthday: "未设置",
+        examDate: "未设置",
+        goal_university: "未设置",
+        goal_major: "未设置",
+        motto: "未设置",
+      })
+    }else{
+      this.edit.setData({
+        nickName: wxInfo['user_name'],
+        birthday: info['birthday'],
+        examDate: info['examDate'],
+        goal_university: info['goal_university'],
+        goal_major: info['goal_major'],
+        motto: info['motto'],
+      })
+    }
     this.edit.showEdit()
   },
 
@@ -116,40 +127,12 @@ Page({
     }
   },
 
-  // /**
-  //  * [按钮_切换离线模式]
-  //  */
-  // offlineTipsChange: function(e) {
-  //   var that = this
-  //   var s = new Storage()
-  //   s.save({
-  //     key: "hideOfflineTips",
-  //     data: !e.detail.value,
-  //     success: function() {
-  //       that.setData({
-  //         hideOfflineTips: !e.detail.value
-  //       })
-  //     },
-  //     showRetry: true,
-  //     saveType: "设置",
-  //     path: '/pages/menu/menu-content/setting/setting.js',
-  //     functionName: 'offlineTipsChange',
-  //     retryCancel: function() {
-  //       wx.showToast({
-  //         title: '设置失败',
-  //         image: "/images/fail.png",
-  //         duration: 1800,
-  //       })
-  //     },
-  //   })
-  // },
-
   /**
    * [按钮_什么是离线模式]
    */
   whatsOfflineMode: function() {
     wx.showModal({
-      title: '什么是离线模式？',
+      title: '什么是离线状态？',
       content: '当手机没有网络或者无法连接到服务器时，软件会进入离线模式。在离线模式下，你只能查看本地已有的今日计划。',
       showCancel: false,
       confirmText: '知道了',
@@ -176,18 +159,29 @@ Page({
    * [初始化显示的数据]
    */
   _initData() {
-    var info = wx.getStorageSync('user_info')
     var wxInfo = wx.getStorageSync('wx_user_info')
-    info.birthday = info.birthday == null ? "未设置" : info.birthday
-    info.examDate = info.examDate == null ? "未设置" : info.examDate
-    info.goal_university = info.goal_university == "" ? "未设置" : info.goal_university
-    info.goal_major = info.goal_major == "" ? "未设置" : info.goal_major
-    info.motto = info.motto == "" ? "未设置座右铭" : info.motto
+    if (!wx.getStorageSync('user_info')) {
+      var info={
+        birthday: "未设置",
+        examDate: "未设置",
+        goal_university: "未设置",
+        goal_major: "未设置",
+        motto: "未设置座右铭",
+      }
+    } else {
+      var info = wx.getStorageSync('user_info')
+      info.birthday = info.birthday == null ? "未设置" : info.birthday
+      info.examDate = info.examDate == null ? "未设置" : info.examDate
+      info.goal_university = info.goal_university == "" ? "未设置" : info.goal_university
+      info.goal_major = info.goal_major == "" ? "未设置" : info.goal_major
+      info.motto = info.motto == "" ? "未设置座右铭" : info.motto
+    }
+    var if_has_network = wx.getStorageSync("hideOfflineTips")==true?"否":"是";
     this.setData({
       wxInfo: wxInfo,
       info: info,
       showDeleteModal: false,
-      hideOfflineTips: wx.getStorageSync("hideOfflineTips")
+      hideOfflineTips: if_has_network
     })
   },
 
