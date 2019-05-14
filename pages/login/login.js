@@ -159,13 +159,13 @@ Page({
   },
   save_success(){
     wx.showToast({
-      title: '基本信息设置成功',
+      title: '设置成功',
     })
     this._toIndex()
   },
   save_fail() {
     wx.showToast({
-      title: '基本信息设置失败',
+      title: '设置失败',
     })
   },
   _saveFail(){

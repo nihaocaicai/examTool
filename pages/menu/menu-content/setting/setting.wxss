@@ -76,6 +76,7 @@
   background: #04838e;
   color: white;
   border-radius: 50rpx;
+  margin-bottom: 12rpx;
 }
 
 .modal view{

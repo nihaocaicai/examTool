@@ -20,5 +20,6 @@
 }
 .text-container text{
   margin: 10rpx;
+  font-size: 32rpx;
 }
 /* 信息end */

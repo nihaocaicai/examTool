@@ -31,8 +31,9 @@ Page({
 
   /*点击 错误反馈 按钮 */
   clickFeedback: function() {
-    wx.navigateTo({
-      url: '../menu/menu-other/feedback/feedback',
+    wx.showModal({
+      title: '提示',
+      content: '请使用该小程序自带的反馈与投诉向我们反馈',
     })
   },
 

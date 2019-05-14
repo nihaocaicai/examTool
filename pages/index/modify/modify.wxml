@@ -10,13 +10,13 @@
             <view class='data-container'>
               <!-- 日期和星标 -->
               <view class='date-container'>
-                <text class='date-text'>时间：{{item.plan_start_time}}<text wx:if="{{item.plan_end_time!=\"\"}}"> - {{item.plan_end_time}}</text></text>
+                <text class='date-text'>时间：<text style='color: #6e6e6e;'>{{item.plan_start_time}}<text wx:if="{{item.plan_end_time!=\"\"}}"> - {{item.plan_end_time}}</text></text></text>
                 <image data-dayindex='{{dayindex}}' data-index='{{index}}' data-plan_id="{{item.plan_id}}" bindtap="changeFinish" wx:if='{{item.plan_if_finish}}' class='date-image' src='/images/index/star.png' />
                 <image data-dayindex='{{dayindex}}' data-index='{{index}}' data-plan_id="{{item.plan_id}}" bindtap="changeFinish" wx:if='{{!item.plan_if_finish}}' class='date-image' src='/images/index/none-star.png' />
               </view>
               <!-- 内容 -->
               <view class='content-container'>
-                <text class='content-text'>计划内容：{{item.plan_content}}</text>
+                <text class='content-text'>计划内容：<text style='color: #6e6e6e;'>{{item.plan_content}}</text></text>
               </view>
             </view>
             <view class="edit">

@@ -11,7 +11,11 @@
   </view>
 
   <view class='text-container'>
-    <text>制作团队：大佬别打我嘤嘤嘤群</text>
+    <text>制作团队：大佬别打我嘤嘤嘤</text>
     <text>团队成员：</text>
+    <text style='margin-left:48rpx;'>广东财经大学 蔡坚鑫</text>
+    <text style='margin-left:48rpx;'>广东财经大学 黄煜晨</text>
+    <text style='margin-left:48rpx;'>广东财经大学 郑树添</text>
+    <text style='margin-left:48rpx;'>广东财经大学 林国峥</text>
   </view>
 </view>

@@ -8,8 +8,7 @@
     "pages/menu/menu-content/diary/diary",
     "pages/menu/menu-content/setting/setting",
     "pages/menu/menu-content/plan/plan",
-    "pages/menu/menu-other/contact/contact",
-    "pages/menu/menu-other/feedback/feedback"
+    "pages/menu/menu-other/contact/contact"
   ],
   "window": {
     "navigationBarTitleText": "考研小工具",
