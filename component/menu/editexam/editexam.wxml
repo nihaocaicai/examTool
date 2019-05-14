@@ -19,14 +19,14 @@
         <!-- 开始日期选择 -->
         <view class="plan-content-container">
           <picker name='arrange_date' mode="date" value="{{arrange_date}}" start="{{dateStart}}" bindchange="bindDateChange">
-            <text>日期: {{arrange_date}}</text>
+            <text decode="true">日期：<text  class='select_text'>{{arrange_date == "" || arrange_date == null ? "点击选择日期" : arrange_date}}</text></text>
           </picker>
         </view>
 
         <!-- 开始当天时间选择 -->
         <view class="plan-content-container">
           <picker name='arrange_time' mode="time" value="{{arrange_time}}" start="{{timeStart}}" bindchange="bindTimeChange">
-            <text>时间: {{arrange_time}}</text>
+            <text decode="true">时间：<text  class='select_text'>{{arrange_time == "" || arrange_time == null ? "点击选择开始时间" : arrange_time}}</text></text>
           </picker>
         </view>
         <!-- 是否开启微信提示 -->
@@ -38,19 +38,19 @@
         <view wx:if="{{arrange_if_prompt}}">
           <view class="plan-content-container">
             <picker name='arrange_if_prompt_date' mode="date" value="{{arrange_if_prompt_date}}" start="{{promptDateStart}}" end="{{promptDateEnd}}" bindchange="bindPromptDateChange">
-              <text>提示日期: {{arrange_if_prompt_date}}</text>
+            <text decode="true">提示日期：<text  class='select_text'>{{arrange_if_prompt_date == "" || arrange_if_prompt_date == null ? "点击选择提示日期" : arrange_if_prompt_date}}</text></text>
             </picker>
           </view>
           <view class="plan-content-container">
             <picker range="{{promptTimeSelect}}" value="{{promptTimeSelectIndex}}" bindchange="bindPromptTimeChange">
-              <text>提示时间: {{arrange_if_prompt_time}}</text>
+              <text decode="true">提示时间：<text  class='select_text'>{{arrange_if_prompt_time == "" || arrange_if_prompt_time == null ? "点击选择提示时间" : arrange_if_prompt_time}}</text></text>
             </picker>
           </view>
-          <view wx:if="{{isModify}}" style='margin-top: 20rpx; text-align:center; font-size: 28rpx; color: black;'>
+          <view wx:if="{{isModify}}" style='margin-top: 20rpx; text-align:center; font-size: 26rpx; color: rgb(90, 90, 90);'>
             {{limitTips}}
           </view>
         </view>
-        <view wx:if="{{!isModify}}" style='margin-top: 20rpx; text-align:center; font-size: 28rpx; color: black;'>
+        <view wx:if="{{!isModify}}" style='margin-top: 20rpx; text-align:center; font-size: 26rpx; color:rgb(90, 90, 90);'>
           {{limitTips}}
         </view>
       </view>

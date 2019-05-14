@@ -34,7 +34,7 @@
       <view wx:else>
         <view wx:for='{{everyday_planList.data}}' wx:key='item'>
           <view class='plan-container'>
-            <text class='plan-text'>{{index+1}}、<text wx:if="{{plan_if_open_time==false}}">{{item.plan_start_time}}-{{item.plan_end_time}}：</text><text wx:else></text>{{item.plan_content}}</text>
+            <text class='plan-text'>{{index+1}}、<text wx:if="{{plan_if_open_time==false}}">{{item.plan_start_time}}<text wx:if="{{item.plan_end_time!=\"\"}}">-{{item.plan_end_time}}</text>：</text>{{item.plan_content}}</text>
             <image wx:if='{{item.plan_if_finish}}' class='plan-image' bindtap='clickStar' data-index="{{index}}" data-id="{{item.plan_id}}" src='/images/index/star.png' />
             <image wx:else class='plan-image' bindtap='clickStar' data-index="{{index}}" data-id="{{item.plan_id}}" src='/images/index/none-star.png' />
           </view>

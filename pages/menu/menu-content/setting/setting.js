@@ -47,9 +47,7 @@ Page({
   },
 
   _cancel() {
-    wx.showToast({
-      title: '设置取消',
-    })
+    
   },
 
   save_success() {

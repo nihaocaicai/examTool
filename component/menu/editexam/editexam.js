@@ -20,7 +20,7 @@ Component({
   data: {
     flag: true,
     arrange_if_prompt: false,
-    limitTips: '由于微信限制，只能设置在未来 7 天内提示',
+    limitTips: '由于微信限制，只能在设置起7天内进行提示',
   },
 
   methods: {
@@ -39,13 +39,13 @@ Component({
         this._showTips("请输入地点")
         return
       } else if (formData.arrange_date == "") {
-        this._showTips("请设置考研的日期")
+        this._showTips("请设置安排的日期")
         return
       } else if (formData.arrange_time == "") {
-        this._showTips("请设置考研的时间")
+        this._showTips("请设置安排的时间")
         return
       } else if (dateUtil.compareNow(formData.arrange_date, formData.arrange_time) != 1) {
-        this._showTips("考研的时间不能早于现在的时间")
+        this._showTips("安排的时间不能早于现在的时间")
         return
       } else if (formData.arrange_if_prompt) {
         //设置了提醒，需要检查提醒时间是否正确
@@ -59,7 +59,7 @@ Component({
           this._showTips("提醒时间不能早于现在的时间")
           return
         } else if (dateUtil.compareDateAndTime(formData.arrange_if_prompt_date, formData.arrange_if_prompt_time, formData.arrange_date, formData.arrange_time) != -1) {
-          this._showTips("提醒时间不能晚于考研的时间")
+          this._showTips("提醒时间不能晚于安排的时间")
           return
         }
       }

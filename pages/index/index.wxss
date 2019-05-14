@@ -42,7 +42,7 @@
 }
 
 .u_text {
-  font-size: 48rpx;
+  font-size: 46rpx;
   margin-bottom: 10rpx;
 }
 
@@ -118,6 +118,8 @@
 .plan-text {
   font-size: 28rpx;
   width: 500rpx;
+  /* 字太多自动换行 */
+  word-wrap: break-word;
 }
 
 .plan-image {

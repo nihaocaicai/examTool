@@ -29,25 +29,14 @@ Component({
       var tips = ""
       if (formData.plan_content == "") {
         tips = "计划"
-      } else if (formData.plan_date == null) {
+      } else if (formData.plan_date == null || formData.plan_date=="") {
         tips = "日期"
-      } else if (formData.plan_start_time == null) {
+      } else if (formData.plan_start_time == null || formData.plan_start_time == "") {
         tips = "开始时间"
-      } else if (formData.plan_end_time == null) {
-        tips = "结束时间"
-      } else if (dateUtil.compareNow(formData.plan_date, formData.plan_start_time) == -1) {
+      }else if (dateUtil.compareNow(formData.plan_date, formData.plan_start_time) == -1) {
         wx.showModal({
           title: '提示',
           content: '开始时间不能早于或等于现在的时间哦！',
-          showCancel: false,
-          confirmColor: "#04838e",
-          confirmText: "知道了",
-        })
-        return
-      } else if (dateUtil.compareTime(this.data.plan_end_time, this.data.plan_start_time) != 1) {
-        wx.showModal({
-          title: '提示',
-          content: '结束时间不能早于或等于开始时间哦！',
           showCancel: false,
           confirmColor: "#04838e",
           confirmText: "知道了",

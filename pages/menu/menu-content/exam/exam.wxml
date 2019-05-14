@@ -52,7 +52,8 @@
 
   <view wx:if="{{noArrangement}}" class='tips'>
     <view style='margin-bottom:1vh'>你还没有考研安排</view>
-    <view>赶快下拉页面添加安排吧</view>
+    <view style='margin-bottom:1vh'>赶快下拉页面添加安排吧</view>
+    <view>tips：下拉添加，左滑可以编辑和删除</view>
   </view>
 
   <editexam id='editexam' bind:add_success="_initData" bind:modify_success="_initData" />

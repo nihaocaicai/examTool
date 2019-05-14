@@ -8,6 +8,7 @@
   border-width: 1rpx;
   border-color: black;
   border-style: dashed;
+  border-radius: 12rpx;
 }
 
 .wx-date {

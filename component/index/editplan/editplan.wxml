@@ -12,29 +12,29 @@
         <!-- 日期选择 -->
         <view class="plan-content-container">
           <picker name='plan_date' mode="date" value="{{plan_date}}" bindchange="bindDateChange">
-            <text>日期: {{plan_date}}</text>
+            <text decode="true">日期：<text  class='select_text'>{{plan_date == "" || plan_date == null ? "点击选择日期" : plan_date}}</text></text>
           </picker>
         </view>
 
         <!-- 开始时间选择 -->
         <view class="plan-content-container">
           <picker name='plan_start_time' mode="time" value="{{plan_start_time}}" bindchange="bindStarTimeChange">
-            <text>开始时间: {{plan_start_time}}</text>
+          <text decode="true">开始时间：<text  class='select_text'>{{plan_start_time == "" || plan_start_time == null ? "点击选择开始时间" : plan_start_time}}</text></text>
           </picker>
         </view>
 
         <!-- 结束时间选择 -->
         <view class="plan-content-container">
           <picker name='plan_end_time' mode="time" value="{{plan_end_time}}" bindchange="bindEndTimeChange">
-            <text>结束时间: {{plan_end_time}}</text>
+            <text decode="true">结束时间：<text  class='select_text'>{{plan_end_time == "" || plan_end_time == null ? "点击选择结束时间（选填）" : plan_end_time}}</text></text>
           </picker>
         </view>
 
         <!-- 是否每日重复 -->
-        <view class="plan-content-container">
+        <!-- <view class="plan-content-container">
           <text>每日重复：</text>
           <switch color='#04838e' name='plan_if_repeat' checked="{{plan_if_repeat}}" bindchange="repeatChange" />
-        </view>
+        </view> -->
 
         <!-- 按钮 -->
         <view class="wx-plan-btn">

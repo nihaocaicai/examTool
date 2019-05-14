@@ -21,14 +21,14 @@ Page({
 
   onLoad: function() {
     // wx.redirectTo({
-    //   url: '../../pages/menu/menu-content/setting/setting',
+    //   url: '../../pages/menu/menu-content/exam/exam',
     // })
   },
 
   onShow:function(){
-    wx.showLoading({
-      title: '拼命加载中',
-    })
+    // wx.showLoading({
+    //   title: '拼命加载中',
+    // })
     this._init() //检查计划是不是今天的
   },
 

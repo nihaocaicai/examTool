@@ -21,7 +21,7 @@ page {
 #title {
   text-align: center;
   color: #04838e;
-  font-size: 70rpx;
+  font-size: 72rpx;
 }
 
 #logo_view {

@@ -29,13 +29,13 @@ Component({
       if (formData.birthday != "" && formData.birthday != null && parseInt(dateUtil.countDownDateFromToday(formData.birthday)) >= 0) {
         wx.showModal({
           title: '提示',
-          content: '生日不能设置为今天或未来的日期',
+          content: '生日不能设置为今天或未来的日期哦',
         })
         return
       } else if (formData.examDate != "" && formData.examDate != null && parseInt(dateUtil.countDownDateFromToday(formData.examDate)) < 0) {
         wx.showModal({
           title: '提示',
-          content: '考研日期不能设置为过去的日期',
+          content: '考研日期不能设置为过去的日期哦',
         })
         return
       } else {

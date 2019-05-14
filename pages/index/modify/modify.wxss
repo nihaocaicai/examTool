@@ -16,6 +16,7 @@
   border-width: 1rpx;
   border-color: black;
   border-style: dashed;
+  border-radius: 12rpx;
 }
 
 /* 日期和星标star */
@@ -100,10 +101,11 @@
 }
 
 .tips_more {
-  margin-top: 1vw;
-  margin-bottom: 1vw;
+  margin-top: 2vw;
+  margin-bottom: 2vw;
   text-align: center;
-  font-size: 33rpx;
+  font-size: 36rpx;
+  color: #d6d6d6;
 }
 
 .button {
