@@ -35,6 +35,7 @@
 .motto {
   font-size: 32rpx;
   color: rgb(85, 85, 85);
+  margin-left: 12rpx;
 }
 
 .menu {

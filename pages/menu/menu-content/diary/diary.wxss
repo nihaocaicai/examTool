@@ -125,3 +125,12 @@
   font-size: 32rpx;
   color: #999;
 }
+
+.button {
+  background: #04838e;
+  color: #fff;
+}
+
+button::after {
+  border: none;
+}

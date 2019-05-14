@@ -241,25 +241,31 @@ Page({
 
   /* 滑动组件*/
   drawStart: function(e) {
+    var touch = e.touches[0];
+    // 最初状态，设置right的值为0，不显示滑块编辑，删除
+    for (var index in this.data.examList) {
+      var items = this.data.examList[index].data
+      for (var ind in items) {
+        var item = items[ind]
+        item.right = 0
+      }
+    }
     this.setData({
-      startX: e.touches[0].clientX,
+      examList: this.data.examList,
+      startX: touch.clientX,
     })
   },
 
-  drawMove: function(e) {
+  drawMove: function (e) {
     var touch = e.touches[0]
-    var item = this.data.examList[e.currentTarget.dataset.dayindex]['data'][e.currentTarget.dataset.index]
+    // 中间状态，设置right的值为滑动的值，相应显示滑块大小
+    // 获得当前滑块所在的日期板块
+    var dayindex = e.currentTarget.dataset.dayindex
+    var items = this.data.examList[dayindex].data
+    // 获得当前滑块日期下对应的时间模块
+    var item = items[e.currentTarget.dataset.index]
+    // 设置right的值
     var disX = this.data.startX - touch.clientX
-
-    //上一个被滑出来的项目收缩回去
-    if (this.data.lastScroll[0] != -1) {
-      this.data.examList[this.data.lastScroll[0]]['data'][this.data.lastScroll[1]]['right'] = 0
-      this.setData({
-        examList: this.data.examList,
-        lastScroll: [-1, -1]
-      })
-    }
-
     if (disX >= 20) {
       if (disX > this.data.delBtnWidth) {
         disX = this.data.delBtnWidth
@@ -267,26 +273,32 @@ Page({
       item.right = disX
       this.setData({
         isScroll: false,
-        examList: this.data.examList,
-      })
-    }
-  },
-
-  drawEnd: function(e) {
-    var item = this.data.examList[e.currentTarget.dataset.dayindex]['data'][e.currentTarget.dataset.index]
-    if (item.right >= this.data.delBtnWidth / 2) {
-      item.right = this.data.delBtnWidth
-      this.setData({
-        isScroll: true,
-        examList: this.data.examList,
-        lastScroll: [e.currentTarget.dataset.dayindex, e.currentTarget.dataset.index]
+        examList: this.data.examList
       })
     } else {
       item.right = 0
       this.setData({
         isScroll: true,
-        examList: this.data.examList,
-        lastScroll: [-1, -1],
+        examList: this.data.examList
+      })
+    }
+  },
+  drawEnd: function (e) {
+    // 最后状态，设置right的值为滑动的值为最大，相应显示滑块大小
+    var dayindex = e.currentTarget.dataset.dayindex
+    var items = this.data.examList[dayindex].data
+    var item = items[e.currentTarget.dataset.index]
+    if (item.right >= this.data.delBtnWidth / 2) {
+      item.right = this.data.delBtnWidth
+      this.setData({
+        isScroll: true,
+        examList: this.data.examList
+      })
+    } else {
+      item.right = 0
+      this.setData({
+        isScroll: true,
+        examList: this.data.examList
       })
     }
   },

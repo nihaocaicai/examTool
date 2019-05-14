@@ -36,7 +36,7 @@ Page({
         }
       },
       fail(res){
-        // console.log(res)
+        that._setHideOfflineTips(false)
       }
     })
     this._login()

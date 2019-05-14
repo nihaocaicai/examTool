@@ -29,21 +29,23 @@ class Diary {
     })
   }
 
-  deleteDiary(callbacks,diary_id) {
+  /**
+     * [删除考研日记]
+     */
+  deleteDiary(params) {
     var r = new Request()
     r.setFailInfo("diary-model.js", "deleteDiary")
     r.request({
-      url: '/user/diarys/delete?diary_id=' + diary_id,
-      success: function (data) {
-        //不做处理，直接把data返回到index.js回去 data = data;
-        callbacks && callbacks(data);
+      url: '/user/diarys/delete',
+      data: {
+        diary_id: params.diary_id
       },
-      fail: function (data) {
-        //不做处理，直接把data返回到index.js回去 data = data;
-        callbacks && callbacks(data);
-      },
+      success: params.success,
+      statusCodeFail: params.statusCodeFail,
+      fail: params.fail,
     })
   }
+
 }
 
 export {

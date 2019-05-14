@@ -12,7 +12,7 @@
     "pages/menu/menu-other/feedback/feedback"
   ],
   "window": {
-    "navigationBarTitleText": "考研小神器",
+    "navigationBarTitleText": "考研小工具",
     "navigationBarBackgroundColor": "#04838e",
     "navigationBarTextStyle": "white"
   },

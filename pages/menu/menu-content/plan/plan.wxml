@@ -38,7 +38,7 @@
   </view>
 
   <view wx:if="{{noPlan}}" class='tips'>
-    <view style='margin-bottom:1vh'>你还没有任何计划哦</view>
+    <view style='margin-bottom:1vh'>你还没有任何历史计划哦</view>
     <view>赶快去首页添加计划吧</view>
   </view>
 </view>

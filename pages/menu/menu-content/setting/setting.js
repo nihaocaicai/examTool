@@ -93,7 +93,7 @@ Page({
       })
       model.deleteAccount({
         success: function() {
-          var s = new Storage()
+          // var s = new Storage()
           wx.clearStorage()
           wx.hideLoading()
           that.setData({
@@ -107,7 +107,7 @@ Page({
           wx.hideLoading()
           wx.showModal({
             title: '提示',
-            content: '当前无法进行操作，请连接网络后重试',
+            content: '当前无法进行操作，发生错误',
             showCancel: false,
             confirmText: '知道了',
             confirmColor: '#04838e',

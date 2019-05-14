@@ -3,6 +3,7 @@ import {
 } from "diary-model.js"
 
 var model = new Diary()
+var thisClass = null
 
 Page({
   data: {
@@ -17,9 +18,11 @@ Page({
     maxItem: 10, // 加载一次显示多少条，要设置好，否则会影响点击加载更多按钮
   },
 
-  onReady: function () {
+  onShow: function () {
+    thisClass = this
     this._initData();
   },
+
   /**
  * [初始化数据]
  */
@@ -62,7 +65,7 @@ Page({
             loadingFail: false,
             showView: true,
             noDiary: false,
-            data:data,
+            diaryList:data,
             nowPage: 2
           })
         }
@@ -115,7 +118,7 @@ Page({
             })
           }
           that.setData({
-            data: data,
+            diaryList: data,
             nowPage: that.data.nowPage + 1
           })
         }
@@ -135,12 +138,14 @@ Page({
 
 // 组件方法start
   //点击取消按钮
-  hidden_dialog: function () { },
+  hidden_dialog: function () {
+    return
+  },
 
 
   //添加/修改成功后执行的操作
-  _successEvent(e) {
-    this.onReady()
+  _successEvent:function() {
+    this.onShow()
   },
 
 // 组件方法end
@@ -168,129 +173,113 @@ Page({
   //点击删除按钮
   delItem: function(e) {
     var that = this;
-    var diary_id = parseInt(e.currentTarget.dataset.diary_id);
     var title = e.currentTarget.dataset.title;
     wx.showModal({
       title: '提示',
       content: '你确定要删除该日记吗？\r\n标题：' + title,
       confirmColor: '#04838e',
-      success: function(res) {
-        model.deleteDiary(((data) => {
-          wx.showToast({
-            title: '删除成功',
+      success(res) {
+        if (res.confirm) {
+          //确认删除
+          wx.showLoading({
+            title: '删除中',
           })
-        }),diary_id);
-
-        that.onReady();
+          model.deleteDiary({
+            diary_id: parseInt(e.currentTarget.dataset.diary_id),
+            success: function () {
+              wx.hideLoading()
+              that.onShow()
+            },
+            statusCodeFail: function () {
+              wx.hideLoading()
+              wx.showModal({
+                title: '提示',
+                content: '服务器出错，请稍后重试',
+                showCancel: false,
+                confirmText: '好的',
+                confirmColor: "#04838e",
+              })
+            },
+            fail: function () {
+              wx.hideLoading()
+              wx.showModal({
+                title: '提示',
+                content: '删除失败，请检查网络连接是否正常',
+                showCancel: false,
+                confirmText: '知道了',
+                confirmColor: "#04838e",
+              })
+            }
+          })
+        }
       }
     })
-
   },
 
-  drawStart: function(e) {
+  /* 滑动组件*/
+  drawStart: function (e) {
+    var touch = e.touches[0];
+    // 最初状态，设置right的值为0，不显示滑块编辑，删除
+    for (var index in this.data.diaryList) {
+      var items = this.data.diaryList[index].data
+      for (var ind in items) {
+        var item = items[ind]
+        item.right = 0
+      }
+    }
     this.setData({
-      startX: e.touches[0].clientX,
-      startRight: this.data.data[e.currentTarget.dataset.dayindex]['data'][e.currentTarget.dataset.index]['right']
+      diaryList: this.data.diaryList,
+      startX: touch.clientX,
     })
   },
 
-  drawMove: function(e) {
-    var item = this.data.data[e.currentTarget.dataset.dayindex]['data'][e.currentTarget.dataset.index]
-    var disX = this.data.startX - e.touches[0].clientX
-    if (this.data.startRight == 0) {
-      //日记项没有展开
-      if (disX >= 20) {
-        var lastDayIndex = this.data.lastScroll[0]
-        var lastIndex = this.data.lastScroll[1]
-        if (lastDayIndex != -1) {
-          this.data.data[lastDayIndex]['data'][lastIndex].right = 0
-          this.setData({
-            isScroll: [-1, -1]
-          })
-        }
-        if (disX > this.data.delBtnWidth) {
-          disX = this.data.delBtnWidth
-        }
-        item.right = disX
-        this.setData({
-          isScroll: false,
-          data: this.data.data
-        })
-      } else {
-        item.right = 0
-        this.setData({
-          isScroll: true,
-          data: this.data.data
-        })
+  drawMove: function (e) {
+    var touch = e.touches[0]
+    // 中间状态，设置right的值为滑动的值，相应显示滑块大小
+    // 获得当前滑块所在的日期板块
+    var dayindex = e.currentTarget.dataset.dayindex
+    var items = this.data.diaryList[dayindex].data
+    // 获得当前滑块日期下对应的时间模块
+    var item = items[e.currentTarget.dataset.index]
+    // 设置right的值
+    var disX = this.data.startX - touch.clientX
+    if (disX >= 20) {
+      if (disX > this.data.delBtnWidth) {
+        disX = this.data.delBtnWidth
       }
+      item.right = disX
+      this.setData({
+        isScroll: false,
+        diaryList: this.data.diaryList
+      })
     } else {
-      //日记项已经展开
-      disX = -disX
-      if (disX >= 20) {
-        var lastDayIndex = this.data.lastScroll[0]
-        var lastIndex = this.data.lastScroll[1]
-        if (lastDayIndex != -1) {
-          this.data.data[lastDayIndex]['data'][lastIndex].right = 0
-          this.setData({
-            isScroll: [-1, -1]
-          })
-        }
-        if (disX > this.data.delBtnWidth) {
-          disX = this.data.delBtnWidth
-        }
-        item.right = this.data.delBtnWidth - disX
-        this.setData({
-          isScroll: false,
-          data: this.data.data
-        })
-      } else {
-        item.right = this.data.delBtnWidth
-        this.setData({
-          isScroll: true,
-          data: this.data.data
-        })
-      }
+      item.right = 0
+      this.setData({
+        isScroll: true,
+        diaryList: this.data.diaryList
+      })
     }
   },
-
-  drawEnd: function(e) {
-    var dayIndex = e.currentTarget.dataset.dayindex
-    var index = e.currentTarget.dataset.index
-    var item = this.data.data[dayIndex]['data'][index]
-    if (this.data.startRight == 0) {
-      //日记项没有展开
-      if (item.right >= this.data.delBtnWidth / 2) {
-        item.right = this.data.delBtnWidth
-        this.setData({
-          isScroll: true,
-          data: this.data.data,
-          lastScroll: [dayIndex, index]
-        })
-      } else {
-        item.right = 0
-        this.setData({
-          isScroll: true,
-          data: this.data.data,
-        })
-      }
+  drawEnd: function (e) {
+    // 最后状态，设置right的值为滑动的值为最大，相应显示滑块大小
+    var dayindex = e.currentTarget.dataset.dayindex
+    var items = this.data.diaryList[dayindex].data
+    var item = items[e.currentTarget.dataset.index]
+    if (item.right >= this.data.delBtnWidth / 2) {
+      item.right = this.data.delBtnWidth
+      this.setData({
+        isScroll: true,
+        diaryList: this.data.diaryList
+      })
     } else {
-      //日记项已经展开
-      if (item.right <= this.data.delBtnWidth / 2) {
-        item.right = 0
-        this.setData({
-          isScroll: true,
-          data: this.data.data,
-          lastScroll: [-1, -1]
-        })
-      } else {
-        item.right = this.data.delBtnWidth
-        this.setData({
-          isScroll: true,
-          data: this.data.data,
-        })
-      }
+      item.right = 0
+      this.setData({
+        isScroll: true,
+        diaryList: this.data.diaryList
+      })
     }
   },
+  /* 滑动组件end*/
 
 
 })

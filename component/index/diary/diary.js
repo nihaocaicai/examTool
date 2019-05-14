@@ -126,6 +126,7 @@ Component({
             duration: 800
           })
           this.hideDiary()
+          this._successEvent();
         } else {
           wx.showToast({
             title: '添加失败',
@@ -135,8 +136,6 @@ Component({
           this.hideDiary()
         }
       }), rawData);
-
-      this._successEvent();
     },
 
     //修改日记
@@ -159,6 +158,7 @@ Component({
             duration: 800
           })
           this.hideDiary()
+          this._successEvent();
         } else {
           wx.showToast({
             title: '修改失败',
@@ -168,8 +168,6 @@ Component({
           this.hideDiary()
         }
       }), rawData);
-
-      this._successEvent();
     },
 
     //对话框显示时禁止下拉
@@ -178,19 +176,6 @@ Component({
     //获取当前位置
     getLocation() {
       var that = this
-      wx.getSetting({
-        success(res) {
-          if (!res.authSetting['scope.userLocation']) {
-            wx.authorize({
-              scope: 'scope.userLocation',
-              success() {
-                // 用户已经同意小程序使用地理位置，后续调用 wx.startRecord 接口不会弹窗询问
-                wx.startRecord()
-              }
-            })
-          }
-        }
-      })
       wx.chooseLocation({
         type: 'wgs84',
         success: function(res) {

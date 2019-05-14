@@ -1,10 +1,9 @@
 <view wx:if="{{!loading}}">
   <view wx:if='{{showView}}'>
-    <view style='margin-top:20rpx; margin-bottom:20rpx' wx:for="{{data}}" wx:key="day" wx:for-item="day" wx:for-index="dayIndex">
+    <view style='margin-top:20rpx; margin-bottom:20rpx' wx:for="{{diaryList}}" wx:key="day" wx:for-item="day" wx:for-index="dayIndex">
       <text class="wx-date">{{day.date}}</text>
       <block wx:key="item" wx:for="{{day.data}}">
         <view data-dayindex='{{dayIndex}}' data-index='{{index}}' class="order-item" bindtouchstart="drawStart" bindtouchmove="drawMove" bindtouchend="drawEnd" style="right:{{item.right}}rpx">
-
           <view class='data-container'>
             <!-- 内容 -->
             <view class='content-container'>

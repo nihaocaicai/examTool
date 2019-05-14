@@ -29,7 +29,7 @@
       <text>是否隐藏首页每日计划时间：</text>
       <view>
         <switch bindchange="switchChange" wx:if="{{plan_if_open_time==false}}"/>
-        <switch checked bindchange="switchChange" wx:else/>
+        <switch checked bindchange="switchChange" color="#04838e" wx:else/>
       </view>
     </view>
   </view>

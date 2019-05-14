@@ -54,11 +54,14 @@
   margin-left: 60rpx;
 }
 
-.switch-view view switch{
+
+/* swtich整体大小 */
+.wx-switch-input{
   margin-left: -32rpx;
   width: 40rpx;
   height: 40rpx;
 }
+
 
 /* 信息end */
 
