@@ -1,4 +1,4 @@
-<view>
+<view wx:if="{{!loading}}">
   <view wx:if='{{showView}}'>
     <view style='margin-top:20rpx; margin-bottom:20rpx' wx:for="{{data}}" wx:key="day" wx:for-item="day" wx:for-index="dayIndex">
       <text class="wx-date">{{day.date}}</text>
@@ -42,7 +42,8 @@
 
   <view wx:if="{{noDiary}}" class='tips'>
     <view style='margin-bottom:1vh'>你还没有考研日记</view>
-    <view>赶快下拉页面添加日记吧</view>
+    <view style='margin-bottom:1vh'>赶快下拉页面添加日记吧</view>
+    <view>tips：下拉添加，左滑可以编辑和删除</view>
   </view>
 
   <diary id='diary' bind:successEvent="_successEvent" bind:hidden="hidden_dialog" />

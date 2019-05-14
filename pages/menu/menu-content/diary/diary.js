@@ -6,9 +6,10 @@ var model = new Diary()
 
 Page({
   data: {
-    loading: true,
     delBtnWidth: 160,
     lastScroll: [-1, -1],
+    loading: true,
+    loadingFail: false,
     isScroll: true,
     windowHeight: 0,
     hasMoreDiary: true,
@@ -16,7 +17,7 @@ Page({
     maxItem: 10, // 加载一次显示多少条，要设置好，否则会影响点击加载更多按钮
   },
 
-  onShow: function () {
+  onReady: function () {
     this._initData();
   },
   /**
@@ -139,7 +140,7 @@ Page({
 
   //添加/修改成功后执行的操作
   _successEvent(e) {
-    this.onShow()
+    this.onReady()
   },
 
 // 组件方法end
@@ -180,7 +181,7 @@ Page({
           })
         }),diary_id);
 
-        that.onShow();
+        that.onReady();
       }
     })
 

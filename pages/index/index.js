@@ -21,7 +21,7 @@ Page({
 
   onLoad: function() {
     // wx.redirectTo({
-    //   url: '../../pages/menu/menu-content/exam/exam',
+    //   url: '../../pages/menu/menu-content/diary/diary',
     // })
   },
 

@@ -16,6 +16,7 @@
                   <view class='detail'>
                     <view class='time'>{{detail.time}}</view>
                     <view class='content'>{{detail.content}}</view>
+                    <view class='content'>{{detail.plan_if_finish==1?"完成":"未完成"}}</view>
                   </view>
                 </view>
               </view>

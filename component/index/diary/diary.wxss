@@ -1,5 +1,5 @@
 .diary-container {
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 50%;
   width: 80%;
@@ -14,15 +14,20 @@
 }
 
 .wx-diary-title {
-  padding: 20rpx;
+  width: 100%;
+  padding-top: 20rpx;
+  padding-bottom: 20rpx;
   text-align: center;
-  font-size: 40rpx;
-  border-bottom: 1rpx solid black;
+  font-size: 36rpx;
+  border-bottom: 1rpx solid #ccc;
 }
 
 .wx-diary-container {
-  margin-left: 20rpx;
-  padding: 45rpx;
+  margin-top: 16rpx;
+  margin-bottom: 16rpx;
+  margin-left: 32rpx;
+  margin-right: 32rpx;
+  padding: 12rpx;
 }
 
 .wx-diary-headline {

@@ -178,6 +178,19 @@ Component({
     //获取当前位置
     getLocation() {
       var that = this
+      wx.getSetting({
+        success(res) {
+          if (!res.authSetting['scope.userLocation']) {
+            wx.authorize({
+              scope: 'scope.userLocation',
+              success() {
+                // 用户已经同意小程序使用地理位置，后续调用 wx.startRecord 接口不会弹窗询问
+                wx.startRecord()
+              }
+            })
+          }
+        }
+      })
       wx.chooseLocation({
         type: 'wgs84',
         success: function(res) {
