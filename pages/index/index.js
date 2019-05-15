@@ -26,9 +26,23 @@ Page({
   },
 
   onShow:function(){
-    // wx.showLoading({
-    //   title: '拼命加载中',
-    // })
+    var that=this
+    // 判断当前有没有网络，有的话设置不为离线
+    wx.getNetworkType({
+      success(res) {
+        // console.log(res.networkType)
+        if (res.networkType != "none") {
+          // 设置不为离线模式
+          that._setHideOfflineTips(true)
+        } else {
+          // 设置为离线模式
+          that._setHideOfflineTips(false)
+        }
+      },
+      fail(res) {
+        that._setHideOfflineTips(false)
+      }
+    })
     this._init() //检查计划是不是今天的
   },
 
@@ -52,7 +66,7 @@ Page({
       })
     }else{
       wx.showToast({
-        title: '额，任务没完成！',
+        title: '任务没完成！',
       })
     }
     plans.data[index].plan_if_finish = flag //修改对应计划的星标状态
@@ -308,5 +322,18 @@ Page({
       })
     }
     wx.hideLoading()
+  },
+  _setHideOfflineTips(data) {
+    var that = this
+    var storage = new Storage()
+    storage.save({
+      key: 'hideOfflineTips',
+      data: data,
+      success: function () {
+        return
+      },
+      showRretry: true,
+      retryCancel: this._saveFail
+    })
   }
 })

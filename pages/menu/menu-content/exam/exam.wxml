@@ -1,5 +1,5 @@
 <!--pages/menu/menu-content/exam/exam.wxml-->
-<view wx:if="{{!loading}}">
+<view wx:if="{{!loading}}" class='ios'>
   <view wx:if="{{showView}}">
     <!--一重循环，循环日期-->
     <view wx:key="item" style="margin-top: 20rpx; margin-bottom: 20rpx;" wx:for-index="dayIndex" wx:for="{{examList}}">

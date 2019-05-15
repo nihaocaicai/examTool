@@ -1,4 +1,4 @@
-<view>
+<view class='ios'>
   <!-- 头像star -->
   <view class='image-container'>
     <view>

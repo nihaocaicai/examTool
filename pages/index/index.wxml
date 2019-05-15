@@ -1,4 +1,4 @@
-<view wx:if="{{showPage}}" class='container'>
+<view wx:if="{{showPage}}" class='container' class='ios'>
   <!-- 倒计时部分star -->
   <view class='top-container'>
     <view class='bookshelf'>
@@ -41,12 +41,11 @@
         </view>
       </view>
     </scroll-view>
-
-    <view class='show-container'>
-      <image src='/images/index/show.png' bindtap='showAllDiary' />
-    </view>
   </view>
-
+  
+  <view class='show-container'>
+    <image src='/images/index/show.png' bindtap='showAllDiary' />
+  </view>
   <!-- 日记添加组件 -->
   <diary id='diary' bind:add_confirm="add_confirm" />
 </view>

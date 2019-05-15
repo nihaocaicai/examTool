@@ -1,3 +1,4 @@
+<view class='ios'>
 <!-- 顶部信息框 -->
 <view class='infomation'>
   <!-- 头像 -->
@@ -61,7 +62,8 @@
 <view class="bottom">
   <text bindtap='clickFeedback'>错误反馈</text>
   <text decode='{{true}}'> &nbsp; |  &nbsp; </text>
-  <text bindtap='clickContact'>联系我们</text>
+  <text bindtap='clickContact'>关于我们</text>
 </view>
 
 <edit id='edit' bind:error="_error" bind:success="_success"/>
+</view>

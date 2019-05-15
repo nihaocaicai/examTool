@@ -1,4 +1,4 @@
-<view wx:if="{{!loading}}">
+<view wx:if="{{!loading}}" class='ios'>
   <view wx:if='{{showView}}'>
     <view class='container'>
       <!-- 一重循环，循环日期 -->

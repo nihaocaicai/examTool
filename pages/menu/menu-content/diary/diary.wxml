@@ -1,4 +1,4 @@
-<view wx:if="{{!loading}}">
+<view wx:if="{{!loading}}" class='ios'>
   <view wx:if='{{showView}}'>
     <view style='margin-top:20rpx; margin-bottom:20rpx' wx:for="{{diaryList}}" wx:key="day" wx:for-item="day" wx:for-index="dayIndex">
       <text class="wx-date">{{day.date}}</text>

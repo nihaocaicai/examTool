@@ -1,21 +1,14 @@
-<view>
+<view class='ios'>
   <view class='image-container'>
     <image class='head-image' src='/images/logo.png'></image>
-  </view>
-  
-  <view class='text-container'>
-    <text>email：2364784478@qq.com</text>
-    <text>GitHub：github.com/nihaocaicai</text>
-    <text>QQ：2364784478</text>
-    <text>微信：15802090624</text>
   </view>
 
   <view class='text-container'>
     <text>制作团队：大佬别打我嘤嘤嘤</text>
     <text>团队成员：</text>
-    <text style='margin-left:48rpx;'>广东财经大学 蔡坚鑫</text>
-    <text style='margin-left:48rpx;'>广东财经大学 黄煜晨</text>
-    <text style='margin-left:48rpx;'>广东财经大学 郑树添</text>
-    <text style='margin-left:48rpx;'>广东财经大学 林国峥</text>
+    <text class='name'>广东财经大学 蔡坚鑫</text>
+    <text class='name'>广东财经大学 黄煜晨</text>
+    <text class='name'>广东财经大学 郑树添</text>
+    <text class='name'>广东财经大学 林国峥</text>
   </view>
 </view>

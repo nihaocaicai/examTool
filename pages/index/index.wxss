@@ -1,10 +1,11 @@
 .container {
-  margin-top: -35rpx;
+  margin-top: -42rpx;
 }
 
 /* 倒计时部分star */
 
 .top-container {
+  margin-top: -32rpx;
   flex-direction: row;
   display: flex;
   margin-bottom: 100rpx;
@@ -147,10 +148,10 @@
 /* 日记展示star */
 
 .show-container {
-  width: 35rpx;
-  height: 35rpx;
-  margin-top: 18rpx;
-  margin-left: 500rpx;
+  margin-top:-24rpx;
+  margin-left: 540rpx;
+  width: 100%;
+  height:100%;
 }
 
 .show-container image {

@@ -1,5 +1,5 @@
 <!-- 如果没有授权，则显示授权页面 -->
-<view id='container'>
+<view id='container' class='ios'>
   <view>
     <view id='title'>
       考研小工具

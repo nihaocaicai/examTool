@@ -16,10 +16,14 @@
 .text-container{
   flex-direction:column;
   display:flex;
-  margin: 60rpx;
+  margin-left:120rpx;
 }
 .text-container text{
-  margin: 10rpx;
+  margin-top: 10rpx;
+  margin-bottom: 10rpx;
   font-size: 32rpx;
+}
+.name{
+  margin-left:52rpx; 
 }
 /* 信息end */

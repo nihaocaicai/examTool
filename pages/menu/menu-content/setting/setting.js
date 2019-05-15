@@ -10,6 +10,10 @@ var model = new Setting()
 
 Page({
   onLoad: function() {
+
+  },
+
+  onShow: function() {
     this._initData()
   },
 
@@ -24,7 +28,7 @@ Page({
   showEdit() {
     var info = wx.getStorageSync('user_info')
     var wxInfo = wx.getStorageSync('wx_user_info')
-    if (!wx.getStorageSync('user_info')){
+    if (!wx.getStorageSync('user_info')) {
       this.edit.setData({
         nickName: wxInfo['user_name'],
         birthday: "未设置",
@@ -33,7 +37,7 @@ Page({
         goal_major: "未设置",
         motto: "未设置",
       })
-    }else{
+    } else {
       this.edit.setData({
         nickName: wxInfo['user_name'],
         birthday: info['birthday'],
@@ -47,14 +51,14 @@ Page({
   },
 
   _cancel() {
-    
+
   },
 
   save_success() {
     wx.showToast({
       title: '设置成功',
     })
-    this.onLoad()
+    this.onShow()
   },
   save_fail() {
     wx.showToast({
@@ -158,7 +162,7 @@ Page({
   _initData() {
     var wxInfo = wx.getStorageSync('wx_user_info')
     if (!wx.getStorageSync('user_info')) {
-      var info={
+      var info = {
         birthday: "未设置",
         examDate: "未设置",
         goal_university: "未设置",
@@ -173,23 +177,35 @@ Page({
       info.goal_major = info.goal_major == "" ? "未设置" : info.goal_major
       info.motto = info.motto == "" ? "未设置座右铭" : info.motto
     }
-    var if_has_network = wx.getStorageSync("hideOfflineTips")==true?"否":"是";
+    var if_has_network = wx.getStorageSync("hideOfflineTips") == true ? "否" : "是";
     this.setData({
       wxInfo: wxInfo,
       info: info,
       showDeleteModal: false,
       hideOfflineTips: if_has_network
     })
-    if (!wx.getStorageSync('plan_if_open_time')) {
-      this.setData({
-        plan_if_open_time: false,
-      })
-    }else{
-      var plan_if_open_time = wx.getStorageSync("plan_if_open_time")
-      this.setData({
-        plan_if_open_time: plan_if_open_time,
-      })
-    }
+
+    var that = this
+    // 判断当前有没有网络，有的话设置不为离线
+    wx.getNetworkType({
+      success(res) {
+        // console.log(res.networkType)
+        if (res.networkType != "none") {
+          // 设置不为离线模式
+          that._setHideOfflineTips(true)
+        } else {
+          // 设置为离线模式
+          that._setHideOfflineTips(false)
+        }
+      },
+      fail(res) {
+        that._setHideOfflineTips(false)
+      }
+    })
+    var plan_if_open_time = wx.getStorageSync("plan_if_open_time")
+    this.setData({
+      plan_if_open_time: plan_if_open_time,
+    })
   },
 
   /**
@@ -203,4 +219,18 @@ Page({
   switchChange(e) {
     wx.setStorageSync("plan_if_open_time", e.detail.value)
   },
+
+  _setHideOfflineTips(data) {
+    var that = this
+    var storage = new Storage()
+    storage.save({
+      key: 'hideOfflineTips',
+      data: data,
+      success: function() {
+        return
+      },
+      showRretry: true,
+      retryCancel: this._saveFail
+    })
+  }
 })

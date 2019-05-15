@@ -1,4 +1,4 @@
-<view wx:if="{{!loading}}">
+<view wx:if="{{!loading}}" class='ios'>
   <scroll-view wx:if="{{showView}}" scroll-y="true" style="width: 100vw; height: 100vh;">
     <view wx:for="{{totalPlan}}" wx:key='{{index}}' wx:for-item="month">
       <view style="display:flex; width: 100%;">
