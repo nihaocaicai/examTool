@@ -120,8 +120,10 @@ class DateUtil {
    * @time 时间, HH:ss 形式
    */
   compareNow(date, time) {
-    var time1 = new Date(date + " " + time).getTime()
+    var dt = date + " " + time
+    var time1 = new Date(dt.replace(/-/g, '/')).getTime()
     var time2 = new Date().getTime()
+
     if (time1 < time2)
       return -1
     else if (time1 > time2)
@@ -147,8 +149,12 @@ class DateUtil {
    * @time2 时间 2, HH:ss 形式
    */
   compareTime(time1, time2) {
-    var time1 = new Date(this.getFormatDate() + " " + time1).getTime()
-    var time2 = new Date(this.getFormatDate() + " " + time2).getTime()
+    var dt1 = this.getFormatDate() + " " + time1
+    var dt2 = this.getFormatDate() + " " + time2
+
+    var time1 = new Date(dt1.replace(/-/g, '/')).getTime()
+    var time2 = new Date(dt2.replace(/-/g, '/')).getTime()
+
     if (time1 < time2)
       return -1
     else if (time1 > time2)
@@ -176,8 +182,11 @@ class DateUtil {
    * @time2 日期 2 的时间, HH:ss 形式
    */
   compareDateAndTime(date1, time1, date2, time2) {
-    var time1 = new Date(date1 + " " + time1).getTime()
-    var time2 = new Date(date2 + " " + time2).getTime()
+    var dt1 = date1 + " " + time1
+    var dt2 = date2 + " " + time2
+
+    var time1 = new Date(dt1.replace(/-/g, '/')).getTime()
+    var time2 = new Date(dt2.replace(/-/g, '/')).getTime()
     if (time1 < time2)
       return -1
     else if (time1 > time2)
