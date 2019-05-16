@@ -25,8 +25,8 @@ Page({
     // })
   },
 
-  onShow:function(){
-    var that=this
+  onShow: function() {
+    var that = this
     // 判断当前有没有网络，有的话设置不为离线
     wx.getNetworkType({
       success(res) {
@@ -60,11 +60,11 @@ Page({
     var plan_id = e.currentTarget.dataset.id
     var plans = this.data.everyday_planList
     var flag = !(plans.data[index].plan_if_finish) // 获取星标状态
-    if (flag){
+    if (flag) {
       wx.showToast({
         title: '任务完成了！',
       })
-    }else{
+    } else {
       wx.showToast({
         title: '任务没完成！',
       })
@@ -291,14 +291,14 @@ Page({
   _initData() {
     var info = wx.getStorageSync("user_info")
     var everyday_planList = wx.getStorageSync("everyday_planList")
-    if (!wx.getStorageSync("user_info")){
+    if (!wx.getStorageSync("user_info")) {
       this.setData({
         goal_university: "未设置目标大学",
         goal_major: "未设置目标专业",
-        motto: "未设置座右铭" ,
+        motto: "未设置座右铭",
         countdown: "无",
       })
-    }else{
+    } else {
       this.setData({
         goal_university: info.goal_university == "" ? "未设置目标大学" : info.goal_university, //目标
         goal_major: info.goal_major == "" ? "未设置目标专业" : info.goal_major, //目标
@@ -329,7 +329,7 @@ Page({
     storage.save({
       key: 'hideOfflineTips',
       data: data,
-      success: function () {
+      success: function() {
         return
       },
       showRretry: true,
