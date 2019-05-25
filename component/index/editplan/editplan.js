@@ -189,7 +189,7 @@ Component({
       wx.showLoading({
         title: '修改中',
       })
-      model.addPlan({
+      model.modifyPlan({
         data: formData,
         success: function() {
           wx.hideLoading()
